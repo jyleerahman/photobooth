@@ -10,7 +10,7 @@ function App() {
   return (
     <>
     <div 
-      className="text-[100px] font-bold font-['Timegoing']"
+      className="text-[5rem] font-bold font-['Timegoing']"
       style={{
         color: '#FFD700',
         textShadow: `
@@ -25,7 +25,7 @@ function App() {
       New York City
     </div>
       <div 
-        className="text-[170px] font-bold font-['WhoopieSunday']"
+        className="text-[10rem] font-bold font-['WhoopieSunday']"
         style={{
           color: '#FF1493',
           textShadow: `

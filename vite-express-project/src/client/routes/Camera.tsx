@@ -129,7 +129,8 @@ const Camera = () => {
                 alignItems: 'center', 
                 justifyContent: 'center',
                 minHeight: '100vh',
-                backgroundColor: '#000'
+                backgroundColor: 'rgba(0, 0, 0, 0.85)',
+                backdropFilter: 'blur(5px)'
             }}>
                 <h1 style={{ color: 'white', marginBottom: '20px' }}>Photo Booth</h1>
                 

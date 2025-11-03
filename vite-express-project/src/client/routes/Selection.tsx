@@ -52,7 +52,8 @@ const Selection = () => {
     return (
         <div style={{
             minHeight: '100vh',
-            backgroundColor: '#1a1a1a',
+            backgroundColor: 'rgba(26, 26, 26, 0.9)',
+            backdropFilter: 'blur(5px)',
             padding: '40px 20px',
             color: 'white'
         }}>

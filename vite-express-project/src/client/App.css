@@ -1,3 +1,41 @@
+@import "tailwindcss";
+
+/* Font Face Declarations */
+@font-face {
+  font-family: 'Graffiti';
+  src: url('./font/Graffiti.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Network';
+  src: url('./font/NetworkFreeVersion.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Throwupz';
+  src: url('./font/throwupz.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Timegoing';
+  src: url('./font/Timegoing Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'WhoopieSunday';
+  src: url('./font/WhoopieSunday-DEMO.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 #root {
   max-width: 1280px;
   margin: 0 auto;

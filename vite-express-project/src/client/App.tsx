@@ -9,9 +9,10 @@ function App() {
 
   return (
     <>
-      <div>Photo Booth</div>
+    <div className="text-[100px] font-bold font-['Timegoing']">New York City</div>
+      <div className="text-[170px] font-bold font-['WhoopieSunday'] text-white">Photo Booth</div>
       <nav>
-        <Link to="/frame">Start</Link>
+        <div className="text-6xl font-bold font-['Timegoing']"><Link to="/frame">Start</Link></div>
       </nav>
     </>
   );

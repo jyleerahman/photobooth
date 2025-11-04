@@ -333,7 +333,7 @@ const Result = () => {
                 <div className="flex flex-wrap justify-center gap-12 flex-shrink-0">
                     <button
                         onClick={handleDownload}
-                        className="text-orange-500 font-bold uppercase transition-all duration-200 hover:scale-110 bg-transparent border-0"
+                        className="text-orange-500 font-bold uppercase transition-all duration-200 hover:scale-110 bg-transparent border-0 outline-none focus:outline-none"
                         style={{
                             fontFamily: 'Graffiti, sans-serif',
                             fontSize: '35px',
@@ -346,7 +346,7 @@ const Result = () => {
 
                     <button
                         onClick={handleRetake}
-                        className="text-orange-500 font-bold uppercase transition-all duration-200 hover:scale-110 bg-transparent border-0"
+                        className="text-orange-500 font-bold uppercase transition-all duration-200 hover:scale-110 bg-transparent border-0 outline-none focus:outline-none"
                         style={{
                             fontFamily: 'Graffiti, sans-serif',
                             fontSize: '35px',
@@ -359,7 +359,7 @@ const Result = () => {
 
                     <button
                         onClick={handleStartOver}
-                        className="text-orange-500 font-bold uppercase transition-all duration-200 hover:scale-110 bg-transparent border-0"
+                        className="text-orange-500 font-bold uppercase transition-all duration-200 hover:scale-110 bg-transparent border-0 outline-none focus:outline-none"
                         style={{
                             fontFamily: 'Graffiti, sans-serif',
                             fontSize: '35px',

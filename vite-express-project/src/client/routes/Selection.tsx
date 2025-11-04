@@ -124,7 +124,7 @@ const Selection = () => {
                 <div className="flex justify-center gap-16 mt-8 pb-8 flex-shrink-0">
                     <button
                         onClick={handleRetake}
-                        className="text-orange-500 font-bold fuppercase transition-all duration-200 hover:scale-110 bg-transparent border-0"
+                        className="text-orange-500 font-bold uppercase transition-all duration-200 hover:scale-110 bg-transparent border-0 outline-none focus:outline-none"
                         style={{
                             fontFamily: 'Graffiti, sans-serif',
                             fontSize: '35px',
@@ -138,7 +138,7 @@ const Selection = () => {
                     <button
                         onClick={handleContinue}
                         disabled={selectedImages.length !== maxSelection}
-                        className={`font-bold uppercase transition-all duration-200 bg-transparent border-0 ${
+                        className={`font-bold uppercase transition-all duration-200 bg-transparent border-0 outline-none focus:outline-none ${
                             selectedImages.length === maxSelection 
                                 ? 'text-orange-500 cursor-pointer hover:scale-110' 
                                 : 'text-gray-400 cursor-not-allowed opacity-50'

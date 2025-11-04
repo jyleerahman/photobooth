@@ -53,7 +53,7 @@ const Selection = () => {
 
     return (
         <div 
-            className="fixed inset-0 w-screen h-screen overflow-auto"
+            className="fixed inset-0 w-screen h-screen overflow-hidden"
             style={{
                 backgroundImage: `url(${new URL('../font/nycstreet.jpg', import.meta.url).href})`,
                 backgroundSize: 'cover',
@@ -91,27 +91,28 @@ const Selection = () => {
             <div style={{
                 position: 'relative',
                 zIndex: 1,
-                padding: '30px 20px',
-                minHeight: '100vh'
+                height: '100vh',
+                display: 'flex',
+                flexDirection: 'column',
+                padding: '1vh 2vw'
             }}>
                 {/* Header - Security Cam Style */}
                 <div style={{
                     backgroundColor: 'rgba(0, 0, 0, 0.9)',
                     border: '2px solid #333',
-                    padding: '20px',
-                    marginBottom: '30px',
-                    maxWidth: '1400px',
-                    margin: '0 auto 30px'
+                    padding: '1.5vh 2vw',
+                    marginBottom: '1vh',
+                    flexShrink: 0
                 }}>
                     <div style={{
                         display: 'flex',
                         justifyContent: 'space-between',
                         alignItems: 'center',
-                        marginBottom: '10px'
+                        marginBottom: '0.5vh'
                     }}>
                         <div style={{
                             color: '#00FF00',
-                            fontSize: '24px',
+                            fontSize: 'clamp(1rem, 2.5vw, 1.5rem)',
                             fontWeight: 'bold',
                             letterSpacing: '2px',
                             textShadow: '0 0 10px rgba(0, 255, 0, 0.5)'
@@ -120,7 +121,7 @@ const Selection = () => {
                         </div>
                         <div style={{
                             color: '#888',
-                            fontSize: '14px',
+                            fontSize: 'clamp(0.6rem, 1.5vw, 0.875rem)',
                             letterSpacing: '1px'
                         }}>
                             {new Date().toLocaleString('en-US', { 
@@ -136,7 +137,7 @@ const Selection = () => {
                     
                     <div style={{
                         color: '#FFD700',
-                        fontSize: '16px',
+                        fontSize: 'clamp(0.75rem, 2vw, 1rem)',
                         letterSpacing: '1px',
                         textTransform: 'uppercase'
                     }}>
@@ -145,8 +146,8 @@ const Selection = () => {
                     
                     <div style={{
                         color: selectedImages.length === maxSelection ? '#00FF00' : '#FF4444',
-                        fontSize: '14px',
-                        marginTop: '8px',
+                        fontSize: 'clamp(0.7rem, 1.8vw, 0.875rem)',
+                        marginTop: '0.5vh',
                         letterSpacing: '1px'
                     }}>
                         STATUS: {selectedImages.length}/{maxSelection} SELECTED {selectedImages.length === maxSelection ? '✓' : ''}

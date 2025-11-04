@@ -1,7 +1,7 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import React from "react";
 import Webcam from "react-webcam";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const videoConstraints = {
     width: 1280,
@@ -9,13 +9,22 @@ const videoConstraints = {
     facingMode: "user"
 };
 
+type FrameLayout = 'strip' | 'grid';
+
+interface LocationState {
+    frameLayout: FrameLayout;
+}
+
 const Camera = () => {
     const webcamRef = React.useRef<Webcam>(null);
     const navigate = useNavigate();
+    const location = useLocation();
+    const state = location.state as LocationState;
+    const frameLayout = state?.frameLayout || 'strip';
     
     const [capturedImages, setCapturedImages] = useState<string[]>([]);
     const [isCapturing, setIsCapturing] = useState(false);
-    const [countdown, setCountdown] = useState(10);
+    const [countdown, setCountdown] = useState(5);
     const [currentPhotoNumber, setCurrentPhotoNumber] = useState(0);
     const [showFlash, setShowFlash] = useState(false);
     const [lastCapturedImage, setLastCapturedImage] = useState<string | null>(null);
@@ -76,7 +85,7 @@ const Camera = () => {
         setIsCapturing(true);
         setCurrentPhotoNumber(0);
         setCapturedImages([]);
-        setCountdown(10);
+        setCountdown(5);
         setLastCapturedImage(null);
         setShowingCapturedImage(false);
     };
@@ -84,7 +93,7 @@ const Camera = () => {
     const stopAutomatedCapture = () => {
         setIsCapturing(false);
         setCurrentPhotoNumber(0);
-        setCountdown(10);
+        setCountdown(5);
         setShowingCapturedImage(false);
     };
 
@@ -94,10 +103,10 @@ const Camera = () => {
         // Check if we've taken all 8 photos
         if (currentPhotoNumber >= totalPhotos) {
             setIsCapturing(false);
-            setCountdown(10);
-            // Navigate to selection page with captured images
+            setCountdown(5);
+            // Navigate to selection page with captured images and frame layout
             setTimeout(() => {
-                navigate('/select', { state: { images: capturedImages } });
+                navigate('/select', { state: { images: capturedImages, frameLayout } });
             }, 500);
             return;
         }
@@ -117,148 +126,122 @@ const Camera = () => {
         if (countdown === 0) {
             capture();
             setCurrentPhotoNumber(prev => prev + 1);
-            setCountdown(10); // Reset countdown for next photo
+            setCountdown(5); // Reset countdown for next photo
         }
     }, [isCapturing, countdown, currentPhotoNumber, capture, navigate, capturedImages, showingCapturedImage]);
 
     return (
-        <>
-            <div style={{ 
-                display: 'flex', 
-                flexDirection: 'column', 
-                alignItems: 'center', 
-                justifyContent: 'center',
-                minHeight: '100vh',
-                backgroundColor: 'rgba(0, 0, 0, 0.85)',
-                backdropFilter: 'blur(5px)'
-            }}>
-                <h1 style={{ color: 'white', marginBottom: '20px' }}>Photo Booth</h1>
-                
-                <div style={{ position: 'relative', display: 'inline-block' }}>
-                    {/* Webcam */}
-                    <Webcam
-                        audio={false}
-                        height={720}
-                        ref={webcamRef}
-                        screenshotFormat="image/jpeg"
-                        width={1280}
-                        videoConstraints={videoConstraints}
-                        style={{ 
-                            display: showingCapturedImage ? 'none' : 'block',
-                            borderRadius: '8px'
-                        }}
-                    />
-                    
-                    {/* Show last captured image for 1 second */}
-                    {showingCapturedImage && lastCapturedImage && (
-                        <img 
-                            src={lastCapturedImage} 
-                            alt="Just captured"
-                            style={{ 
-                                width: '1280px',
-                                height: '720px',
-                                borderRadius: '8px',
-                                objectFit: 'cover'
-                            }}
-                        />
-                    )}
-                    
-                    {/* Flash effect */}
-                    {showFlash && (
-                        <div style={{
-                            position: 'absolute',
-                            top: 0,
-                            left: 0,
-                            right: 0,
-                            bottom: 0,
-                            backgroundColor: 'white',
-                            opacity: 0.8,
-                            pointerEvents: 'none',
-                            borderRadius: '8px'
-                        }} />
-                    )}
-                    
-                    {/* Countdown display in top-right corner */}
-                    {isCapturing && !showingCapturedImage && (
-                        <div style={{
-                            position: 'absolute',
-                            top: '20px',
-                            right: '20px',
-                            fontSize: '80px',
-                            color: countdown <= 3 ? '#ff4444' : 'white',
-                            textShadow: '0 0 20px rgba(0,0,0,0.9), 0 0 40px rgba(0,0,0,0.9)',
-                            fontWeight: 'bold',
-                            fontFamily: 'monospace',
-                            backgroundColor: 'rgba(0,0,0,0.5)',
-                            padding: '10px 30px',
-                            borderRadius: '10px',
-                            minWidth: '120px',
-                            textAlign: 'center'
-                        }}>
-                            {countdown > 0 ? countdown : '📸'}
-                        </div>
-                    )}
-                    
-                    {/* Photo counter */}
-                    {isCapturing && (
-                        <div style={{
-                            position: 'absolute',
-                            bottom: '20px',
-                            left: '50%',
-                            transform: 'translateX(-50%)',
-                            fontSize: '24px',
-                            color: 'white',
-                            textShadow: '0 0 10px rgba(0,0,0,0.9)',
-                            fontWeight: 'bold',
-                            backgroundColor: 'rgba(0,0,0,0.6)',
-                            padding: '10px 20px',
-                            borderRadius: '8px'
-                        }}>
-                            Photo {currentPhotoNumber + 1} of {totalPhotos}
-                        </div>
-                    )}
+        <div 
+            className="fixed inset-0 w-screen h-screen overflow-hidden flex items-center justify-center"
+            style={{ 
+                backgroundImage: `url(${new URL('./font/newyorkbodega.jpg', import.meta.url).href})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center'
+            }}
+        >
+            {/* Single Active Camera Feed */}
+            <div className="relative w-[80vw] h-[80vh] max-w-[1280px] max-h-[720px]">
+                {/* Camera Label Bar */}
+                <div className="absolute top-0 left-0 right-0 bg-black/90 z-20 py-2 px-4">
+                    <div className="flex items-center justify-between">
+                        <span className="text-white text-lg font-bold tracking-wider" style={{ fontFamily: 'SpaceMono, monospace' }}>
+                            CAMERA {String(currentPhotoNumber + 1).padStart(2, '0')}
+                        </span>
+                        {isCapturing && (
+                            <div className="flex items-center gap-2">
+                                <div className="w-3 h-3 bg-red-600 rounded-full animate-pulse"></div>
+                                <span className="text-red-600 text-sm font-bold" style={{ fontFamily: 'SpaceMono, monospace' }}>REC</span>
+                            </div>
+                        )}
+                    </div>
                 </div>
 
-                {/* Control buttons */}
-                <div style={{ marginTop: '20px' }}>
-                    {!isCapturing ? (
-                        <button 
-                            onClick={startAutomatedCapture}
+                {/* Webcam Feed */}
+                <Webcam
+                    audio={false}
+                    ref={webcamRef}
+                    screenshotFormat="image/jpeg"
+                    videoConstraints={videoConstraints}
+                    className="w-full h-full object-cover"
+                />
+
+                {/* Countdown overlay */}
+                {isCapturing && countdown > 0 && !showingCapturedImage && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/30 z-10">
+                        <div 
+                            className={`text-[200px] font-bold font-['SpaceMono'] ${
+                                countdown <= 3 ? 'text-red-500' : 'text-white'
+                            }`}
                             style={{ 
-                                padding: '20px 40px', 
-                                fontSize: '24px',
-                                cursor: 'pointer',
-                                backgroundColor: '#4CAF50',
-                                color: 'white',
-                                border: 'none',
-                                borderRadius: '8px',
-                                fontWeight: 'bold',
-                                boxShadow: '0 4px 6px rgba(0,0,0,0.3)'
+                                textShadow: '0 0 30px rgba(0,0,0,0.9)'
                             }}
                         >
-                            Start Photo Session
-                        </button>
-                    ) : (
-                        <button 
-                            onClick={stopAutomatedCapture}
-                            style={{ 
-                                padding: '15px 30px', 
-                                fontSize: '18px',
-                                cursor: 'pointer',
-                                backgroundColor: '#ff4444',
-                                color: 'white',
-                                border: 'none',
-                                borderRadius: '8px',
-                                fontWeight: 'bold',
-                                boxShadow: '0 4px 6px rgba(0,0,0,0.3)'
-                            }}
-                        >
-                            Cancel Session
-                        </button>
-                    )}
+                            {countdown}
+                        </div>
+                    </div>
+                )}
+
+                {/* Flash effect */}
+                {showFlash && (
+                    <div className="absolute inset-0 bg-white opacity-80 pointer-events-none z-10" />
+                )}
+
+                {/* Show captured image briefly */}
+                {showingCapturedImage && lastCapturedImage && (
+                    <img 
+                        src={lastCapturedImage} 
+                        alt="Just captured"
+                        className="absolute inset-0 w-full h-full object-cover z-10"
+                    />
+                )}
+
+                {/* Bottom info bar */}
+                <div className="absolute bottom-0 left-0 right-0 bg-black/90 z-20 py-2 px-4">
+                    <div className="flex items-center justify-between">
+                        <span className="text-white text-xs font-['SpaceMono']">
+                            {new Date().toLocaleString('en-US', { 
+                                month: '2-digit', 
+                                day: '2-digit', 
+                                year: 'numeric',
+                                hour: '2-digit', 
+                                minute: '2-digit', 
+                                second: '2-digit',
+                                hour12: false 
+                            })}
+                        </span>
+                        {isCapturing && (
+                            <span className="text-white text-xs font-['SpaceMono']">
+                                PHOTO {currentPhotoNumber + 1}/{totalPhotos}
+                            </span>
+                        )}
+                    </div>
                 </div>
+
+                {/* Control button - positioned over feed */}
+                {!isCapturing && (
+                    <div 
+                        onClick={startAutomatedCapture}
+                        className="absolute inset-0 flex items-center justify-center z-30 bg-black/60 cursor-pointer hover:bg-black/70 transition-colors"
+                    >
+                        <div className="text-center">
+                            <div className="text-white text-6xl font-bold mb-4 font-['SpaceMono']" >[ REC ]</div>
+                            <div className="text-white/70 text-lg tracking-widest font-['SpaceMono']">PRESS TO START</div>
+                        </div>
+                    </div>
+                )}
+
+                {/* Stop button - small and unobtrusive */}
+                {isCapturing && (
+                    <button 
+                        onClick={stopAutomatedCapture}
+                        className="absolute top-20 right-4 z-30 py-2 px-4 text-sm cursor-pointer bg-red-600/80 text-white border-none rounded font-bold hover:bg-red-700 transition-colors font-['SpaceMono']"
+                        style={{ fontFamily: 'SpaceMono, monospace' }}
+                    >
+                        ■ STOP
+                    </button>
+                )}
             </div>
-        </>
+        </div>
     );
 };
 

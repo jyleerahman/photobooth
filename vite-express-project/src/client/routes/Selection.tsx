@@ -1,8 +1,11 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
+type FrameLayout = 'strip' | 'grid';
+
 interface LocationState {
     images: string[];
+    frameLayout: FrameLayout;
 }
 
 const Selection = () => {
@@ -12,6 +15,7 @@ const Selection = () => {
     
     const [selectedImages, setSelectedImages] = useState<number[]>([]);
     const images = state?.images || [];
+    const frameLayout = state?.frameLayout || 'strip';
     
     const maxSelection = 4;
 
@@ -39,10 +43,8 @@ const Selection = () => {
 
     const handleContinue = () => {
         const selected = selectedImages.map(index => images[index]);
-        // TODO: Navigate to next page with selected images
-        console.log('Selected images:', selected);
-        // For now, just log. You can add navigation to frame page later
-        navigate('/frame', { state: { selectedImages: selected } });
+        // Navigate to result page with selected images and frame layout
+        navigate('/result', { state: { selectedImages: selected, frameLayout } });
     };
 
     const handleRetake = () => {
@@ -50,40 +52,118 @@ const Selection = () => {
     };
 
     return (
-        <div style={{
-            minHeight: '100vh',
-            backgroundColor: 'rgba(26, 26, 26, 0.9)',
-            backdropFilter: 'blur(5px)',
-            padding: '40px 20px',
-            color: 'white'
-        }}>
+        <div 
+            className="fixed inset-0 w-screen h-screen overflow-hidden"
+            style={{
+                backgroundImage: `url(${new URL('../font/nycstreet.jpg', import.meta.url).href})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                fontFamily: 'SpaceMono, monospace'
+            }}
+        >
+            {/* Scanline overlay for gritty feel */}
+            <div 
+                style={{
+                    position: 'fixed',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    background: 'repeating-linear-gradient(0deg, rgba(0,0,0,0.15) 0px, rgba(0,0,0,0.15) 1px, transparent 1px, transparent 2px)',
+                    pointerEvents: 'none',
+                    zIndex: 100
+                }}
+            />
+
+            {/* Dark overlay for readability */}
+            <div 
+                style={{
+                    position: 'fixed',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    backgroundColor: 'rgba(0, 0, 0, 0.75)',
+                    pointerEvents: 'none'
+                }}
+            />
+
             <div style={{
-                maxWidth: '1400px',
-                margin: '0 auto'
+                position: 'relative',
+                zIndex: 1,
+                height: '100vh',
+                display: 'flex',
+                flexDirection: 'column',
+                padding: '1vh 2vw'
             }}>
-                <h1 style={{
-                    textAlign: 'center',
-                    marginBottom: '10px',
-                    fontSize: '36px'
+                {/* Header - Security Cam Style */}
+                <div style={{
+                    backgroundColor: 'rgba(0, 0, 0, 0.9)',
+                    border: '2px solid #333',
+                    padding: '1.5vh 2vw',
+                    marginBottom: '1vh',
+                    flexShrink: 0
                 }}>
-                    Select Your Favorite 4 Photos
-                </h1>
-                
-                <p style={{
-                    textAlign: 'center',
-                    marginBottom: '30px',
-                    fontSize: '20px',
-                    color: '#888'
-                }}>
-                    {selectedImages.length} of {maxSelection} selected
-                </p>
+                    <div style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        marginBottom: '0.5vh'
+                    }}>
+                        <div style={{
+                            color: '#00FF00',
+                            fontSize: 'clamp(1rem, 2.5vw, 1.5rem)',
+                            fontWeight: 'bold',
+                            letterSpacing: '2px',
+                            textShadow: '0 0 10px rgba(0, 255, 0, 0.5)'
+                        }}>
+                            [ FOOTAGE REVIEW ]
+                        </div>
+                        <div style={{
+                            color: '#888',
+                            fontSize: 'clamp(0.6rem, 1.5vw, 0.875rem)',
+                            letterSpacing: '1px'
+                        }}>
+                            {new Date().toLocaleString('en-US', { 
+                                month: '2-digit', 
+                                day: '2-digit', 
+                                year: 'numeric',
+                                hour: '2-digit', 
+                                minute: '2-digit',
+                                hour12: false 
+                            })}
+                        </div>
+                    </div>
+                    
+                    <div style={{
+                        color: '#FFD700',
+                        fontSize: 'clamp(0.75rem, 2vw, 1rem)',
+                        letterSpacing: '1px',
+                        textTransform: 'uppercase'
+                    }}>
+                        SELECT {maxSelection} FRAMES FOR PRINT
+                    </div>
+                    
+                    <div style={{
+                        color: selectedImages.length === maxSelection ? '#00FF00' : '#FF4444',
+                        fontSize: 'clamp(0.7rem, 1.8vw, 0.875rem)',
+                        marginTop: '0.5vh',
+                        letterSpacing: '1px'
+                    }}>
+                        STATUS: {selectedImages.length}/{maxSelection} SELECTED {selectedImages.length === maxSelection ? '✓' : ''}
+                    </div>
+                </div>
 
                 {/* Image Grid */}
                 <div style={{
                     display: 'grid',
-                    gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-                    gap: '20px',
-                    marginBottom: '40px'
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(min(250px, 100%), 1fr))',
+                    gap: '1.5vh',
+                    flexGrow: 1,
+                    flexShrink: 1,
+                    minHeight: 0,
+                    overflowY: 'auto',
+                    padding: '1vh 0'
                 }}>
                     {images.map((image, index) => {
                         const isSelected = selectedImages.includes(index);
@@ -96,16 +176,62 @@ const Selection = () => {
                                 style={{
                                     position: 'relative',
                                     cursor: 'pointer',
-                                    border: isSelected ? '4px solid #4CAF50' : '4px solid transparent',
-                                    borderRadius: '12px',
+                                    border: isSelected ? '3px solid #00FF00' : '3px solid #333',
+                                    backgroundColor: '#000',
                                     overflow: 'hidden',
                                     transition: 'all 0.2s ease',
-                                    transform: isSelected ? 'scale(0.98)' : 'scale(1)',
+                                    transform: isSelected ? 'scale(1.02)' : 'scale(1)',
                                     boxShadow: isSelected 
-                                        ? '0 0 20px rgba(76, 175, 80, 0.5)' 
-                                        : '0 4px 6px rgba(0,0,0,0.3)'
+                                        ? '0 0 25px rgba(0, 255, 0, 0.4), inset 0 0 20px rgba(0, 255, 0, 0.1)' 
+                                        : '0 4px 10px rgba(0,0,0,0.5)'
                                 }}
                             >
+                                {/* Camera Label Bar */}
+                                <div style={{
+                                    position: 'absolute',
+                                    top: 0,
+                                    left: 0,
+                                    right: 0,
+                                    backgroundColor: 'rgba(0,0,0,0.9)',
+                                    padding: '0.5vh 1vw',
+                                    display: 'flex',
+                                    justifyContent: 'space-between',
+                                    alignItems: 'center',
+                                    zIndex: 2,
+                                    borderBottom: '1px solid #333'
+                                }}>
+                                    <span style={{
+                                        color: '#888',
+                                        fontSize: 'clamp(0.6rem, 1.2vw, 0.75rem)',
+                                        letterSpacing: '1px'
+                                    }}>
+                                        CAM {String(index + 1).padStart(2, '0')}
+                                    </span>
+                                    {isSelected && (
+                                        <div style={{
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            gap: '0.5vw'
+                                        }}>
+                                            <div style={{
+                                                width: 'clamp(6px, 1vw, 8px)',
+                                                height: 'clamp(6px, 1vw, 8px)',
+                                                backgroundColor: '#00FF00',
+                                                borderRadius: '50%',
+                                                boxShadow: '0 0 8px rgba(0, 255, 0, 0.8)'
+                                            }} />
+                                            <span style={{
+                                                color: '#00FF00',
+                                                fontSize: 'clamp(0.6rem, 1.2vw, 0.75rem)',
+                                                fontWeight: 'bold',
+                                                letterSpacing: '1px'
+                                            }}>
+                                                SELECTED #{selectionOrder + 1}
+                                            </span>
+                                        </div>
+                                    )}
+                                </div>
+
                                 <img
                                     src={image}
                                     alt={`Photo ${index + 1}`}
@@ -113,49 +239,38 @@ const Selection = () => {
                                         width: '100%',
                                         height: 'auto',
                                         display: 'block',
-                                        opacity: isSelected ? 1 : 0.7,
-                                        transition: 'opacity 0.2s ease'
+                                        opacity: isSelected ? 1 : 0.6,
+                                        transition: 'opacity 0.2s ease',
+                                        filter: 'contrast(1.1) saturate(0.9)',
+                                        paddingTop: '32px'
                                     }}
                                 />
                                 
-                                {/* Selection badge */}
-                                {isSelected && (
-                                    <div style={{
-                                        position: 'absolute',
-                                        top: '10px',
-                                        right: '10px',
-                                        backgroundColor: '#4CAF50',
-                                        color: 'white',
-                                        width: '50px',
-                                        height: '50px',
-                                        borderRadius: '50%',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        fontSize: '24px',
-                                        fontWeight: 'bold',
-                                        boxShadow: '0 2px 8px rgba(0,0,0,0.3)'
-                                    }}>
-                                        {selectionOrder + 1}
-                                    </div>
-                                )}
-                                
-                                {/* Photo number */}
+                                {/* Timestamp overlay */}
                                 <div style={{
                                     position: 'absolute',
-                                    bottom: '10px',
-                                    left: '10px',
-                                    backgroundColor: 'rgba(0,0,0,0.7)',
-                                    color: 'white',
-                                    padding: '5px 12px',
-                                    borderRadius: '5px',
-                                    fontSize: '14px',
-                                    fontWeight: 'bold'
+                                    bottom: '0.5vh',
+                                    left: '0.5vw',
+                                    backgroundColor: 'rgba(0,0,0,0.85)',
+                                    color: '#888',
+                                    padding: '0.3vh 0.8vw',
+                                    fontSize: 'clamp(0.5rem, 1vw, 0.625rem)',
+                                    letterSpacing: '1px',
+                                    fontFamily: 'SpaceMono, monospace',
+                                    border: '1px solid #333'
                                 }}>
-                                    Photo {index + 1}
+                                    {new Date(Date.now() - (images.length - index) * 6000).toLocaleString('en-US', {
+                                        month: '2-digit',
+                                        day: '2-digit', 
+                                        year: '2-digit',
+                                        hour: '2-digit',
+                                        minute: '2-digit',
+                                        second: '2-digit',
+                                        hour12: false
+                                    })}
                                 </div>
 
-                                {/* Checkmark overlay for selected */}
+                                {/* Green tint overlay for selected */}
                                 {isSelected && (
                                     <div style={{
                                         position: 'absolute',
@@ -163,70 +278,105 @@ const Selection = () => {
                                         left: 0,
                                         right: 0,
                                         bottom: 0,
-                                        backgroundColor: 'rgba(76, 175, 80, 0.2)',
-                                        pointerEvents: 'none'
+                                        backgroundColor: 'rgba(0, 255, 0, 0.08)',
+                                        pointerEvents: 'none',
+                                        border: '1px solid rgba(0, 255, 0, 0.3)'
                                     }} />
                                 )}
+
+                                {/* Hover effect */}
+                                <div style={{
+                                    position: 'absolute',
+                                    top: 0,
+                                    left: 0,
+                                    right: 0,
+                                    bottom: 0,
+                                    opacity: 0,
+                                    transition: 'opacity 0.2s',
+                                    pointerEvents: 'none'
+                                }}
+                                onMouseEnter={(e) => e.currentTarget.style.opacity = '0.3'}
+                                onMouseLeave={(e) => e.currentTarget.style.opacity = '0'}
+                                />
                             </div>
                         );
                     })}
                 </div>
 
-                {/* Action Buttons */}
+                {/* Action Buttons - Control Panel Style */}
                 <div style={{
                     display: 'flex',
                     justifyContent: 'center',
-                    gap: '20px',
-                    marginTop: '40px'
+                    gap: '2vw',
+                    marginTop: '1vh',
+                    paddingBottom: '1vh',
+                    flexShrink: 0
                 }}>
                     <button
                         onClick={handleRetake}
                         style={{
-                            padding: '15px 40px',
-                            fontSize: '18px',
+                            padding: '1.2vh 3vw',
+                            fontSize: 'clamp(0.75rem, 2vw, 1rem)',
                             cursor: 'pointer',
-                            backgroundColor: '#666',
-                            color: 'white',
-                            border: 'none',
-                            borderRadius: '8px',
+                            backgroundColor: '#000',
+                            color: '#888',
+                            border: '2px solid #444',
                             fontWeight: 'bold',
-                            boxShadow: '0 4px 6px rgba(0,0,0,0.3)',
-                            transition: 'background-color 0.2s'
+                            letterSpacing: '2px',
+                            fontFamily: 'SpaceMono, monospace',
+                            textTransform: 'uppercase',
+                            transition: 'all 0.2s',
+                            boxShadow: '0 4px 10px rgba(0,0,0,0.5)'
                         }}
-                        onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#777'}
-                        onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#666'}
+                        onMouseEnter={(e) => {
+                            e.currentTarget.style.backgroundColor = '#1a1a1a';
+                            e.currentTarget.style.borderColor = '#666';
+                            e.currentTarget.style.color = '#aaa';
+                        }}
+                        onMouseLeave={(e) => {
+                            e.currentTarget.style.backgroundColor = '#000';
+                            e.currentTarget.style.borderColor = '#444';
+                            e.currentTarget.style.color = '#888';
+                        }}
                     >
-                        Retake Photos
+                        ◄ RETAKE
                     </button>
                     
                     <button
                         onClick={handleContinue}
                         disabled={selectedImages.length !== maxSelection}
                         style={{
-                            padding: '15px 40px',
-                            fontSize: '18px',
+                            padding: '1.2vh 3vw',
+                            fontSize: 'clamp(0.75rem, 2vw, 1rem)',
                             cursor: selectedImages.length === maxSelection ? 'pointer' : 'not-allowed',
-                            backgroundColor: selectedImages.length === maxSelection ? '#4CAF50' : '#333',
-                            color: 'white',
-                            border: 'none',
-                            borderRadius: '8px',
+                            backgroundColor: selectedImages.length === maxSelection ? '#000' : '#0a0a0a',
+                            color: selectedImages.length === maxSelection ? '#00FF00' : '#333',
+                            border: selectedImages.length === maxSelection ? '2px solid #00FF00' : '2px solid #222',
                             fontWeight: 'bold',
-                            boxShadow: '0 4px 6px rgba(0,0,0,0.3)',
-                            opacity: selectedImages.length === maxSelection ? 1 : 0.5,
-                            transition: 'all 0.2s'
+                            letterSpacing: '2px',
+                            fontFamily: 'SpaceMono, monospace',
+                            textTransform: 'uppercase',
+                            boxShadow: selectedImages.length === maxSelection 
+                                ? '0 0 20px rgba(0, 255, 0, 0.3), 0 4px 10px rgba(0,0,0,0.5)' 
+                                : '0 4px 10px rgba(0,0,0,0.5)',
+                            opacity: selectedImages.length === maxSelection ? 1 : 0.4,
+                            transition: 'all 0.2s',
+                            textShadow: selectedImages.length === maxSelection ? '0 0 10px rgba(0, 255, 0, 0.5)' : 'none'
                         }}
-                        onMouseOver={(e) => {
+                        onMouseEnter={(e) => {
                             if (selectedImages.length === maxSelection) {
-                                e.currentTarget.style.backgroundColor = '#45a049';
+                                e.currentTarget.style.backgroundColor = '#0a0a0a';
+                                e.currentTarget.style.boxShadow = '0 0 30px rgba(0, 255, 0, 0.5), 0 4px 10px rgba(0,0,0,0.5)';
                             }
                         }}
-                        onMouseOut={(e) => {
+                        onMouseLeave={(e) => {
                             if (selectedImages.length === maxSelection) {
-                                e.currentTarget.style.backgroundColor = '#4CAF50';
+                                e.currentTarget.style.backgroundColor = '#000';
+                                e.currentTarget.style.boxShadow = '0 0 20px rgba(0, 255, 0, 0.3), 0 4px 10px rgba(0,0,0,0.5)';
                             }
                         }}
                     >
-                        Continue {selectedImages.length === maxSelection ? '→' : `(${selectedImages.length}/${maxSelection})`}
+                        {selectedImages.length === maxSelection ? 'CONTINUE ►' : `SELECT ${maxSelection - selectedImages.length} MORE`}
                     </button>
                 </div>
             </div>

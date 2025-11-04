@@ -36,6 +36,13 @@
   font-style: normal;
 }
 
+@font-face {
+  font-family: 'SpaceMono';
+  src: url('./font/SpaceMono-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 #root {
   max-width: 1280px;
   margin: 0 auto;
@@ -77,6 +84,37 @@
 
 .read-the-docs {
   color: #888;
+}
+
+/* Custom Text Effects */
+.text-neon-gold {
+  color: #FFD700;
+  text-shadow: 
+    2px 2px 0 #000,
+    -2px -2px 0 #000,
+    2px -2px 0 #000,
+    -2px 2px 0 #000,
+    0 0 20px rgba(255, 215, 0, 0.5);
+}
+
+.text-neon-pink {
+  color: #FF1493;
+  text-shadow: 
+    3px 3px 0 #000,
+    -3px -3px 0 #000,
+    3px -3px 0 #000,
+    -3px 3px 0 #000,
+    0 0 30px rgba(255, 20, 147, 0.6);
+}
+
+.text-neon-cyan {
+  color: #00FFFF;
+  text-shadow: 
+    2px 2px 0 #000,
+    -2px -2px 0 #000,
+    2px -2px 0 #000,
+    -2px 2px 0 #000,
+    0 0 20px rgba(0, 255, 255, 0.5);
 }
 
 /* Spray Paint Animations */

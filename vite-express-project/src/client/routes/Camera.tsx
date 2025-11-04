@@ -123,7 +123,7 @@ const Camera = () => {
 
     return (
         <div 
-            className="relative w-[90%] h-[90%] overflow-hidden"
+            className="fixed inset-0 w-screen h-screen overflow-hidden flex items-center justify-center"
             style={{ 
                 backgroundImage: `url(${new URL('./font/newyorkbodega.jpg', import.meta.url).href})`,
                 backgroundSize: 'cover',
@@ -131,7 +131,7 @@ const Camera = () => {
             }}
         >
             {/* Single Active Camera Feed */}
-            <div className="relative w-[80%] h-[80%]">
+            <div className="relative w-[80vw] h-[80vh] max-w-[1280px] max-h-[720px]">
                 {/* Camera Label Bar */}
                 <div className="absolute top-0 left-0 right-0 bg-black/90 z-20 py-2 px-4">
                     <div className="flex items-center justify-between">

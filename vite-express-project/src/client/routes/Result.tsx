@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
-type FrameLayout = 'strip' | 'grid';
+type FrameLayout = 'strip' | 'grid' | 'bodega-cat';
 
 interface LocationState {
     selectedImages: string[];
@@ -33,7 +33,109 @@ const Result = () => {
         if (!ctx) return;
 
         const generatePhotoStrip = async () => {
-            if (frameLayout === 'strip') {
+            if (frameLayout === 'bodega-cat') {
+                // Bodega Cat layout: One big photo on top, 3 small photos on bottom
+                const dpi = 300;
+                const catWidth = 6 * dpi;  // 1800px - square
+                const catHeight = 6 * dpi; // 1800px
+                
+                canvas.width = catWidth;
+                canvas.height = catHeight;
+
+                // White background
+                ctx.fillStyle = 'white';
+                ctx.fillRect(0, 0, catWidth, catHeight);
+
+                // Padding
+                const padding = 0.3 * dpi; // 90px padding
+                const spacing = 0.15 * dpi; // 45px between photos
+
+                // Big photo dimensions (top 60% of space)
+                const bigPhotoWidth = catWidth - (2 * padding);
+                const bigPhotoHeight = (catHeight - (2 * padding) - spacing) * 0.6;
+
+                // Small photos dimensions (bottom 40% of space, split into 3)
+                const smallPhotoHeight = (catHeight - (2 * padding) - spacing) * 0.4;
+                const smallPhotoWidth = (catWidth - (2 * padding) - (2 * spacing)) / 3;
+
+                // Draw big photo (first selected image)
+                const bigImg = new Image();
+                bigImg.src = selectedImages[0];
+                await new Promise((resolve) => {
+                    bigImg.onload = resolve;
+                });
+
+                const bigImgAspect = bigImg.width / bigImg.height;
+                const bigBoxAspect = bigPhotoWidth / bigPhotoHeight;
+                
+                let bigSourceX, bigSourceY, bigSourceWidth, bigSourceHeight;
+                
+                if (bigImgAspect > bigBoxAspect) {
+                    bigSourceHeight = bigImg.height;
+                    bigSourceWidth = bigImg.height * bigBoxAspect;
+                    bigSourceX = (bigImg.width - bigSourceWidth) / 2;
+                    bigSourceY = 0;
+                } else {
+                    bigSourceWidth = bigImg.width;
+                    bigSourceHeight = bigImg.width / bigBoxAspect;
+                    bigSourceX = 0;
+                    bigSourceY = (bigImg.height - bigSourceHeight) / 2;
+                }
+                
+                ctx.drawImage(
+                    bigImg,
+                    bigSourceX, bigSourceY, bigSourceWidth, bigSourceHeight,
+                    padding, padding, bigPhotoWidth, bigPhotoHeight
+                );
+
+                // Draw 3 small photos (remaining selected images)
+                for (let i = 0; i < 3; i++) {
+                    const smallImg = new Image();
+                    smallImg.src = selectedImages[i + 1];
+                    await new Promise((resolve) => {
+                        smallImg.onload = resolve;
+                    });
+
+                    const x = padding + (i * (smallPhotoWidth + spacing));
+                    const y = padding + bigPhotoHeight + spacing;
+
+                    const smallImgAspect = smallImg.width / smallImg.height;
+                    const smallBoxAspect = smallPhotoWidth / smallPhotoHeight;
+                    
+                    let smallSourceX, smallSourceY, smallSourceWidth, smallSourceHeight;
+                    
+                    if (smallImgAspect > smallBoxAspect) {
+                        smallSourceHeight = smallImg.height;
+                        smallSourceWidth = smallImg.height * smallBoxAspect;
+                        smallSourceX = (smallImg.width - smallSourceWidth) / 2;
+                        smallSourceY = 0;
+                    } else {
+                        smallSourceWidth = smallImg.width;
+                        smallSourceHeight = smallImg.width / smallBoxAspect;
+                        smallSourceX = 0;
+                        smallSourceY = (smallImg.height - smallSourceHeight) / 2;
+                    }
+                    
+                    ctx.drawImage(
+                        smallImg,
+                        smallSourceX, smallSourceY, smallSourceWidth, smallSourceHeight,
+                        x, y, smallPhotoWidth, smallPhotoHeight
+                    );
+                }
+
+                // Add "BODEGA CAT APPROVED" stamp in corner
+                ctx.save();
+                ctx.font = `bold ${0.15 * dpi}px Arial`;
+                ctx.fillStyle = '#FFD700';
+                ctx.strokeStyle = '#000';
+                ctx.lineWidth = 3;
+                ctx.textAlign = 'right';
+                ctx.rotate(-0.1);
+                const stampText = '🐈 BODEGA CAT';
+                ctx.strokeText(stampText, catWidth - padding - 20, catHeight - padding - 20);
+                ctx.fillText(stampText, catWidth - padding - 20, catHeight - padding - 20);
+                ctx.restore();
+            } else if (frameLayout === 'strip') {
                 // Classic strip: 2 inches wide x 8 inches tall (at 300 DPI for print quality)
                 const dpi = 300;
                 const stripWidth = 2 * dpi;  // 600px
@@ -168,16 +270,27 @@ const Result = () => {
         navigate('/frame');
     };
 
+    const getLayoutName = () => {
+        if (frameLayout === 'bodega-cat') return 'bodega cat special 🐈';
+        if (frameLayout === 'grid') return 'square grid format ✨';
+        return 'classic strip format ✨';
+    };
+
     return (
         <div 
             className="fixed inset-0 flex items-center justify-center overflow-hidden"
             style={{
-                backgroundImage: `url(${new URL('../font/nycstreet.jpg', import.meta.url).href})`,
+                backgroundImage: `url(${new URL('../font/newyorkbodega.jpg', import.meta.url).href})`,
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
                 fontFamily: 'SpaceMono, monospace'
             }}
         >
+            {/* VHS/Bodega Effects */}
+            <div className="bodega-scanlines" />
+            <div className="bodega-vhs-effect" />
+            <div className="bodega-grain" />
+            
             {/* Dark overlay */}
             <div className="fixed inset-0 pointer-events-none" 
                 style={{
@@ -198,7 +311,7 @@ const Result = () => {
                         className="text-neon-cyan font-['Timegoing'] tracking-wide rotate-1"
                         style={{ fontSize: 'clamp(0.75rem, 2vw, 1rem)' }}
                     >
-                        {frameLayout === 'strip' ? 'classic strip format ✨' : 'square grid format ✨'}
+                        {getLayoutName()}
                     </div>
                 </div>
 
@@ -220,7 +333,8 @@ const Result = () => {
                                 maxHeight: '100%',
                                 width: 'auto',
                                 height: 'auto',
-                                display: 'block'
+                                display: 'block',
+                                filter: 'contrast(1.05) brightness(0.98)'
                             }}
                         />
                     </div>
@@ -302,10 +416,13 @@ const Result = () => {
                     </button>
                 </div>
 
-                {/* Fun message - Compact */}
+                {/* Fun message - Bodega Style */}
                 <div className="text-center flex-shrink-0">
-                    <div className="text-neon-gold tracking-wider font-['Timegoing'] opacity-80" style={{ fontSize: 'clamp(0.6rem, 1.5vw, 0.75rem)' }}>
-                        ✨ THANKS FOR VISITING THE NYC PHOTO BOOTH! ✨
+                    <div className="text-neon-gold tracking-wider font-['Timegoing'] opacity-80" style={{ 
+                        fontSize: 'clamp(0.6rem, 1.5vw, 0.75rem)',
+                        textShadow: '0 0 10px rgba(255, 215, 0, 0.6)'
+                    }}>
+                        🐈 BODEGA CAT APPROVED • COME BACK SOON! • OPEN 24/7
                     </div>
                 </div>
             </div>

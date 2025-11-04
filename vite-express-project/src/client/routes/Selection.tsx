@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
-type FrameLayout = 'strip' | 'grid';
+type FrameLayout = 'strip' | 'grid' | 'bodega-cat';
 
 interface LocationState {
     images: string[];
@@ -61,19 +61,10 @@ const Selection = () => {
                 fontFamily: 'SpaceMono, monospace'
             }}
         >
-            {/* Scanline overlay for gritty feel */}
-            <div 
-                style={{
-                    position: 'fixed',
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    background: 'repeating-linear-gradient(0deg, rgba(0,0,0,0.15) 0px, rgba(0,0,0,0.15) 1px, transparent 1px, transparent 2px)',
-                    pointerEvents: 'none',
-                    zIndex: 100
-                }}
-            />
+            {/* VHS/Bodega Effects */}
+            <div className="bodega-scanlines" />
+            <div className="bodega-vhs-effect" />
+            <div className="bodega-grain" />
 
             {/* Dark overlay for readability */}
             <div 

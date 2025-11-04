@@ -9,7 +9,7 @@ const videoConstraints = {
     facingMode: "user"
 };
 
-type FrameLayout = 'strip' | 'grid';
+type FrameLayout = 'strip' | 'grid' | 'bodega-cat';
 
 interface LocationState {
     frameLayout: FrameLayout;
@@ -139,18 +139,30 @@ const Camera = () => {
                 backgroundPosition: 'center'
             }}
         >
+            {/* VHS/Bodega Security Cam Effects */}
+            <div className="bodega-scanlines" />
+            <div className="bodega-vhs-effect" />
+            <div className="bodega-grain" />
             {/* Single Active Camera Feed */}
             <div className="relative w-[80vw] h-[80vh] max-w-[1280px] max-h-[720px]">
-                {/* Camera Label Bar */}
-                <div className="absolute top-0 left-0 right-0 bg-black/90 z-20 py-2 px-4">
+                {/* Camera Label Bar - Enhanced Bodega Style */}
+                <div className="absolute top-0 left-0 right-0 bg-black/90 z-20 py-2 px-4 border-b-2 border-[#FFD700]">
                     <div className="flex items-center justify-between">
-                        <span className="text-white text-lg font-bold tracking-wider" style={{ fontFamily: 'SpaceMono, monospace' }}>
-                            CAMERA {String(currentPhotoNumber + 1).padStart(2, '0')}
+                        <span className="text-[#00FF00] text-lg font-bold tracking-wider" style={{ 
+                            fontFamily: 'Courier New, monospace',
+                            textShadow: '0 0 10px rgba(0, 255, 0, 0.8)'
+                        }}>
+                            🎥 BODEGA CAM {String(currentPhotoNumber + 1).padStart(2, '0')}
                         </span>
                         {isCapturing && (
                             <div className="flex items-center gap-2">
-                                <div className="w-3 h-3 bg-red-600 rounded-full animate-pulse"></div>
-                                <span className="text-red-600 text-sm font-bold" style={{ fontFamily: 'SpaceMono, monospace' }}>REC</span>
+                                <div className="w-3 h-3 bg-red-600 rounded-full animate-pulse" style={{
+                                    boxShadow: '0 0 10px rgba(255, 0, 0, 0.8)'
+                                }}></div>
+                                <span className="text-red-600 text-sm font-bold" style={{ 
+                                    fontFamily: 'Courier New, monospace',
+                                    textShadow: '0 0 8px rgba(255, 0, 0, 0.8)'
+                                }}>● REC</span>
                             </div>
                         )}
                     </div>
@@ -195,14 +207,17 @@ const Camera = () => {
                     />
                 )}
 
-                {/* Bottom info bar */}
-                <div className="absolute bottom-0 left-0 right-0 bg-black/90 z-20 py-2 px-4">
+                {/* Bottom info bar - Enhanced Bodega Style */}
+                <div className="absolute bottom-0 left-0 right-0 bg-black/90 z-20 py-2 px-4 border-t-2 border-[#FFD700]">
                     <div className="flex items-center justify-between">
-                        <span className="text-white text-xs font-['SpaceMono']">
-                            {new Date().toLocaleString('en-US', { 
+                        <span className="text-[#FFD700] text-xs font-bold" style={{ 
+                            fontFamily: 'Courier New, monospace',
+                            textShadow: '0 0 8px rgba(255, 215, 0, 0.6)'
+                        }}>
+                            📅 {new Date().toLocaleString('en-US', { 
                                 month: '2-digit', 
                                 day: '2-digit', 
-                                year: 'numeric',
+                                year: '2-digit',
                                 hour: '2-digit', 
                                 minute: '2-digit', 
                                 second: '2-digit',
@@ -210,8 +225,18 @@ const Camera = () => {
                             })}
                         </span>
                         {isCapturing && (
-                            <span className="text-white text-xs font-['SpaceMono']">
-                                PHOTO {currentPhotoNumber + 1}/{totalPhotos}
+                            <span className="text-[#00FF00] text-xs font-bold" style={{ 
+                                fontFamily: 'Courier New, monospace',
+                                textShadow: '0 0 8px rgba(0, 255, 0, 0.6)'
+                            }}>
+                                FRAME {currentPhotoNumber + 1}/{totalPhotos}
+                            </span>
+                        )}
+                        {!isCapturing && (
+                            <span className="text-[#888] text-xs" style={{ 
+                                fontFamily: 'Courier New, monospace'
+                            }}>
+                                🐈 BODEGA CAT PHOTOBOOTH
                             </span>
                         )}
                     </div>

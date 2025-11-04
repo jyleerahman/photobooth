@@ -14,102 +14,84 @@ function App() {
   }, []);
 
   return (
-    <div 
-      className="fixed inset-0 flex flex-col items-center justify-center overflow-hidden"
-      style={{
-        backgroundImage: `url(${new URL('./font/newyorkbodega.jpg', import.meta.url).href})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center'
-      }}
-    >
-      {/* VHS/Bodega Effects */}
-      <div className="bodega-scanlines" />
-      <div className="bodega-vhs-effect" />
-      <div className="bodega-grain" />
-      
-      {/* Bodega Security Cam Timestamp */}
-      <div className="bodega-timestamp">
-        🎥 BODEGA CAM 01 • {time.toLocaleString('en-US', { 
-          month: '2-digit', 
-          day: '2-digit', 
-          year: '2-digit',
-          hour: '2-digit', 
-          minute: '2-digit', 
-          second: '2-digit',
-          hour12: false 
-        })}
-      </div>
-
-      {/* Dark overlay for contrast */}
-      <div className="fixed inset-0 pointer-events-none" 
+      <div 
+        className="fixed inset-0 flex flex-col items-center justify-center overflow-hidden"
         style={{
-          background: 'radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.85))'
+          backgroundColor: '#f5f5f5',
+          backgroundImage: `url(${new URL('./font/newyorkstreet.jpg', import.meta.url).href})`,
+          backgroundSize: '50% auto',
+          backgroundPosition: 'center center',
+          backgroundRepeat: 'no-repeat'
         }}
-      />
+      >
+        {/* Film grain texture */}
+        <div className="bodega-grain" />
+        
+        {/* Timestamp - minimal */}
+        <div className="bodega-timestamp">
+          {time.toLocaleString('en-US', { 
+            month: '2-digit', 
+            day: '2-digit', 
+            year: '2-digit',
+            hour: '2-digit', 
+            minute: '2-digit', 
+            second: '2-digit',
+            hour12: false 
+          })}
+        </div>
 
       {/* Main Content */}
-      <div className="relative z-10 text-center">
-        {/* Bodega Sign Style */}
-        <div className="mb-[3vh]">
-          <div className="text-[clamp(2rem,8vw,5rem)] font-bold font-['Timegoing'] text-neon-gold leading-none"
+      <div className="relative z-10 text-center max-w-4xl mx-auto px-8">
+        {/* BLACK & WHITE ZINE TITLES */}
+        <div className="mb-12">
+          <div className="text-[clamp(3rem,12vw,9rem)] font-bold font-['Throwupz'] text-white leading-[0.85] tracking-tight"
             style={{
-              textShadow: '0 0 20px rgba(255, 215, 0, 0.8), 0 0 40px rgba(255, 215, 0, 0.4), 3px 3px 0 rgba(0,0,0,0.8)'
+              textShadow: '4px 4px 0 rgba(0,0,0,0.3)',
             }}
           >
-            New York City
+            NEW YORK
           </div>
-          <div className="text-[clamp(4rem,16vw,10rem)] font-bold font-['WhoopieSunday'] text-neon-pink leading-none -rotate-1"
+          <div className="text-[clamp(5rem,20vw,14rem)] font-bold font-['Throwupz'] text-white leading-[0.7] -rotate-1 tracking-tighter"
             style={{
-              textShadow: '0 0 30px rgba(255, 20, 147, 0.9), 0 0 60px rgba(255, 20, 147, 0.5), 4px 4px 0 rgba(0,0,0,0.9)'
+              textShadow: '6px 6px 0 rgba(0,0,0,0.3)',
+              marginTop: '-1rem'
             }}
           >
-            Photo Booth
+            PHOTOBOOTH
           </div>
         </div>
 
-        {/* Bodega-style notice */}
-        <div className="text-neon-cyan text-[clamp(0.8rem,2vw,1.2rem)] font-['SpaceMono'] mb-[2vh] tracking-wider opacity-90"
+        {/* Clean description */}
+        <div className="text-white text-[clamp(0.75rem,1.8vw,1rem)] mb-8 max-w-md mx-auto leading-relaxed tracking-wide"
           style={{
-            textShadow: '0 0 10px rgba(0, 255, 255, 0.8), 2px 2px 0 rgba(0,0,0,0.8)'
+            fontFamily: 'Coolvetica, Helvetica, Arial, sans-serif',
+            fontWeight: 400,
+            textShadow: '2px 2px 0 rgba(0,0,0,0.3)'
           }}
         >
-          ★ OPEN 24/7 • NO PURCHASE NECESSARY ★
+          STREET-STYLE PHOTOGRAPHY BOOTH
         </div>
 
-        <nav className="mt-[2vh]">
+        <nav className="mt-8">
           <Link to="/frame">
             <div className="inline-block relative group">
-              {/* Neon button effect */}
-              <div className="text-[clamp(2rem,8vw,4rem)] font-bold font-['Timegoing'] text-neon-cyan px-[3vw] py-[2vh] border-4 border-neon-cyan transition-all duration-300 group-hover:scale-105"
+              {/* MINIMAL BLACK BUTTON */}
+              <div className="text-[clamp(1.2rem,3vw,1.5rem)] font-bold text-white px-16 py-4 border-4 border-black transition-all duration-200 group-hover:scale-105 uppercase tracking-[0.3em]"
                 style={{
-                  textShadow: '0 0 20px rgba(0, 255, 255, 0.8), 0 0 40px rgba(0, 255, 255, 0.4)',
-                  boxShadow: '0 0 20px rgba(0, 255, 255, 0.6), inset 0 0 20px rgba(0, 255, 255, 0.1)',
-                  background: 'rgba(0, 0, 0, 0.7)'
+                  fontFamily: 'Coolvetica, Helvetica, Arial, sans-serif',
+                  backgroundColor: '#000',
+                  boxShadow: '6px 6px 0 rgba(0,0,0,0.2)',
+                  letterSpacing: '0.3em',
+                  fontWeight: 700
                 }}
               >
-                → START ←
-              </div>
-              
-              {/* Bodega sticker style decorations */}
-              <div className="absolute -top-2 -right-2 bg-[#FF1493] text-black text-[clamp(0.8rem,2vw,1.2rem)] font-bold px-3 py-1 rotate-12 font-['WhoopieSunday']"
-                style={{
-                  boxShadow: '0 0 15px rgba(255, 20, 147, 0.8)'
-                }}
-              >
-                FREE!
+                START
               </div>
             </div>
           </Link>
         </nav>
 
-        {/* Bodega Details */}
-        <div className="mt-[3vh] text-neon-gold text-[clamp(0.6rem,1.5vw,0.9rem)] font-['SpaceMono'] opacity-75 tracking-wide"
-          style={{
-            textShadow: '0 0 10px rgba(255, 215, 0, 0.6), 1px 1px 0 rgba(0,0,0,0.8)'
-          }}
-        >
-          🐈 BODEGA CAT APPROVED • ATM INSIDE • WE ACCEPT EBT
-        </div>
+       
       </div>
     </div>
   );

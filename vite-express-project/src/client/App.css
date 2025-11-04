@@ -86,35 +86,41 @@
   color: #888;
 }
 
-/* Custom Text Effects */
+/* Custom Text Effects - EDGY GRAFFITI STYLE */
 .text-neon-gold {
   color: #FFD700;
   text-shadow: 
-    2px 2px 0 #000,
-    -2px -2px 0 #000,
-    2px -2px 0 #000,
-    -2px 2px 0 #000,
-    0 0 20px rgba(255, 215, 0, 0.5);
+    4px 4px 0 #000,
+    -1px -1px 0 #000,
+    1px -1px 0 #000,
+    -1px 1px 0 #000,
+    6px 6px 0 rgba(0, 0, 0, 0.5),
+    0 0 30px rgba(255, 215, 0, 0.4);
+  filter: contrast(1.2);
 }
 
 .text-neon-pink {
   color: #FF1493;
   text-shadow: 
-    3px 3px 0 #000,
-    -3px -3px 0 #000,
-    3px -3px 0 #000,
-    -3px 3px 0 #000,
-    0 0 30px rgba(255, 20, 147, 0.6);
+    5px 5px 0 #000,
+    -2px -2px 0 #000,
+    2px -2px 0 #000,
+    -2px 2px 0 #000,
+    8px 8px 0 rgba(0, 0, 0, 0.4),
+    0 0 40px rgba(255, 20, 147, 0.5);
+  filter: contrast(1.3) saturate(1.2);
 }
 
 .text-neon-cyan {
   color: #00FFFF;
   text-shadow: 
-    2px 2px 0 #000,
-    -2px -2px 0 #000,
-    2px -2px 0 #000,
-    -2px 2px 0 #000,
-    0 0 20px rgba(0, 255, 255, 0.5);
+    4px 4px 0 #000,
+    -1px -1px 0 #000,
+    1px -1px 0 #000,
+    -1px 1px 0 #000,
+    6px 6px 0 rgba(0, 0, 0, 0.5),
+    0 0 30px rgba(0, 255, 255, 0.4);
+  filter: contrast(1.2);
 }
 
 /* Spray Paint Animations */

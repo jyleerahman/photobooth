@@ -134,34 +134,35 @@ const Camera = () => {
         <div 
             className="fixed inset-0 w-screen h-screen overflow-hidden flex items-center justify-center"
             style={{ 
-                backgroundImage: `url(${new URL('./font/newyorkbodega.jpg', import.meta.url).href})`,
+                backgroundImage: `url(${new URL('./font/newyorkstreet.jpg', import.meta.url).href})`,
                 backgroundSize: 'cover',
-                backgroundPosition: 'center'
+                backgroundPosition: 'center',
+                backgroundColor: '#0a0a0a'
             }}
         >
-            {/* VHS/Bodega Security Cam Effects */}
+            {/* Gritty Film Effects */}
             <div className="bodega-scanlines" />
             <div className="bodega-vhs-effect" />
             <div className="bodega-grain" />
             {/* Single Active Camera Feed */}
-            <div className="relative w-[80vw] h-[80vh] max-w-[1280px] max-h-[720px]">
-                {/* Camera Label Bar - Enhanced Bodega Style */}
-                <div className="absolute top-0 left-0 right-0 bg-black/90 z-20 py-2 px-4 border-b-2 border-[#FFD700]">
+            <div className="relative w-[80vw] h-[80vh] max-w-[1280px] max-h-[720px] border-8 border-black" style={{
+                boxShadow: '0 0 60px rgba(0,0,0,0.9), inset 0 0 40px rgba(0,0,0,0.5)'
+            }}>
+                {/* Camera Label Bar - RAW STYLE */}
+                <div className="absolute top-0 left-0 right-0 bg-black z-20 py-3 px-4 border-b-4 border-[#FF1493]">
                     <div className="flex items-center justify-between">
-                        <span className="text-[#00FF00] text-lg font-bold tracking-wider" style={{ 
-                            fontFamily: 'Courier New, monospace',
-                            textShadow: '0 0 10px rgba(0, 255, 0, 0.8)'
+                        <span className="text-white text-base font-bold tracking-wider uppercase font-['SpaceMono']" style={{ 
+                            textShadow: '2px 2px 0 rgba(0, 0, 0, 0.9)'
                         }}>
-                            🎥 BODEGA CAM {String(currentPhotoNumber + 1).padStart(2, '0')}
+                            ▶ CAM {String(currentPhotoNumber + 1).padStart(2, '0')}
                         </span>
                         {isCapturing && (
                             <div className="flex items-center gap-2">
                                 <div className="w-3 h-3 bg-red-600 rounded-full animate-pulse" style={{
-                                    boxShadow: '0 0 10px rgba(255, 0, 0, 0.8)'
+                                    boxShadow: '0 0 15px rgba(255, 0, 0, 0.9)'
                                 }}></div>
-                                <span className="text-red-600 text-sm font-bold" style={{ 
-                                    fontFamily: 'Courier New, monospace',
-                                    textShadow: '0 0 8px rgba(255, 0, 0, 0.8)'
+                                <span className="text-red-600 text-sm font-bold uppercase font-['SpaceMono']" style={{ 
+                                    textShadow: '0 0 10px rgba(255, 0, 0, 0.9)'
                                 }}>● REC</span>
                             </div>
                         )}
@@ -175,17 +176,22 @@ const Camera = () => {
                     screenshotFormat="image/jpeg"
                     videoConstraints={videoConstraints}
                     className="w-full h-full object-cover"
+                    style={{
+                        filter: 'contrast(1.15) saturate(0.9) brightness(0.95)'
+                    }}
                 />
 
-                {/* Countdown overlay */}
+                {/* Countdown overlay - BOLD */}
                 {isCapturing && countdown > 0 && !showingCapturedImage && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-black/30 z-10">
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/50 z-10">
                         <div 
-                            className={`text-[200px] font-bold font-['SpaceMono'] ${
-                                countdown <= 3 ? 'text-red-500' : 'text-white'
+                            className={`text-[250px] font-bold font-['Throwupz'] ${
+                                countdown <= 3 ? 'text-[#FF1493]' : 'text-white'
                             }`}
                             style={{ 
-                                textShadow: '0 0 30px rgba(0,0,0,0.9)'
+                                textShadow: '8px 8px 0 #000, -3px -3px 0 #000, 3px -3px 0 #000, -3px 3px 0 #000, 12px 12px 0 rgba(0,0,0,0.5)',
+                                WebkitTextStroke: '4px black',
+                                paintOrder: 'stroke fill'
                             }}
                         >
                             {countdown}
@@ -207,14 +213,13 @@ const Camera = () => {
                     />
                 )}
 
-                {/* Bottom info bar - Enhanced Bodega Style */}
-                <div className="absolute bottom-0 left-0 right-0 bg-black/90 z-20 py-2 px-4 border-t-2 border-[#FFD700]">
+                {/* Bottom info bar - RAW */}
+                <div className="absolute bottom-0 left-0 right-0 bg-black z-20 py-3 px-4 border-t-4 border-[#FF1493]">
                     <div className="flex items-center justify-between">
-                        <span className="text-[#FFD700] text-xs font-bold" style={{ 
-                            fontFamily: 'Courier New, monospace',
-                            textShadow: '0 0 8px rgba(255, 215, 0, 0.6)'
+                        <span className="text-gray-400 text-xs font-bold uppercase font-['SpaceMono']" style={{ 
+                            textShadow: '1px 1px 0 rgba(0, 0, 0, 0.9)'
                         }}>
-                            📅 {new Date().toLocaleString('en-US', { 
+                            {new Date().toLocaleString('en-US', { 
                                 month: '2-digit', 
                                 day: '2-digit', 
                                 year: '2-digit',
@@ -225,42 +230,49 @@ const Camera = () => {
                             })}
                         </span>
                         {isCapturing && (
-                            <span className="text-[#00FF00] text-xs font-bold" style={{ 
-                                fontFamily: 'Courier New, monospace',
-                                textShadow: '0 0 8px rgba(0, 255, 0, 0.6)'
+                            <span className="text-white text-xs font-bold uppercase font-['SpaceMono']" style={{ 
+                                textShadow: '2px 2px 0 rgba(0, 0, 0, 0.9)'
                             }}>
-                                FRAME {currentPhotoNumber + 1}/{totalPhotos}
+                                {currentPhotoNumber + 1}/{totalPhotos}
                             </span>
                         )}
                         {!isCapturing && (
-                            <span className="text-[#888] text-xs" style={{ 
-                                fontFamily: 'Courier New, monospace'
-                            }}>
-                                🐈 BODEGA CAT PHOTOBOOTH
+                            <span className="text-gray-500 text-xs uppercase font-['SpaceMono']">
+                                NYC BOOTH
                             </span>
                         )}
                     </div>
                 </div>
 
-                {/* Control button - positioned over feed */}
+                {/* Control button - CHUNKY */}
                 {!isCapturing && (
                     <div 
                         onClick={startAutomatedCapture}
-                        className="absolute inset-0 flex items-center justify-center z-30 bg-black/60 cursor-pointer hover:bg-black/70 transition-colors"
+                        className="absolute inset-0 flex items-center justify-center z-30 bg-black/70 cursor-pointer hover:bg-black/80 transition-colors"
                     >
                         <div className="text-center">
-                            <div className="text-white text-6xl font-bold mb-4 font-['SpaceMono']" >[ REC ]</div>
-                            <div className="text-white/70 text-lg tracking-widest font-['SpaceMono']">PRESS TO START</div>
+                            <div className="text-white text-8xl font-bold mb-6 font-['Throwupz'] uppercase"
+                                style={{
+                                    textShadow: '6px 6px 0 #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 10px 10px 0 rgba(255,20,147,0.6)',
+                                    WebkitTextStroke: '3px black',
+                                    paintOrder: 'stroke fill'
+                                }}
+                            >START</div>
+                            
                         </div>
                     </div>
                 )}
 
-                {/* Stop button - small and unobtrusive */}
+                {/* Stop button - BOLD */}
                 {isCapturing && (
                     <button 
                         onClick={stopAutomatedCapture}
-                        className="absolute top-20 right-4 z-30 py-2 px-4 text-sm cursor-pointer bg-red-600/80 text-white border-none rounded font-bold hover:bg-red-700 transition-colors font-['SpaceMono']"
-                        style={{ fontFamily: 'SpaceMono, monospace' }}
+                        className="absolute top-20 right-4 z-30 py-3 px-6 text-base cursor-pointer bg-black text-white border-4 border-red-600 font-bold hover:bg-red-600 transition-colors font-['SpaceMono'] uppercase tracking-wider"
+                        style={{ 
+                            fontFamily: 'SpaceMono, monospace',
+                            boxShadow: '4px 4px 0 rgba(0,0,0,0.8), 0 0 20px rgba(255,0,0,0.6)',
+                            textShadow: '2px 2px 0 rgba(0,0,0,0.8)'
+                        }}
                     >
                         ■ STOP
                     </button>

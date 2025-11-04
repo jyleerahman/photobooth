@@ -157,11 +157,13 @@ const Selection = () => {
                 {/* Image Grid */}
                 <div style={{
                     display: 'grid',
-                    gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-                    gap: '25px',
-                    marginBottom: '40px',
-                    maxWidth: '1400px',
-                    margin: '0 auto 40px'
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(min(250px, 100%), 1fr))',
+                    gap: '1.5vh',
+                    flexGrow: 1,
+                    flexShrink: 1,
+                    minHeight: 0,
+                    overflowY: 'auto',
+                    padding: '1vh 0'
                 }}>
                     {images.map((image, index) => {
                         const isSelected = selectedImages.includes(index);
@@ -191,7 +193,7 @@ const Selection = () => {
                                     left: 0,
                                     right: 0,
                                     backgroundColor: 'rgba(0,0,0,0.9)',
-                                    padding: '8px 12px',
+                                    padding: '0.5vh 1vw',
                                     display: 'flex',
                                     justifyContent: 'space-between',
                                     alignItems: 'center',
@@ -200,7 +202,7 @@ const Selection = () => {
                                 }}>
                                     <span style={{
                                         color: '#888',
-                                        fontSize: '11px',
+                                        fontSize: 'clamp(0.6rem, 1.2vw, 0.75rem)',
                                         letterSpacing: '1px'
                                     }}>
                                         CAM {String(index + 1).padStart(2, '0')}
@@ -209,18 +211,18 @@ const Selection = () => {
                                         <div style={{
                                             display: 'flex',
                                             alignItems: 'center',
-                                            gap: '6px'
+                                            gap: '0.5vw'
                                         }}>
                                             <div style={{
-                                                width: '8px',
-                                                height: '8px',
+                                                width: 'clamp(6px, 1vw, 8px)',
+                                                height: 'clamp(6px, 1vw, 8px)',
                                                 backgroundColor: '#00FF00',
                                                 borderRadius: '50%',
                                                 boxShadow: '0 0 8px rgba(0, 255, 0, 0.8)'
                                             }} />
                                             <span style={{
                                                 color: '#00FF00',
-                                                fontSize: '11px',
+                                                fontSize: 'clamp(0.6rem, 1.2vw, 0.75rem)',
                                                 fontWeight: 'bold',
                                                 letterSpacing: '1px'
                                             }}>
@@ -247,12 +249,12 @@ const Selection = () => {
                                 {/* Timestamp overlay */}
                                 <div style={{
                                     position: 'absolute',
-                                    bottom: '8px',
-                                    left: '8px',
+                                    bottom: '0.5vh',
+                                    left: '0.5vw',
                                     backgroundColor: 'rgba(0,0,0,0.85)',
                                     color: '#888',
-                                    padding: '4px 10px',
-                                    fontSize: '10px',
+                                    padding: '0.3vh 0.8vw',
+                                    fontSize: 'clamp(0.5rem, 1vw, 0.625rem)',
                                     letterSpacing: '1px',
                                     fontFamily: 'SpaceMono, monospace',
                                     border: '1px solid #333'
@@ -305,17 +307,16 @@ const Selection = () => {
                 <div style={{
                     display: 'flex',
                     justifyContent: 'center',
-                    gap: '20px',
-                    marginTop: '40px',
-                    maxWidth: '1400px',
-                    margin: '40px auto 0',
-                    paddingBottom: '30px'
+                    gap: '2vw',
+                    marginTop: '1vh',
+                    paddingBottom: '1vh',
+                    flexShrink: 0
                 }}>
                     <button
                         onClick={handleRetake}
                         style={{
-                            padding: '18px 45px',
-                            fontSize: '16px',
+                            padding: '1.2vh 3vw',
+                            fontSize: 'clamp(0.75rem, 2vw, 1rem)',
                             cursor: 'pointer',
                             backgroundColor: '#000',
                             color: '#888',
@@ -345,8 +346,8 @@ const Selection = () => {
                         onClick={handleContinue}
                         disabled={selectedImages.length !== maxSelection}
                         style={{
-                            padding: '18px 45px',
-                            fontSize: '16px',
+                            padding: '1.2vh 3vw',
+                            fontSize: 'clamp(0.75rem, 2vw, 1rem)',
                             cursor: selectedImages.length === maxSelection ? 'pointer' : 'not-allowed',
                             backgroundColor: selectedImages.length === maxSelection ? '#000' : '#0a0a0a',
                             color: selectedImages.length === maxSelection ? '#00FF00' : '#333',

@@ -185,35 +185,38 @@ const Result = () => {
                 }}
             />
 
-            <div className="relative z-10 w-full h-full flex flex-col items-center justify-center px-4 py-4 gap-3">
+            <div className="relative z-10 w-full h-full flex flex-col items-center justify-center gap-[1vh]" style={{ padding: '2vh 2vw' }}>
                 {/* Header */}
-                <div className="text-center">
+                <div className="text-center flex-shrink-0">
                     <div 
-                        className="text-neon-pink text-3xl sm:text-4xl font-bold font-['WhoopieSunday'] mb-1 -rotate-1"
+                        className="text-neon-pink font-bold font-['WhoopieSunday'] -rotate-1 leading-none"
+                        style={{ fontSize: 'clamp(1.5rem, 4vw, 2.5rem)', marginBottom: '0.5vh' }}
                     >
                         YA PHOTO STRIP!
                     </div>
                     <div 
-                        className="text-neon-cyan text-sm sm:text-base font-['Timegoing'] tracking-wide rotate-1"
+                        className="text-neon-cyan font-['Timegoing'] tracking-wide rotate-1"
+                        style={{ fontSize: 'clamp(0.75rem, 2vw, 1rem)' }}
                     >
                         {frameLayout === 'strip' ? 'classic strip format ✨' : 'square grid format ✨'}
                     </div>
                 </div>
 
                 {/* Photo Strip Preview - Constrained height */}
-                <div className="flex justify-center flex-shrink" style={{ maxHeight: 'calc(100vh - 250px)' }}>
+                <div className="flex justify-center flex-shrink flex-grow min-h-0" style={{ maxHeight: '70vh', width: '100%' }}>
                     <div 
-                        className="bg-white p-3 shadow-2xl"
+                        className="bg-white shadow-2xl"
                         style={{
                             boxShadow: '0 0 40px rgba(255, 20, 147, 0.4), 0 10px 30px rgba(0, 0, 0, 0.7)',
                             transform: 'rotate(-1deg)',
-                            maxHeight: '100%'
+                            maxHeight: '100%',
+                            padding: 'clamp(8px, 1vh, 16px)'
                         }}
                     >
                         <canvas 
                             ref={canvasRef}
                             style={{
-                                maxWidth: frameLayout === 'strip' ? '280px' : '400px',
+                                maxWidth: frameLayout === 'strip' ? 'min(25vw, 280px)' : 'min(40vw, 450px)',
                                 maxHeight: '100%',
                                 width: 'auto',
                                 height: 'auto',
@@ -224,11 +227,13 @@ const Result = () => {
                 </div>
 
                 {/* Action Buttons - Compact */}
-                <div className="flex flex-wrap justify-center gap-3">
+                <div className="flex flex-wrap justify-center gap-[2vw] flex-shrink-0">
                     <button
                         onClick={handleDownload}
-                        className="px-6 py-2.5 text-sm font-bold font-['SpaceMono'] uppercase tracking-wider cursor-pointer transition-all duration-300"
+                        className="font-bold font-['SpaceMono'] uppercase tracking-wider cursor-pointer transition-all duration-300"
                         style={{
+                            padding: '1vh 2vw',
+                            fontSize: 'clamp(0.7rem, 1.8vw, 0.9rem)',
                             backgroundColor: '#000',
                             color: '#00FF00',
                             border: '2px solid #00FF00',
@@ -249,8 +254,10 @@ const Result = () => {
 
                     <button
                         onClick={handleRetake}
-                        className="px-6 py-2.5 text-sm font-bold font-['SpaceMono'] uppercase tracking-wider cursor-pointer transition-all duration-300"
+                        className="font-bold font-['SpaceMono'] uppercase tracking-wider cursor-pointer transition-all duration-300"
                         style={{
+                            padding: '1vh 2vw',
+                            fontSize: 'clamp(0.7rem, 1.8vw, 0.9rem)',
                             backgroundColor: '#000',
                             color: '#FFD700',
                             border: '2px solid #FFD700',
@@ -271,8 +278,10 @@ const Result = () => {
 
                     <button
                         onClick={handleStartOver}
-                        className="px-6 py-2.5 text-sm font-bold font-['SpaceMono'] uppercase tracking-wider cursor-pointer transition-all duration-300"
+                        className="font-bold font-['SpaceMono'] uppercase tracking-wider cursor-pointer transition-all duration-300"
                         style={{
+                            padding: '1vh 2vw',
+                            fontSize: 'clamp(0.7rem, 1.8vw, 0.9rem)',
                             backgroundColor: '#000',
                             color: '#888',
                             border: '2px solid #444',
@@ -294,8 +303,8 @@ const Result = () => {
                 </div>
 
                 {/* Fun message - Compact */}
-                <div className="text-center">
-                    <div className="text-neon-gold text-xs tracking-wider font-['Timegoing'] opacity-80">
+                <div className="text-center flex-shrink-0">
+                    <div className="text-neon-gold tracking-wider font-['Timegoing'] opacity-80" style={{ fontSize: 'clamp(0.6rem, 1.5vw, 0.75rem)' }}>
                         ✨ THANKS FOR VISITING THE NYC PHOTO BOOTH! ✨
                     </div>
                 </div>

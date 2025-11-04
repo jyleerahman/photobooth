@@ -76,14 +76,7 @@ function Frame() {
                             </div>
                         </div>
 
-                        <div className="text-neon-cyan text-xs sm:text-sm text-center mb-1.5 tracking-wide font-bold font-['SpaceMono']">
-                            2×6" VERTICAL
-                        </div>
-
-                        <div className="text-gray-400 text-xs text-center leading-relaxed font-['SpaceMono']">
-                            old school booth vibes<br/>
-                            4 pics stacked up
-                        </div>
+                       
                     </div>
 
                     {/* Option 2: Grid Layout */}
@@ -120,14 +113,7 @@ function Frame() {
                             </div>
                         </div>
 
-                        <div className="text-neon-gold text-xs sm:text-sm text-center mb-1.5 tracking-wide font-bold font-['SpaceMono']">
-                            4×6" GRID
-                        </div>
-
-                        <div className="text-gray-400 text-xs text-center leading-relaxed font-['SpaceMono']">
-                            modern square layout<br/>
-                            2×2 grid style
-                        </div>
+                      
                     </div>
                 </div>
 

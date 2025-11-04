@@ -6,160 +6,69 @@ function Frame() {
     const navigate = useNavigate();
 
     const selectFrame = (layout: FrameLayout) => {
-        // Navigate to camera with selected layout
         navigate('/camera', { state: { frameLayout: layout } });
     };
 
     return (
         <div 
-            className="fixed inset-0 w-screen h-screen overflow-hidden flex items-center justify-center"
+            className="fixed inset-0 flex items-center justify-center font-['SpaceMono'] overflow-auto"
             style={{
                 backgroundImage: `url(${new URL('../font/newyorkbodega.jpg', import.meta.url).href})`,
                 backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                fontFamily: 'SpaceMono, monospace'
+                backgroundPosition: 'center'
             }}
         >
-            {/* Dark overlay with slight color tint */}
-            <div 
+            {/* Dark overlay */}
+            <div className="fixed inset-0 pointer-events-none" 
                 style={{
-                    position: 'fixed',
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    background: 'radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.85))',
-                    pointerEvents: 'none'
+                    background: 'radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.85))'
                 }}
             />
 
-            <div style={{
-                position: 'relative',
-                zIndex: 1,
-                maxWidth: '1200px',
-                width: '100%',
-                padding: '40px'
-            }}>
+            <div className="relative z-10 w-full max-w-6xl px-3 sm:px-6 py-4 sm:py-6">
                 {/* Header */}
-                <div style={{
-                    textAlign: 'center',
-                    marginBottom: '60px'
-                }}>
+                <div className="text-center mb-4 sm:mb-6">
                     <div 
-                        className="text-neon-pink"
-                        style={{
-                            fontSize: '72px',
-                            fontWeight: 'bold',
-                            fontFamily: 'Throwupz, sans-serif',
-                            marginBottom: '10px',
-                            transform: 'rotate(-2deg)',
-                            lineHeight: '1'
-                        }}
+                        className="text-neon-pink text-3xl sm:text-4xl lg:text-5xl font-bold font-['WhoopieSunday'] mb-1 -rotate-2 leading-tight"
                     >
                         PICK YA LAYOUT
                     </div>
                     <div 
-                        className="text-neon-cyan"
-                        style={{
-                            fontSize: '24px',
-                            fontFamily: 'Graffiti, sans-serif',
-                            letterSpacing: '1px',
-                            transform: 'rotate(1deg)'
-                        }}
+                        className="text-neon-cyan text-sm sm:text-base lg:text-lg font-['Timegoing'] tracking-wide rotate-1"
                     >
                         choose your strip style ↓
                     </div>
                 </div>
 
                 {/* Frame options */}
-                <div style={{
-                    display: 'grid',
-                    gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))',
-                    gap: '40px',
-                    justifyContent: 'center'
-                }}>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 justify-items-center max-w-4xl mx-auto">
                     {/* Option 1: Strip Layout */}
                     <div
                         onClick={() => selectFrame('strip')}
-                        style={{
-                            cursor: 'pointer',
-                            padding: '35px',
-                            transition: 'all 0.3s ease',
-                            position: 'relative',
-                            transform: 'rotate(-1deg)'
-                        }}
-                        onMouseEnter={(e) => {
-                            e.currentTarget.style.transform = 'rotate(-1deg) scale(1.05)';
-                        }}
-                        onMouseLeave={(e) => {
-                            e.currentTarget.style.transform = 'rotate(-1deg) scale(1)';
-                        }}
+                        className="cursor-pointer p-4 sm:p-6 transition-all duration-300 relative -rotate-1 hover:scale-105 w-full max-w-xs"
                     >
                         {/* Spray paint number tag */}
-                        <div style={{
-                            position: 'absolute',
-                            top: '-15px',
-                            left: '20px',
-                            backgroundColor: '#FF1493',
-                            color: '#000',
-                            fontSize: '32px',
-                            fontWeight: 'bold',
-                            fontFamily: 'Throwupz, sans-serif',
-                            padding: '5px 20px',
-                            transform: 'rotate(-5deg)',
-                            boxShadow: '0 0 20px rgba(255, 20, 147, 0.7), 0 4px 10px rgba(0, 0, 0, 0.5)',
-                            border: '2px solid #000',
-                            zIndex: 10
-                        }}>
+                        <div className="absolute -top-3 left-3 bg-[#FF1493] text-black text-xl sm:text-2xl font-bold font-['WhoopieSunday'] px-3 sm:px-4 py-0.5 -rotate-6 border-2 border-black z-10"
+                            style={{
+                                boxShadow: '0 0 15px rgba(255, 20, 147, 0.7), 0 3px 8px rgba(0, 0, 0, 0.5)'
+                            }}>
                             01
                         </div>
 
-                        <div 
-                            className="text-neon-gold"
-                            style={{
-                                fontSize: '32px',
-                                fontWeight: 'bold',
-                                marginBottom: '25px',
-                                marginTop: '10px',
-                                fontFamily: 'Graffiti, sans-serif',
-                                textAlign: 'center',
-                                letterSpacing: '1px'
-                            }}
-                        >
+                        <div className="text-neon-gold text-xl sm:text-2xl font-bold font-['Graffiti'] mb-3 sm:mb-4 mt-1 text-center tracking-wide">
                             CLASSIC STRIP
                         </div>
 
                         {/* Visual representation of strip layout */}
-                        <div style={{
-                            display: 'flex',
-                            justifyContent: 'center',
-                            marginBottom: '25px'
-                        }}>
-                            <div style={{
-                                width: '160px',
-                                backgroundColor: '#fff',
-                                padding: '15px',
-                                display: 'flex',
-                                flexDirection: 'column',
-                                gap: '12px',
-                                boxShadow: '5px 5px 0 rgba(255, 215, 0, 0.6), 10px 10px 20px rgba(0, 0, 0, 0.5)',
-                                transform: 'rotate(2deg)'
-                            }}>
+                        <div className="flex justify-center mb-3 sm:mb-4">
+                            <div className="w-28 sm:w-32 bg-white p-2.5 sm:p-3 flex flex-col gap-2 rotate-2"
+                                style={{
+                                    boxShadow: '4px 4px 0 rgba(255, 215, 0, 0.6), 8px 8px 15px rgba(0, 0, 0, 0.5)'
+                                }}>
                                 {[1, 2, 3, 4].map((i) => (
                                     <div
                                         key={i}
-                                        style={{
-                                            height: '85px',
-                                            backgroundColor: '#ddd',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            color: '#555',
-                                            fontSize: '11px',
-                                            fontWeight: 'bold',
-                                            letterSpacing: '1px',
-                                            fontFamily: 'SpaceMono, monospace'
-                                        }}
+                                        className="h-14 sm:h-16 bg-gray-300 flex items-center justify-center text-gray-600 text-xs font-bold tracking-wide font-['SpaceMono']"
                                     >
                                         #{i}
                                     </div>
@@ -167,27 +76,11 @@ function Frame() {
                             </div>
                         </div>
 
-                        <div 
-                            className="text-neon-cyan"
-                            style={{
-                                fontSize: '16px',
-                                textAlign: 'center',
-                                marginBottom: '10px',
-                                letterSpacing: '1px',
-                                fontFamily: 'SpaceMono, monospace',
-                                fontWeight: 'bold'
-                            }}
-                        >
+                        <div className="text-neon-cyan text-xs sm:text-sm text-center mb-1.5 tracking-wide font-bold font-['SpaceMono']">
                             2×6" VERTICAL
                         </div>
 
-                        <div style={{
-                            color: '#aaa',
-                            fontSize: '13px',
-                            textAlign: 'center',
-                            lineHeight: '1.5',
-                            fontFamily: 'SpaceMono, monospace'
-                        }}>
+                        <div className="text-gray-400 text-xs text-center leading-relaxed font-['SpaceMono']">
                             old school booth vibes<br/>
                             4 pics stacked up
                         </div>
@@ -196,85 +89,30 @@ function Frame() {
                     {/* Option 2: Grid Layout */}
                     <div
                         onClick={() => selectFrame('grid')}
-                        style={{
-                            cursor: 'pointer',
-                            padding: '35px',
-                            transition: 'all 0.3s ease',
-                            position: 'relative',
-                            transform: 'rotate(1deg)'
-                        }}
-                        onMouseEnter={(e) => {
-                            e.currentTarget.style.transform = 'rotate(1deg) scale(1.05)';
-                        }}
-                        onMouseLeave={(e) => {
-                            e.currentTarget.style.transform = 'rotate(1deg) scale(1)';
-                        }}
+                        className="cursor-pointer p-4 sm:p-6 transition-all duration-300 relative rotate-1 hover:scale-105 w-full max-w-xs"
                     >
                         {/* Spray paint number tag */}
-                        <div style={{
-                            position: 'absolute',
-                            top: '-15px',
-                            right: '20px',
-                            backgroundColor: '#00FFFF',
-                            color: '#000',
-                            fontSize: '32px',
-                            fontWeight: 'bold',
-                            fontFamily: 'Throwupz, sans-serif',
-                            padding: '5px 20px',
-                            transform: 'rotate(5deg)',
-                            boxShadow: '0 0 20px rgba(0, 255, 255, 0.7), 0 4px 10px rgba(0, 0, 0, 0.5)',
-                            border: '2px solid #000',
-                            zIndex: 10
-                        }}>
+                        <div className="absolute -top-3 right-3 bg-[#00FFFF] text-black text-xl sm:text-2xl font-bold font-['WhoopieSunday'] px-3 sm:px-4 py-0.5 rotate-6 border-2 border-black z-10"
+                            style={{
+                                boxShadow: '0 0 15px rgba(0, 255, 255, 0.7), 0 3px 8px rgba(0, 0, 0, 0.5)'
+                            }}>
                             02
                         </div>
 
-                        <div 
-                            className="text-neon-pink"
-                            style={{
-                                fontSize: '32px',
-                                fontWeight: 'bold',
-                                marginBottom: '25px',
-                                marginTop: '10px',
-                                fontFamily: 'Graffiti, sans-serif',
-                                textAlign: 'center',
-                                letterSpacing: '1px'
-                            }}
-                        >
+                        <div className="text-neon-pink text-xl sm:text-2xl font-bold font-['Graffiti'] mb-3 sm:mb-4 mt-1 text-center tracking-wide">
                             SQUARE GRID
                         </div>
 
                         {/* Visual representation of grid layout */}
-                        <div style={{
-                            display: 'flex',
-                            justifyContent: 'center',
-                            marginBottom: '25px'
-                        }}>
-                            <div style={{
-                                width: '260px',
-                                height: '260px',
-                                backgroundColor: '#fff',
-                                padding: '18px',
-                                display: 'grid',
-                                gridTemplateColumns: '1fr 1fr',
-                                gap: '12px',
-                                boxShadow: '5px 5px 0 rgba(0, 255, 255, 0.6), 10px 10px 20px rgba(0, 0, 0, 0.5)',
-                                transform: 'rotate(-2deg)'
-                            }}>
+                        <div className="flex justify-center mb-3 sm:mb-4">
+                            <div className="w-44 h-44 sm:w-52 sm:h-52 bg-white p-3 sm:p-4 grid grid-cols-2 gap-2 -rotate-2"
+                                style={{
+                                    boxShadow: '4px 4px 0 rgba(0, 255, 255, 0.6), 8px 8px 15px rgba(0, 0, 0, 0.5)'
+                                }}>
                                 {[1, 2, 3, 4].map((i) => (
                                     <div
                                         key={i}
-                                        style={{
-                                            backgroundColor: '#ddd',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            color: '#555',
-                                            fontSize: '11px',
-                                            fontWeight: 'bold',
-                                            letterSpacing: '1px',
-                                            fontFamily: 'SpaceMono, monospace'
-                                        }}
+                                        className="bg-gray-300 flex items-center justify-center text-gray-600 text-xs font-bold tracking-wide font-['SpaceMono']"
                                     >
                                         #{i}
                                     </div>
@@ -282,27 +120,11 @@ function Frame() {
                             </div>
                         </div>
 
-                        <div 
-                            className="text-neon-gold"
-                            style={{
-                                fontSize: '16px',
-                                textAlign: 'center',
-                                marginBottom: '10px',
-                                letterSpacing: '1px',
-                                fontFamily: 'SpaceMono, monospace',
-                                fontWeight: 'bold'
-                            }}
-                        >
+                        <div className="text-neon-gold text-xs sm:text-sm text-center mb-1.5 tracking-wide font-bold font-['SpaceMono']">
                             4×6" GRID
                         </div>
 
-                        <div style={{
-                            color: '#aaa',
-                            fontSize: '13px',
-                            textAlign: 'center',
-                            lineHeight: '1.5',
-                            fontFamily: 'SpaceMono, monospace'
-                        }}>
+                        <div className="text-gray-400 text-xs text-center leading-relaxed font-['SpaceMono']">
                             modern square layout<br/>
                             2×2 grid style
                         </div>
@@ -310,17 +132,7 @@ function Frame() {
                 </div>
 
                 {/* Instructions */}
-                <div 
-                    className="text-neon-gold"
-                    style={{
-                        textAlign: 'center',
-                        marginTop: '50px',
-                        fontSize: '18px',
-                        letterSpacing: '2px',
-                        fontFamily: 'Graffiti, sans-serif',
-                        opacity: 0.8
-                    }}
-                >
+                <div className="text-neon-gold text-center mt-4 sm:mt-6 text-xs sm:text-sm tracking-wider font-['Timegoing'] opacity-80">
                     ↑ TAP TO PICK & START ↑
                 </div>
             </div>

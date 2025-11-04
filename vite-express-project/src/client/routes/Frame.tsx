@@ -34,15 +34,11 @@ function Frame() {
                 {/* Header */}
                 <div className="text-center mb-4 sm:mb-6">
                     <div 
-                        className="text-neon-pink text-3xl sm:text-4xl lg:text-5xl font-bold font-['WhoopieSunday'] mb-1 -rotate-2 leading-tight"
+                        className="text-white text-3xl sm:text-4xl lg:text-5xl font-bold font-['WhoopieSunday'] mb-1 -rotate-2 leading-tight"
                     >
                         PICK YA LAYOUT
                     </div>
-                    <div 
-                        className="text-neon-cyan text-sm sm:text-base lg:text-lg font-['Timegoing'] tracking-wide rotate-1"
-                    >
-                        choose your strip style ↓
-                    </div>
+                   
                 </div>
 
                 {/* Frame options */}
@@ -60,7 +56,7 @@ function Frame() {
                             01
                         </div>
 
-                        <div className="text-neon-gold text-xl sm:text-2xl font-bold font-['Graffiti'] mb-3 sm:mb-4 mt-1 text-center tracking-wide">
+                        <div className="text-neon-cyan text-xl sm:text-2xl font-bold font-['Graffiti'] mb-3 sm:mb-4 mt-1 text-center tracking-wide">
                             CLASSIC STRIP
                         </div>
 
@@ -168,7 +164,7 @@ function Frame() {
                 </div>
 
                 {/* Instructions */}
-                <div className="text-neon-gold text-center mt-4 sm:mt-6 text-xs sm:text-sm tracking-wider font-['Timegoing'] opacity-80">
+                <div className="text-neon-cyan text-center mt-4 sm:mt-6 text-xs sm:text-sm tracking-wider font-['Timegoing'] opacity-80">
                     ↑ TAP TO PICK & START ↑
                 </div>
             </div>

@@ -53,13 +53,7 @@ const Selection = () => {
 
     return (
         <div 
-            className="fixed inset-0 w-screen h-screen overflow-hidden"
-            style={{
-                backgroundImage: `url(${new URL('../font/nycstreet.jpg', import.meta.url).href})`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                fontFamily: 'SpaceMono, monospace'
-            }}
+            className="fixed inset-0 w-screen h-screen overflow-hidden font-['SpaceMono']"
         >
             {/* VHS/Bodega Effects */}
             <div className="bodega-scanlines" />

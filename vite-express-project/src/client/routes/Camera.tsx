@@ -258,11 +258,7 @@ const Camera = () => {
                                     paintOrder: 'stroke fill'
                                 }}
                             >START</div>
-                            <div className="text-gray-400 text-xl tracking-[0.3em] font-['Graffiti'] uppercase"
-                                style={{
-                                    textShadow: '2px 2px 0 rgba(0,0,0,0.9)'
-                                }}
-                            >▶ TAP TO BEGIN ◀</div>
+                            
                         </div>
                     </div>
                 )}

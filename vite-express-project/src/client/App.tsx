@@ -14,115 +14,84 @@ function App() {
   }, []);
 
   return (
-    <div 
-      className="fixed inset-0 flex flex-col items-center justify-center overflow-hidden"
-      style={{
-        backgroundImage: `url(${new URL('./font/newyorkstreet.jpg', import.meta.url).href})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundColor: '#0a0a0a'
-      }}
-    >
-      {/* Gritty Film Grain Effects */}
-      <div className="bodega-scanlines" />
-      <div className="bodega-vhs-effect" />
-      <div className="bodega-grain" />
-      
-      {/* Film Timestamp - Subtle */}
-      <div className="bodega-timestamp">
-        {time.toLocaleString('en-US', { 
-          month: '2-digit', 
-          day: '2-digit', 
-          year: '2-digit',
-          hour: '2-digit', 
-          minute: '2-digit', 
-          second: '2-digit',
-          hour12: false 
-        })}
-      </div>
-
-      {/* Dark overlay for contrast */}
-      <div className="fixed inset-0 pointer-events-none" 
+      <div 
+        className="fixed inset-0 flex flex-col items-center justify-center overflow-hidden"
         style={{
-          background: 'radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7))'
+          backgroundColor: '#f5f5f5',
+          backgroundImage: `url(${new URL('./font/newyorkstreet.jpg', import.meta.url).href})`,
+          backgroundSize: '50% auto',
+          backgroundPosition: 'center center',
+          backgroundRepeat: 'no-repeat'
         }}
-      />
+      >
+        {/* Film grain texture */}
+        <div className="bodega-grain" />
+        
+        {/* Timestamp - minimal */}
+        <div className="bodega-timestamp">
+          {time.toLocaleString('en-US', { 
+            month: '2-digit', 
+            day: '2-digit', 
+            year: '2-digit',
+            hour: '2-digit', 
+            minute: '2-digit', 
+            second: '2-digit',
+            hour12: false 
+          })}
+        </div>
 
       {/* Main Content */}
-      <div className="relative z-10 text-center">
-        {/* RAW GRAFFITI TITLES */}
-        <div className="mb-[3vh]">
-          <div className="text-[clamp(2.5rem,10vw,7rem)] font-bold font-['Throwupz'] text-neon-gold leading-[0.85] tracking-tight"
+      <div className="relative z-10 text-center max-w-4xl mx-auto px-8">
+        {/* BLACK & WHITE ZINE TITLES */}
+        <div className="mb-12">
+          <div className="text-[clamp(3rem,12vw,9rem)] font-bold font-['Throwupz'] text-white leading-[0.85] tracking-tight"
             style={{
-              textShadow: '6px 6px 0 #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 10px 10px 0 rgba(0,0,0,0.3)',
-              WebkitTextStroke: '2px black',
-              paintOrder: 'stroke fill'
+              textShadow: '4px 4px 0 rgba(0,0,0,0.3)',
             }}
           >
             NEW YORK
           </div>
-          <div className="text-[clamp(4.5rem,18vw,12rem)] font-bold font-['Throwupz'] text-neon-pink leading-[0.75] -rotate-2 tracking-tighter"
+          <div className="text-[clamp(5rem,20vw,14rem)] font-bold font-['Throwupz'] text-white leading-[0.7] -rotate-1 tracking-tighter"
             style={{
-              textShadow: '8px 8px 0 #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 12px 12px 0 rgba(0,0,0,0.4)',
-              WebkitTextStroke: '3px black',
-              paintOrder: 'stroke fill',
-              marginTop: '-0.5rem'
+              textShadow: '6px 6px 0 rgba(0,0,0,0.3)',
+              marginTop: '-1rem'
             }}
           >
             PHOTOBOOTH
           </div>
         </div>
 
-        {/* Gritty tagline */}
-        <div className="text-white text-[clamp(0.7rem,1.8vw,1rem)] font-['Graffiti'] mb-[2vh] tracking-[0.3em] opacity-80 uppercase"
+        {/* Clean description */}
+        <div className="text-white text-[clamp(0.75rem,1.8vw,1rem)] mb-8 max-w-md mx-auto leading-relaxed tracking-wide"
           style={{
-            textShadow: '3px 3px 0 rgba(0,0,0,0.9)',
-            letterSpacing: '0.2em'
+            fontFamily: 'Coolvetica, Helvetica, Arial, sans-serif',
+            fontWeight: 400,
+            textShadow: '2px 2px 0 rgba(0,0,0,0.3)'
           }}
         >
-          ▀▄ STREET CERTIFIED ▄▀
+          STREET-STYLE PHOTOGRAPHY BOOTH
         </div>
 
-        <nav className="mt-[3vh]">
+        <nav className="mt-8">
           <Link to="/frame">
             <div className="inline-block relative group">
-              {/* CHUNKY GRAFFITI BUTTON */}
-              <div className="text-[clamp(2.5rem,10vw,5rem)] font-bold font-['Throwupz'] text-white px-[4vw] py-[2.5vh] border-[6px] border-black transition-all duration-200 group-hover:scale-105"
+              {/* MINIMAL BLACK BUTTON */}
+              <div className="text-[clamp(1.2rem,3vw,1.5rem)] font-bold text-white px-16 py-4 border-4 border-black transition-all duration-200 group-hover:scale-105 uppercase tracking-[0.3em]"
                 style={{
-                  textShadow: '5px 5px 0 #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 8px 8px 0 rgba(255,20,147,0.6)',
-                  boxShadow: '8px 8px 0 rgba(255,20,147,0.8), 12px 12px 0 rgba(0,0,0,0.5), inset 0 0 40px rgba(255,20,147,0.2)',
-                  background: 'linear-gradient(135deg, #FF1493 0%, #FF1493 100%)',
-                  WebkitTextStroke: '2px black',
-                  paintOrder: 'stroke fill',
-                  letterSpacing: '0.05em'
+                  fontFamily: 'Coolvetica, Helvetica, Arial, sans-serif',
+                  backgroundColor: '#000',
+                  boxShadow: '6px 6px 0 rgba(0,0,0,0.2)',
+                  letterSpacing: '0.3em',
+                  fontWeight: 700
                 }}
               >
                 START
               </div>
-              
-              {/* Spray paint drips effect */}
-              <div className="absolute -bottom-2 left-[20%] w-2 h-8 bg-[#FF1493] opacity-60"
-                style={{
-                  clipPath: 'polygon(40% 0%, 60% 0%, 70% 100%, 30% 100%)'
-                }}
-              />
-              <div className="absolute -bottom-2 right-[30%] w-2 h-6 bg-[#FF1493] opacity-60"
-                style={{
-                  clipPath: 'polygon(40% 0%, 60% 0%, 70% 100%, 30% 100%)'
-                }}
-              />
             </div>
           </Link>
         </nav>
 
-        {/* Raw street cred */}
-        <div className="mt-[3vh] text-gray-400 text-[clamp(0.55rem,1.3vw,0.75rem)] font-['SpaceMono'] opacity-60 tracking-[0.15em] uppercase"
-          style={{
-            textShadow: '2px 2px 0 rgba(0,0,0,0.8)'
-          }}
-        >
-          ※ CASH ONLY ※ NO COPS ※ REAL SHIT ※
-        </div>
+       
       </div>
     </div>
   );

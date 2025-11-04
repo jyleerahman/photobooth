@@ -280,61 +280,40 @@ const Result = () => {
         <div 
             className="fixed inset-0 flex items-center justify-center overflow-hidden"
             style={{
+                backgroundColor: '#f5f5f5',
                 backgroundImage: `url(${new URL('../font/newyorkstreet.jpg', import.meta.url).href})`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                backgroundColor: '#0a0a0a',
-                fontFamily: 'SpaceMono, monospace'
+                backgroundSize: '50% auto',
+                backgroundPosition: 'center center',
+                backgroundRepeat: 'no-repeat'
             }}
         >
-            {/* Gritty Film Effects */}
-            <div className="bodega-scanlines" />
-            <div className="bodega-vhs-effect" />
+            {/* Film grain texture */}
             <div className="bodega-grain" />
-            
-            {/* Dark overlay */}
-            <div className="fixed inset-0 pointer-events-none" 
-                style={{
-                    background: 'radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.75))'
-                }}
-            />
 
-            <div className="relative z-10 w-full h-full flex flex-col items-center justify-center gap-[1.5vh]" style={{ padding: '2vh 2vw' }}>
-                {/* Header - RAW GRAFFITI */}
+            <div className="relative z-10 w-full h-full flex flex-col items-center justify-center gap-6" style={{ padding: '2rem' }}>
+                {/* Header - MINIMAL GRAFFITI */}
                 <div className="text-center flex-shrink-0">
                     <div 
-                        className="text-white font-bold font-['Throwupz'] -rotate-2 leading-none tracking-tight"
+                        className="text-white font-bold font-['Throwupz'] leading-none"
                         style={{ 
-                            fontSize: 'clamp(2rem, 5vw, 3.5rem)', 
-                            marginBottom: '0.8vh',
-                            textShadow: '5px 5px 0 #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 8px 8px 0 rgba(255,20,147,0.5)',
-                            WebkitTextStroke: '2px black',
-                            paintOrder: 'stroke fill'
+                            fontSize: 'clamp(2.5rem, 6vw, 4rem)',
+                            textShadow: '4px 4px 0 rgba(0,0,0,0.3)',
+                            marginBottom: '0.5rem'
                         }}
                     >
-                        YA PRINTS!
+                        YOUR PHOTOS
                     </div>
-                    <div 
-                        className="text-gray-400 font-['Graffiti'] tracking-[0.2em] uppercase"
-                        style={{ 
-                            fontSize: 'clamp(0.7rem, 1.8vw, 0.95rem)',
-                            textShadow: '2px 2px 0 rgba(0,0,0,0.9)'
-                        }}
-                    >
-                        {getLayoutName()}
-                    </div>
+                    
                 </div>
 
-                {/* Photo Strip Preview - BOLD FRAMING */}
-                <div className="flex justify-center flex-shrink flex-grow min-h-0" style={{ maxHeight: '70vh', width: '100%' }}>
+                {/* Photo Strip Preview - MINIMAL FRAMING */}
+                <div className="flex justify-center flex-shrink flex-grow min-h-0" style={{ maxHeight: '65vh', width: '100%' }}>
                     <div 
-                        className="bg-white"
+                        className="bg-white border-4 border-black"
                         style={{
-                            boxShadow: '8px 8px 0 rgba(0,0,0,0.8), 0 0 50px rgba(255, 20, 147, 0.5), 15px 15px 30px rgba(0, 0, 0, 0.8)',
-                            transform: 'rotate(-2deg)',
+                            boxShadow: '6px 6px 0 rgba(0,0,0,0.2)',
                             maxHeight: '100%',
-                            padding: 'clamp(10px, 1.2vh, 20px)',
-                            border: '6px solid #000'
+                            padding: 'clamp(10px, 1.2vh, 20px)'
                         }}
                     >
                         <canvas 
@@ -344,101 +323,52 @@ const Result = () => {
                                 maxHeight: '100%',
                                 width: 'auto',
                                 height: 'auto',
-                                display: 'block',
-                                filter: 'contrast(1.15) brightness(0.95) saturate(1.05)',
-                                boxShadow: 'inset 0 0 20px rgba(0,0,0,0.2)'
+                                display: 'block'
                             }}
                         />
                     </div>
                 </div>
 
-                {/* Action Buttons - CHUNKY */}
-                <div className="flex flex-wrap justify-center gap-[3vw] flex-shrink-0">
+                {/* Action Buttons - GRAFFITI STYLE */}
+                <div className="flex flex-wrap justify-center gap-12 flex-shrink-0">
                     <button
                         onClick={handleDownload}
-                        className="font-bold font-['Graffiti'] uppercase tracking-wider cursor-pointer transition-all duration-200"
+                        className="text-orange-500 font-bold uppercase transition-all duration-200 hover:scale-110 bg-transparent border-0"
                         style={{
-                            padding: '1.5vh 3vw',
-                            fontSize: 'clamp(0.8rem, 2vw, 1.1rem)',
-                            backgroundColor: '#FF1493',
-                            color: '#fff',
-                            border: '4px solid #fff',
-                            boxShadow: '6px 6px 0 rgba(0,0,0,0.8), 0 0 30px rgba(255, 20, 147, 0.6), 10px 10px 20px rgba(0,0,0,0.7)',
-                            textShadow: '3px 3px 0 rgba(0,0,0,0.8)'
-                        }}
-                        onMouseEnter={(e) => {
-                            e.currentTarget.style.backgroundColor = '#FF006E';
-                            e.currentTarget.style.transform = 'scale(1.05)';
-                        }}
-                        onMouseLeave={(e) => {
-                            e.currentTarget.style.backgroundColor = '#FF1493';
-                            e.currentTarget.style.transform = 'scale(1)';
+                            fontFamily: 'Graffiti, sans-serif',
+                            fontSize: '35px',
+                            textShadow: '5px 5px 0 rgba(0,0,0,0.6)',
+                            background: 'none'
                         }}
                     >
-                        ⬇ DOWNLOAD
+                        DOWNLOAD
                     </button>
 
                     <button
                         onClick={handleRetake}
-                        className="font-bold font-['Graffiti'] uppercase tracking-wider cursor-pointer transition-all duration-200"
+                        className="text-orange-500 font-bold uppercase transition-all duration-200 hover:scale-110 bg-transparent border-0"
                         style={{
-                            padding: '1.5vh 3vw',
-                            fontSize: 'clamp(0.8rem, 2vw, 1.1rem)',
-                            backgroundColor: '#00FFFF',
-                            color: '#000',
-                            border: '4px solid #000',
-                            boxShadow: '6px 6px 0 rgba(0,0,0,0.8), 0 0 30px rgba(0, 255, 255, 0.6), 10px 10px 20px rgba(0,0,0,0.7)',
-                            textShadow: '2px 2px 0 rgba(255,255,255,0.5)'
-                        }}
-                        onMouseEnter={(e) => {
-                            e.currentTarget.style.backgroundColor = '#00E6E6';
-                            e.currentTarget.style.transform = 'scale(1.05)';
-                        }}
-                        onMouseLeave={(e) => {
-                            e.currentTarget.style.backgroundColor = '#00FFFF';
-                            e.currentTarget.style.transform = 'scale(1)';
+                            fontFamily: 'Graffiti, sans-serif',
+                            fontSize: '35px',
+                            textShadow: '5px 5px 0 rgba(0,0,0,0.6)',
+                            background: 'none'
                         }}
                     >
-                        📸 RETAKE
+                        RETAKE
                     </button>
 
                     <button
                         onClick={handleStartOver}
-                        className="font-bold font-['Graffiti'] uppercase tracking-wider cursor-pointer transition-all duration-200"
+                        className="text-orange-500 font-bold uppercase transition-all duration-200 hover:scale-110 bg-transparent border-0"
                         style={{
-                            padding: '1.5vh 3vw',
-                            fontSize: 'clamp(0.8rem, 2vw, 1.1rem)',
-                            backgroundColor: '#000',
-                            color: '#888',
-                            border: '4px solid #333',
-                            boxShadow: '4px 4px 0 rgba(0,0,0,0.6), 8px 8px 15px rgba(0,0,0,0.7)',
-                            textShadow: '2px 2px 0 rgba(0,0,0,0.8)'
-                        }}
-                        onMouseEnter={(e) => {
-                            e.currentTarget.style.backgroundColor = '#1a1a1a';
-                            e.currentTarget.style.borderColor = '#555';
-                            e.currentTarget.style.color = '#aaa';
-                            e.currentTarget.style.transform = 'scale(1.05)';
-                        }}
-                        onMouseLeave={(e) => {
-                            e.currentTarget.style.backgroundColor = '#000';
-                            e.currentTarget.style.borderColor = '#333';
-                            e.currentTarget.style.color = '#888';
-                            e.currentTarget.style.transform = 'scale(1)';
+                            fontFamily: 'Graffiti, sans-serif',
+                            fontSize: '35px',
+                            textShadow: '5px 5px 0 rgba(0,0,0,0.6)',
+                            background: 'none'
                         }}
                     >
-                        ◄ HOME
+                        HOME
                     </button>
-                </div>
-
-                {/* RAW street message */}
-                <div className="text-center flex-shrink-0">
-                    <div className="text-gray-500 tracking-[0.2em] font-['Graffiti'] opacity-60 uppercase" style={{ 
-                        fontSize: 'clamp(0.6rem, 1.4vw, 0.75rem)',
-                        textShadow: '2px 2px 0 rgba(0,0,0,0.9)'
-                    }}>
-                        ※ NYC CERTIFIED ※ REAL SHIT ※
-                    </div>
                 </div>
             </div>
         </div>

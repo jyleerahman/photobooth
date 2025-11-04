@@ -1,7 +1,7 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import React from "react";
 import Webcam from "react-webcam";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const videoConstraints = {
     width: 1280,
@@ -9,9 +9,18 @@ const videoConstraints = {
     facingMode: "user"
 };
 
+type FrameLayout = 'strip' | 'grid';
+
+interface LocationState {
+    frameLayout: FrameLayout;
+}
+
 const Camera = () => {
     const webcamRef = React.useRef<Webcam>(null);
     const navigate = useNavigate();
+    const location = useLocation();
+    const state = location.state as LocationState;
+    const frameLayout = state?.frameLayout || 'strip';
     
     const [capturedImages, setCapturedImages] = useState<string[]>([]);
     const [isCapturing, setIsCapturing] = useState(false);
@@ -95,9 +104,9 @@ const Camera = () => {
         if (currentPhotoNumber >= totalPhotos) {
             setIsCapturing(false);
             setCountdown(5);
-            // Navigate to selection page with captured images
+            // Navigate to selection page with captured images and frame layout
             setTimeout(() => {
-                navigate('/select', { state: { images: capturedImages } });
+                navigate('/select', { state: { images: capturedImages, frameLayout } });
             }, 500);
             return;
         }

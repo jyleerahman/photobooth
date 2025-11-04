@@ -1,8 +1,11 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
+type FrameLayout = 'strip' | 'grid';
+
 interface LocationState {
     images: string[];
+    frameLayout: FrameLayout;
 }
 
 const Selection = () => {
@@ -12,6 +15,7 @@ const Selection = () => {
     
     const [selectedImages, setSelectedImages] = useState<number[]>([]);
     const images = state?.images || [];
+    const frameLayout = state?.frameLayout || 'strip';
     
     const maxSelection = 4;
 
@@ -39,10 +43,8 @@ const Selection = () => {
 
     const handleContinue = () => {
         const selected = selectedImages.map(index => images[index]);
-        // TODO: Navigate to next page with selected images
-        console.log('Selected images:', selected);
-        // For now, just log. You can add navigation to frame page later
-        navigate('/frame', { state: { selectedImages: selected } });
+        // Navigate to result page with selected images and frame layout
+        navigate('/result', { state: { selectedImages: selected, frameLayout } });
     };
 
     const handleRetake = () => {

@@ -6,7 +6,16 @@ function Frame() {
 
     return (
         <>
-            <div>Choose layout</div>
+            <div className="text-[5rem] font-bold font-['Timegoing']" 
+            style={{
+          color: '#FF1493',
+          textShadow: `
+            3px 3px 0 #000,
+            -3px -3px 0 #000,
+            3px -3px 0 #000,
+            -3px 3px 0 #000,
+            0 0 30px rgba(255, 20, 147, 0.6)
+          `}}>Choose layout</div>
             <nav>
                 <div><Link to="/camera">A</Link></div>
                 <div><Link to="/camera">B</Link></div>

@@ -9,53 +9,19 @@ function App() {
 
   return (
     <>
-    <div 
-      className="text-[5rem] font-bold font-['Timegoing']"
-      style={{
-        color: '#FFD700',
-        textShadow: `
-          2px 2px 0 #000,
-          -2px -2px 0 #000,
-          2px -2px 0 #000,
-          -2px 2px 0 #000,
-          0 0 20px rgba(255, 215, 0, 0.5)
-        `
-      }}
-    >
-      New York City
-    </div>
-      <div 
-        className="text-[10rem] font-bold font-['WhoopieSunday']"
-        style={{
-          color: '#FF1493',
-          textShadow: `
-            3px 3px 0 #000,
-            -3px -3px 0 #000,
-            3px -3px 0 #000,
-            -3px 3px 0 #000,
-            0 0 30px rgba(255, 20, 147, 0.6)
-          `
-        }}
-      >
+    <div className="flex flex-col items-center justify-center gap-1">
+      <div className="text-[5rem] font-bold font-['Timegoing'] text-neon-gold -mb-10">
+        New York City
+      </div>
+      <div className="text-[10rem] font-bold font-['WhoopieSunday'] text-neon-pink">
         Photo Booth
       </div>
       <nav>
-        <div 
-          className="text-6xl font-bold font-['Timegoing']"
-          style={{
-            color: '#00FFFF',
-            textShadow: `
-              2px 2px 0 #000,
-              -2px -2px 0 #000,
-              2px -2px 0 #000,
-              -2px 2px 0 #000,
-              0 0 20px rgba(0, 255, 255, 0.5)
-            `
-          }}
-        >
+        <div className="text-6xl font-bold font-['Timegoing'] text-neon-cyan">
           <Link to="/frame">Start</Link>
         </div>
       </nav>
+    </div>
     </>
   );
 }

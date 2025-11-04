@@ -127,7 +127,7 @@ const Selection = () => {
                         className="text-orange-500 font-bold fuppercase transition-all duration-200 hover:scale-110 bg-transparent border-0"
                         style={{
                             fontFamily: 'Graffiti, sans-serif',
-                            fontSize: '30px',
+                            fontSize: '35px',
                             textShadow: '5px 5px 0 rgba(0,0,0,0.6)',
                             background: 'none'
                         }}
@@ -145,7 +145,7 @@ const Selection = () => {
                         }`}
                         style={{
                             fontFamily: 'Graffiti, sans-serif',
-                            fontSize: '30px',
+                            fontSize: '35px',
                             textShadow: selectedImages.length === maxSelection 
                                 ? '5px 5px 0 rgba(0,0,0,0.6)' 
                                 : '2px 2px 0 rgba(0,0,0,0.2)',

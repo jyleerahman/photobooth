@@ -117,41 +117,58 @@ const Selection = () => {
                     })}
                 </div>
 
-                {/* Action Buttons - MINIMAL BLACK BUTTONS */}
-                <div className="flex justify-center gap-8 mt-8 pb-8 flex-shrink-0">
+                {/* Action Buttons - STREET SIGN BUTTONS */}
+                <div className="flex justify-center gap-12 mt-8 pb-8 flex-shrink-0">
                     <button
                         onClick={handleRetake}
-                        className="text-[clamp(1rem,2.5vw,1.25rem)] font-bold text-white px-12 py-3 border-4 border-black transition-all duration-200 hover:scale-105 uppercase tracking-[0.3em]"
+                        className="relative transition-all duration-200 hover:scale-105"
                         style={{
-                            fontFamily: 'Coolvetica, Helvetica, Arial, sans-serif',
-                            backgroundColor: '#000',
-                            boxShadow: '6px 6px 0 rgba(0,0,0,0.2)',
-                            letterSpacing: '0.3em',
-                            fontWeight: 700
+                            width: 'clamp(120px, 18vw, 180px)',
+                            height: 'clamp(120px, 18vw, 180px)',
+                            backgroundImage: `url(${new URL('../font/stop.png', import.meta.url).href})`,
+                            backgroundSize: 'contain',
+                            backgroundRepeat: 'no-repeat',
+                            backgroundPosition: 'center',
+                            border: 'none',
+                            background: 'transparent',
+                            cursor: 'pointer',
+                            filter: 'drop-shadow(4px 4px 8px rgba(0,0,0,0.3))'
                         }}
                     >
-                        RETAKE
+                        <span className="sr-only">RETAKE</span>
                     </button>
                     
                     <button
                         onClick={handleContinue}
                         disabled={selectedImages.length !== maxSelection}
-                        className={`text-[clamp(1rem,2.5vw,1.25rem)] font-bold px-12 py-3 border-4 transition-all duration-200 uppercase tracking-[0.3em] ${
+                        className={`relative transition-all duration-200 ${
                             selectedImages.length === maxSelection 
-                                ? 'text-white border-black hover:scale-105 cursor-pointer' 
-                                : 'text-gray-400 border-gray-400 cursor-not-allowed opacity-50'
+                                ? 'hover:scale-105 cursor-pointer' 
+                                : 'cursor-not-allowed opacity-40'
                         }`}
                         style={{
-                            fontFamily: 'Coolvetica, Helvetica, Arial, sans-serif',
-                            backgroundColor: selectedImages.length === maxSelection ? '#000' : '#666',
-                            boxShadow: selectedImages.length === maxSelection 
-                                ? '6px 6px 0 rgba(0,0,0,0.2)' 
-                                : '3px 3px 0 rgba(0,0,0,0.1)',
-                            letterSpacing: '0.3em',
-                            fontWeight: 700
+                            width: 'clamp(200px, 28vw, 320px)',
+                            height: 'clamp(60px, 8vw, 100px)',
+                            backgroundImage: `url(${new URL('../font/greenplate.png', import.meta.url).href})`,
+                            backgroundSize: 'contain',
+                            backgroundRepeat: 'no-repeat',
+                            backgroundPosition: 'center',
+                            border: 'none',
+                            background: 'transparent',
+                            filter: selectedImages.length === maxSelection 
+                                ? 'drop-shadow(4px 4px 8px rgba(0,0,0,0.3))' 
+                                : 'grayscale(50%) drop-shadow(2px 2px 4px rgba(0,0,0,0.2))'
                         }}
                     >
-                        {selectedImages.length === maxSelection ? 'CONTINUE' : `SELECT ${maxSelection - selectedImages.length} MORE`}
+                        <div className="absolute inset-0 flex items-center justify-center text-[clamp(0.9rem,2vw,1.5rem)] font-bold text-white uppercase tracking-[0.2em]"
+                            style={{
+                                fontFamily: 'Coolvetica, Helvetica, Arial, sans-serif',
+                                textShadow: '2px 2px 4px rgba(0,0,0,0.8)',
+                                fontWeight: 700
+                            }}
+                        >
+                            {selectedImages.length === maxSelection ? 'CONTINUE' : `SELECT ${maxSelection - selectedImages.length} MORE`}
+                        </div>
                     </button>
                 </div>
             </div>

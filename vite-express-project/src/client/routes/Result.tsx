@@ -328,48 +328,76 @@ const Result = () => {
                     </div>
                 </div>
 
-                {/* Action Buttons - MINIMAL BLACK BUTTONS */}
-                <div className="flex flex-wrap justify-center gap-8 flex-shrink-0">
+                {/* Action Buttons - STREET SIGN BUTTONS */}
+                <div className="flex flex-wrap justify-center gap-8 flex-shrink-0 items-center">
                     <button
                         onClick={handleDownload}
-                        className="text-[clamp(1rem,2.5vw,1.25rem)] font-bold text-white px-12 py-3 border-4 border-black transition-all duration-200 hover:scale-105 uppercase tracking-[0.3em]"
+                        className="relative transition-all duration-200 hover:scale-105 border-0"
                         style={{
-                            fontFamily: 'Coolvetica, Helvetica, Arial, sans-serif',
-                            backgroundColor: '#000',
-                            boxShadow: '6px 6px 0 rgba(0,0,0,0.2)',
-                            letterSpacing: '0.3em',
-                            fontWeight: 700
+                            width: 'clamp(200px, 25vw, 300px)',
+                            height: 'clamp(60px, 8vw, 90px)',
+                            backgroundImage: `url(${new URL('../font/greenplate.png', import.meta.url).href})`,
+                            backgroundSize: 'contain',
+                            backgroundRepeat: 'no-repeat',
+                            backgroundPosition: 'center',
+                            backgroundColor: 'transparent',
+                            cursor: 'pointer',
+                            filter: 'drop-shadow(4px 4px 8px rgba(0,0,0,0.3))'
                         }}
                     >
-                        DOWNLOAD
+                        <div className="absolute inset-0 flex items-center justify-center text-[clamp(1rem,2.2vw,1.5rem)] font-bold text-white uppercase tracking-[0.25em]"
+                            style={{
+                                fontFamily: 'Coolvetica, Helvetica, Arial, sans-serif',
+                                textShadow: '2px 2px 4px rgba(0,0,0,0.8)',
+                                fontWeight: 700
+                            }}
+                        >
+                            DOWNLOAD
+                        </div>
                     </button>
 
                     <button
                         onClick={handleRetake}
-                        className="text-[clamp(1rem,2.5vw,1.25rem)] font-bold text-white px-12 py-3 border-4 border-black transition-all duration-200 hover:scale-105 uppercase tracking-[0.3em]"
+                        className="relative transition-all duration-200 hover:scale-105 border-0"
                         style={{
-                            fontFamily: 'Coolvetica, Helvetica, Arial, sans-serif',
-                            backgroundColor: '#000',
-                            boxShadow: '6px 6px 0 rgba(0,0,0,0.2)',
-                            letterSpacing: '0.3em',
-                            fontWeight: 700
+                            width: 'clamp(110px, 16vw, 160px)',
+                            height: 'clamp(110px, 16vw, 160px)',
+                            backgroundImage: `url(${new URL('../font/stop.png', import.meta.url).href})`,
+                            backgroundSize: 'contain',
+                            backgroundRepeat: 'no-repeat',
+                            backgroundPosition: 'center',
+                            backgroundColor: 'transparent',
+                            cursor: 'pointer',
+                            filter: 'drop-shadow(4px 4px 8px rgba(0,0,0,0.3))'
                         }}
                     >
-                        RETAKE
+                        <span className="sr-only">RETAKE</span>
                     </button>
 
                     <button
                         onClick={handleStartOver}
-                        className="text-[clamp(1rem,2.5vw,1.25rem)] font-bold text-white px-12 py-3 border-4 border-black transition-all duration-200 hover:scale-105 uppercase tracking-[0.3em]"
+                        className="relative transition-all duration-200 hover:scale-105 border-0"
                         style={{
-                            fontFamily: 'Coolvetica, Helvetica, Arial, sans-serif',
-                            backgroundColor: '#000',
-                            boxShadow: '6px 6px 0 rgba(0,0,0,0.2)',
-                            letterSpacing: '0.3em',
-                            fontWeight: 700
+                            width: 'clamp(140px, 20vw, 200px)',
+                            height: 'clamp(80px, 11vw, 120px)',
+                            backgroundImage: `url(${new URL('../font/yellowarrow.png', import.meta.url).href})`,
+                            backgroundSize: 'contain',
+                            backgroundRepeat: 'no-repeat',
+                            backgroundPosition: 'center',
+                            backgroundColor: 'transparent',
+                            cursor: 'pointer',
+                            filter: 'drop-shadow(4px 4px 8px rgba(0,0,0,0.3))'
                         }}
                     >
-                        HOME
+                        <div className="absolute inset-0 flex items-center justify-center text-[clamp(0.9rem,2vw,1.3rem)] font-bold text-black uppercase tracking-[0.2em]"
+                            style={{
+                                fontFamily: 'Coolvetica, Helvetica, Arial, sans-serif',
+                                textShadow: '1px 1px 2px rgba(255,255,255,0.5)',
+                                fontWeight: 700
+                            }}
+                        >
+                            HOME
+                        </div>
                     </button>
                 </div>
             </div>

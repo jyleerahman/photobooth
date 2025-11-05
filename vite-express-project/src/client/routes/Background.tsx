@@ -23,7 +23,6 @@ const Background = () => {
     const selectedImages = state?.selectedImages || [];
     const frameLayout = state?.frameLayout || 'strip';
     
-    const [hoveredBackground, setHoveredBackground] = useState<BackgroundStyle | null>(null);
     const [selectedBackground, setSelectedBackground] = useState<BackgroundStyle>('graffiti');
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -55,9 +54,8 @@ const Background = () => {
 
     // Generate preview whenever background changes
     useEffect(() => {
-        const currentBg = hoveredBackground || selectedBackground;
-        generatePreview(currentBg);
-    }, [selectedImages, frameLayout, hoveredBackground, selectedBackground]);
+        generatePreview(selectedBackground);
+    }, [selectedImages, frameLayout, selectedBackground]);
 
     const generatePreview = async (bgStyle: BackgroundStyle) => {
         if (!canvasRef.current || selectedImages.length !== 4) return;
@@ -284,31 +282,26 @@ const Background = () => {
 
     return (
         <div 
-            className="fixed inset-0 w-screen h-screen overflow-hidden"
-            style={{
-                backgroundColor: '#f5f5f5',
-                backgroundImage: `url(${new URL('../font/newyorkstreet.jpg', import.meta.url).href})`,
-                backgroundSize: '50% auto',
-                backgroundPosition: 'center center',
-                backgroundRepeat: 'no-repeat'
-            }}
+            className="fixed inset-0 w-screen h-screen overflow-hidden bg-[#f5f5f5]"
+            
         >
             <div className="bodega-grain" />
 
             <div className="relative z-10 h-screen flex flex-col px-8 py-6">
                 {/* Header */}
-                <div className="px-4 py-4 mb-4 flex-shrink-0">
+                <div className="px-4 py-4 mb-4 flex-shrink-0 text-center">
                     <div className="text-black text-[clamp(2.5rem,4vw,3.5rem)] font-bold uppercase font-['Throwupz'] mb-1 leading-none">
                         CHOOSE BACKGROUND
                     </div>
                     <div className="text-white text-[clamp(0.9rem,1.5vw,1.25rem)] font-bold uppercase tracking-wide font-['Coolvetica']">
-                        HOVER TO PREVIEW YOUR PHOTOS
+                        CLICK TO PREVIEW
                     </div>
                 </div>
 
-                <div className="flex gap-6 flex-1 min-h-0 px-4">
-                    {/* Preview on the left */}
-                    <div className="flex-shrink-0 flex items-center justify-center">
+                {/* Main content area - Preview left, Buttons right */}
+                <div className="flex-1 flex gap-8 items-center justify-center min-h-0 mb-6">
+                    {/* Big Preview - Left Side */}
+                    <div className="flex items-center justify-center">
                         <div 
                             className="bg-white border-4 border-black p-4"
                             style={{
@@ -318,7 +311,7 @@ const Background = () => {
                             <canvas 
                                 ref={canvasRef}
                                 style={{
-                                    maxWidth: frameLayout === 'strip' ? '200px' : '350px',
+                                    maxWidth: frameLayout === 'strip' ? '280px' : '500px',
                                     maxHeight: '70vh',
                                     width: 'auto',
                                     height: 'auto',
@@ -328,59 +321,54 @@ const Background = () => {
                         </div>
                     </div>
 
-                    {/* Background options on the right */}
-                    <div className="flex-1 flex flex-col min-w-0">
-                        <div className="grid grid-cols-1 gap-6 flex-1 min-h-0 content-start overflow-y-auto">
-                            {backgrounds.map((bg, index) => (
-                                <div
-                                    key={bg.id}
-                                    onClick={() => handleSelectBackground(bg.id)}
-                                    onMouseEnter={() => setHoveredBackground(bg.id)}
-                                    onMouseLeave={() => setHoveredBackground(null)}
-                                    className="cursor-pointer p-6 transition-all duration-200 hover:scale-105"
+                    {/* Small Square Buttons - Right Side (Vertical Stack) */}
+                    <div className="flex flex-col gap-4">
+                        {backgrounds.map((bg, index) => (
+                            <div
+                                key={bg.id}
+                                onClick={() => handleSelectBackground(bg.id)}
+                                className="cursor-pointer transition-all duration-200 hover:scale-105"
+                                style={{
+                                    backgroundColor: '#fff',
+                                    border: selectedBackground === bg.id ? '4px solid #000' : '3px solid #000',
+                                    boxShadow: selectedBackground === bg.id 
+                                        ? '8px 8px 0 rgba(0,0,0,0.3)' 
+                                        : '4px 4px 0 rgba(0,0,0,0.15)',
+                                    width: 'clamp(120px, 18vw, 160px)',
+                                    height: 'clamp(120px, 18vw, 160px)',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    padding: '1rem'
+                                }}
+                            >
+                                {/* Number */}
+                                <div className="text-black text-4xl font-bold mb-2"
                                     style={{
-                                        backgroundColor: '#fff',
-                                        border: selectedBackground === bg.id ? '4px solid #000' : '3px solid #000',
-                                        boxShadow: selectedBackground === bg.id 
-                                            ? '10px 10px 0 rgba(0,0,0,0.3)' 
-                                            : '6px 6px 0 rgba(0,0,0,0.15)',
-                                        height: 'fit-content'
+                                        fontFamily: 'Coolvetica, Helvetica, Arial, sans-serif',
+                                        fontWeight: 900
+                                    }}>
+                                    {String(index + 1).padStart(2, '0')}
+                                </div>
+
+                                {/* Name */}
+                                <div className="text-black text-sm font-bold uppercase tracking-wide text-center"
+                                    style={{
+                                        fontFamily: 'Coolvetica, Helvetica, Arial, sans-serif',
+                                        fontWeight: 700,
+                                        lineHeight: 1.2
                                     }}
                                 >
-                                    {/* Number */}
-                                    <div className="text-black text-4xl font-bold mb-3"
-                                        style={{
-                                            fontFamily: 'Coolvetica, Helvetica, Arial, sans-serif',
-                                            fontWeight: 900
-                                        }}>
-                                        {String(index + 1).padStart(2, '0')}
-                                    </div>
-
-                                    {/* Name */}
-                                    <div className="text-black text-xl font-bold mb-4 uppercase tracking-wide"
-                                        style={{
-                                            fontFamily: 'Coolvetica, Helvetica, Arial, sans-serif',
-                                            fontWeight: 700
-                                        }}
-                                    >
-                                        {bg.name}
-                                    </div>
-
-                                    {/* Preview thumbnail */}
-                                    <div 
-                                        className="w-full h-32 border-2 border-black bg-cover bg-center"
-                                        style={{ 
-                                            backgroundImage: `url(${bg.imageUrl})`
-                                        }}
-                                    />
+                                    {bg.name}
                                 </div>
-                            ))}
-                        </div>
+                            </div>
+                        ))}
                     </div>
                 </div>
 
                 {/* Continue button */}
-                <div className="flex justify-center mt-4 pb-4 flex-shrink-0">
+                <div className="flex justify-center pb-4 flex-shrink-0">
                     <button
                         onClick={handleContinue}
                         className="relative transition-all duration-200 hover:scale-105 border-0"

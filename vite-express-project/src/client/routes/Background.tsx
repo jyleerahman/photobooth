@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
 type FrameLayout = 'strip' | 'grid' | 'bodega-cat';
-type BackgroundStyle = 'graffiti' | 'subway' | 'bodega';
+type BackgroundStyle = 'graffiti' | 'subway' | 'bodega' | 'white' | 'black' | 'neon';
 
 interface LocationState {
     selectedImages: string[];
@@ -43,6 +43,21 @@ const Background = () => {
             name: 'BODEGA',
             imageUrl: new URL('../font/newyorkbodega.jpg', import.meta.url).href
         },
+        { 
+            id: 'white', 
+            name: 'WHITE',
+            imageUrl: '' // Solid color, no image
+        },
+        { 
+            id: 'black', 
+            name: 'BLACK',
+            imageUrl: '' // Solid color, no image
+        },
+        { 
+            id: 'neon', 
+            name: 'NEON LIGHTS',
+            imageUrl: '' // Gradient, no image
+        },
     ];
 
     // Redirect if no images
@@ -75,17 +90,34 @@ const Background = () => {
             canvas.width = catWidth;
             canvas.height = catHeight;
 
-            // Draw background image
+            // Draw background
             const bgOption = backgrounds.find(bg => bg.id === bgStyle);
             if (bgOption) {
-                const bgImage = new Image();
-                bgImage.crossOrigin = "anonymous";
-                bgImage.src = bgOption.imageUrl;
-                await new Promise((resolve) => { 
-                    bgImage.onload = resolve;
-                    bgImage.onerror = resolve; // Continue even if bg fails
-                });
-                ctx.drawImage(bgImage, 0, 0, catWidth, catHeight);
+                if (bgStyle === 'white') {
+                    ctx.fillStyle = '#FFFFFF';
+                    ctx.fillRect(0, 0, catWidth, catHeight);
+                } else if (bgStyle === 'black') {
+                    ctx.fillStyle = '#000000';
+                    ctx.fillRect(0, 0, catWidth, catHeight);
+                } else if (bgStyle === 'neon') {
+                    const gradient = ctx.createLinearGradient(0, 0, catWidth, catHeight);
+                    gradient.addColorStop(0, '#FF00FF');
+                    gradient.addColorStop(0.25, '#00FFFF');
+                    gradient.addColorStop(0.5, '#FF00FF');
+                    gradient.addColorStop(0.75, '#FFFF00');
+                    gradient.addColorStop(1, '#FF00FF');
+                    ctx.fillStyle = gradient;
+                    ctx.fillRect(0, 0, catWidth, catHeight);
+                } else if (bgOption.imageUrl) {
+                    const bgImage = new Image();
+                    bgImage.crossOrigin = "anonymous";
+                    bgImage.src = bgOption.imageUrl;
+                    await new Promise((resolve) => { 
+                        bgImage.onload = resolve;
+                        bgImage.onerror = resolve; // Continue even if bg fails
+                    });
+                    ctx.drawImage(bgImage, 0, 0, catWidth, catHeight);
+                }
             }
 
             const padding = 0.3 * dpi;
@@ -161,17 +193,34 @@ const Background = () => {
             canvas.width = stripWidth;
             canvas.height = stripHeight;
 
-            // Draw background image
+            // Draw background
             const bgOption = backgrounds.find(bg => bg.id === bgStyle);
             if (bgOption) {
-                const bgImage = new Image();
-                bgImage.crossOrigin = "anonymous";
-                bgImage.src = bgOption.imageUrl;
-                await new Promise((resolve) => { 
-                    bgImage.onload = resolve;
-                    bgImage.onerror = resolve;
-                });
-                ctx.drawImage(bgImage, 0, 0, stripWidth, stripHeight);
+                if (bgStyle === 'white') {
+                    ctx.fillStyle = '#FFFFFF';
+                    ctx.fillRect(0, 0, stripWidth, stripHeight);
+                } else if (bgStyle === 'black') {
+                    ctx.fillStyle = '#000000';
+                    ctx.fillRect(0, 0, stripWidth, stripHeight);
+                } else if (bgStyle === 'neon') {
+                    const gradient = ctx.createLinearGradient(0, 0, stripWidth, stripHeight);
+                    gradient.addColorStop(0, '#FF00FF');
+                    gradient.addColorStop(0.25, '#00FFFF');
+                    gradient.addColorStop(0.5, '#FF00FF');
+                    gradient.addColorStop(0.75, '#FFFF00');
+                    gradient.addColorStop(1, '#FF00FF');
+                    ctx.fillStyle = gradient;
+                    ctx.fillRect(0, 0, stripWidth, stripHeight);
+                } else if (bgOption.imageUrl) {
+                    const bgImage = new Image();
+                    bgImage.crossOrigin = "anonymous";
+                    bgImage.src = bgOption.imageUrl;
+                    await new Promise((resolve) => { 
+                        bgImage.onload = resolve;
+                        bgImage.onerror = resolve;
+                    });
+                    ctx.drawImage(bgImage, 0, 0, stripWidth, stripHeight);
+                }
             }
 
             const padding = 0.15 * dpi;
@@ -216,17 +265,34 @@ const Background = () => {
             canvas.width = gridSize;
             canvas.height = gridSize;
 
-            // Draw background image
+            // Draw background
             const bgOption = backgrounds.find(bg => bg.id === bgStyle);
             if (bgOption) {
-                const bgImage = new Image();
-                bgImage.crossOrigin = "anonymous";
-                bgImage.src = bgOption.imageUrl;
-                await new Promise((resolve) => { 
-                    bgImage.onload = resolve;
-                    bgImage.onerror = resolve;
-                });
-                ctx.drawImage(bgImage, 0, 0, gridSize, gridSize);
+                if (bgStyle === 'white') {
+                    ctx.fillStyle = '#FFFFFF';
+                    ctx.fillRect(0, 0, gridSize, gridSize);
+                } else if (bgStyle === 'black') {
+                    ctx.fillStyle = '#000000';
+                    ctx.fillRect(0, 0, gridSize, gridSize);
+                } else if (bgStyle === 'neon') {
+                    const gradient = ctx.createLinearGradient(0, 0, gridSize, gridSize);
+                    gradient.addColorStop(0, '#FF00FF');
+                    gradient.addColorStop(0.25, '#00FFFF');
+                    gradient.addColorStop(0.5, '#FF00FF');
+                    gradient.addColorStop(0.75, '#FFFF00');
+                    gradient.addColorStop(1, '#FF00FF');
+                    ctx.fillStyle = gradient;
+                    ctx.fillRect(0, 0, gridSize, gridSize);
+                } else if (bgOption.imageUrl) {
+                    const bgImage = new Image();
+                    bgImage.crossOrigin = "anonymous";
+                    bgImage.src = bgOption.imageUrl;
+                    await new Promise((resolve) => { 
+                        bgImage.onload = resolve;
+                        bgImage.onerror = resolve;
+                    });
+                    ctx.drawImage(bgImage, 0, 0, gridSize, gridSize);
+                }
             }
 
             const padding = 0.3 * dpi;
@@ -298,7 +364,7 @@ const Background = () => {
                     </div>
                 </div>
 
-                {/* Main content area - Preview left, Buttons right */}
+                {/* Main content area - Preview left, Buttons right in 3x2 grid */}
                 <div className="flex-1 flex gap-8 items-center justify-center min-h-0 mt-10 mb-6">
                     {/* Big Preview - Left Side */}
                     <div className="flex items-center justify-center">
@@ -321,8 +387,8 @@ const Background = () => {
                         </div>
                     </div>
 
-                    {/* Small Square Buttons - Right Side (Vertical Stack) */}
-                    <div className="flex flex-col gap-4">
+                    {/* Small Square Buttons - Right Side (3x2 Grid) */}
+                    <div className="grid grid-cols-3 gap-4">
                         {backgrounds.map((bg, index) => (
                             <div
                                 key={bg.id}
@@ -334,17 +400,17 @@ const Background = () => {
                                     boxShadow: selectedBackground === bg.id 
                                         ? '8px 8px 0 rgba(0,0,0,0.3)' 
                                         : '4px 4px 0 rgba(0,0,0,0.15)',
-                                    width: 'clamp(120px, 18vw, 160px)',
-                                    height: 'clamp(120px, 18vw, 160px)',
+                                    width: 'clamp(100px, 12vw, 130px)',
+                                    height: 'clamp(100px, 12vw, 130px)',
                                     display: 'flex',
                                     flexDirection: 'column',
                                     alignItems: 'center',
                                     justifyContent: 'center',
-                                    padding: '1rem'
+                                    padding: '0.8rem'
                                 }}
                             >
                                 {/* Number */}
-                                <div className="text-black text-4xl font-bold mb-2"
+                                <div className="text-black text-3xl font-bold mb-1"
                                     style={{
                                         fontFamily: 'Coolvetica, Helvetica, Arial, sans-serif',
                                         fontWeight: 900
@@ -353,7 +419,7 @@ const Background = () => {
                                 </div>
 
                                 {/* Name */}
-                                <div className="text-black text-sm font-bold uppercase tracking-wide text-center"
+                                <div className="text-black text-xs font-bold uppercase tracking-wide text-center"
                                     style={{
                                         fontFamily: 'Coolvetica, Helvetica, Arial, sans-serif',
                                         fontWeight: 700,

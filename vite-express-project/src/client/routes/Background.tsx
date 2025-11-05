@@ -36,12 +36,12 @@ const Background = () => {
         { 
             id: 'subway', 
             name: 'SUBWAY STATION',
-            imageUrl: new URL('../font/newyork-subway.jpg', import.meta.url).href
+            imageUrl: new URL('../font/subway-wall.jpg', import.meta.url).href
         },
         { 
             id: 'bodega', 
             name: 'BODEGA',
-            imageUrl: new URL('../font/newyorkbodega.jpg', import.meta.url).href
+            imageUrl: new URL('../font/bodega-cat.jpg', import.meta.url).href
         },
         { 
             id: 'white', 

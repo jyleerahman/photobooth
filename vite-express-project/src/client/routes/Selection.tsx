@@ -53,14 +53,8 @@ const Selection = () => {
 
     return (
         <div 
-            className="fixed inset-0 w-screen h-screen overflow-hidden"
-            style={{
-                backgroundColor: '#f5f5f5',
-                backgroundImage: `url(${new URL('../font/newyorkstreet.jpg', import.meta.url).href})`,
-                backgroundSize: '50% auto',
-                backgroundPosition: 'center center',
-                backgroundRepeat: 'no-repeat'
-            }}
+            className="fixed inset-0 w-screen h-screen overflow-hidden bg-[#f5f5f5]"
+            
         >
             {/* Film grain texture */}
             <div className="bodega-grain" />
@@ -75,11 +69,11 @@ const Selection = () => {
                     
                 
 
-                    <div className="text-white text-[clamp(0.9rem,1.5vw,1.25rem)] font-bold uppercase tracking-wide font-['Coolvetica']">
+                    <div className="text-black text-[clamp(0.9rem,1.5vw,1.25rem)] font-bold uppercase tracking-wide font-['Coolvetica']">
                         TAP TO SELECT YOUR FAVORITES 
                     </div>
 
-                    <div className="text-white text-[clamp(0.75rem,1.2vw,1rem)] tracking-[0.2em] font-['Coolvetica']">
+                    <div className="text-black text-[clamp(0.75rem,1.2vw,1rem)] tracking-[0.2em] font-['Coolvetica']">
                         {selectedImages.length}/{maxSelection}
                     </div>
                 </div>

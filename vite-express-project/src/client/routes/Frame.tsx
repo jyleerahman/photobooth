@@ -54,7 +54,7 @@ function Frame() {
                         }}
                     >
                         {/* Minimal number */}
-                        <div className="text-black text-6xl font-bold mb-4"
+                        <div className="text-black text-5xl font-bold mb-3"
                             style={{
                                 fontFamily: 'Coolvetica, Helvetica, Arial, sans-serif',
                                 fontWeight: 900
@@ -100,7 +100,7 @@ function Frame() {
                         }}
                     >
                         {/* Minimal number */}
-                        <div className="text-black text-6xl font-bold mb-4"
+                        <div className="text-black text-5xl font-bold mb-3"
                             style={{
                                 fontFamily: 'Coolvetica, Helvetica, Arial, sans-serif',
                                 fontWeight: 900
@@ -146,7 +146,7 @@ function Frame() {
                         }}
                     >
                         {/* Minimal number */}
-                        <div className="text-black text-6xl font-bold mb-4"
+                        <div className="text-black text-5xl font-bold mb-3"
                             style={{
                                 fontFamily: 'Coolvetica, Helvetica, Arial, sans-serif',
                                 fontWeight: 900
@@ -194,7 +194,7 @@ function Frame() {
                 </div>
 
                 {/* Instructions */}
-                <div className="text-gray-500 text-center mt-12 text-sm tracking-[0.2em] uppercase"
+                <div className="text-gray-500 text-center mt-6 text-sm tracking-[0.2em] uppercase"
                     style={{
                         fontFamily: 'Coolvetica, Helvetica, Arial, sans-serif',
                         fontWeight: 400,

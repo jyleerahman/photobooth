@@ -43,8 +43,8 @@ const Selection = () => {
 
     const handleContinue = () => {
         const selected = selectedImages.map(index => images[index]);
-        // Navigate to result page with selected images and frame layout
-        navigate('/result', { state: { selectedImages: selected, frameLayout } });
+        // Navigate to background selection page with selected images and frame layout
+        navigate('/background', { state: { selectedImages: selected, frameLayout } });
     };
 
     const handleRetake = () => {

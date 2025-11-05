@@ -8,6 +8,7 @@ import App from "./App";
 import Frame from "./routes/Frame"
 import Camera from "./routes/Camera";
 import Selection from "./routes/Selection";
+import Background from "./routes/Background";
 import Result from "./routes/Result";
 
 const router = createBrowserRouter([
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
   {
     path: "/select",
     element: <Selection />
+  },
+  {
+    path: "/background",
+    element: <Background />
   },
   {
     path: "/result",

@@ -6,6 +6,7 @@ type FrameLayout = 'strip' | 'grid' | 'bodega-cat';
 interface LocationState {
     selectedImages: string[];
     frameLayout: FrameLayout;
+    backgroundStyle?: string;
 }
 
 const Result = () => {
@@ -16,6 +17,17 @@ const Result = () => {
     
     const selectedImages = state?.selectedImages || [];
     const frameLayout = state?.frameLayout || 'strip';
+    const backgroundStyle = state?.backgroundStyle || 'graffiti';
+
+    // Helper function to get background image URL
+    const getBackgroundImageUrl = (style: string): string => {
+        const backgrounds: Record<string, string> = {
+            'graffiti': new URL('../font/graffiti-wall.jpg', import.meta.url).href,
+            'subway': new URL('../font/newyork-subway.jpg', import.meta.url).href,
+            'bodega': new URL('../font/newyorkbodega.jpg', import.meta.url).href,
+        };
+        return backgrounds[style] || backgrounds['graffiti'];
+    };
 
     // Redirect if no images are available
     useEffect(() => {
@@ -42,9 +54,22 @@ const Result = () => {
                 canvas.width = catWidth;
                 canvas.height = catHeight;
 
-                // White background
-                ctx.fillStyle = 'white';
-                ctx.fillRect(0, 0, catWidth, catHeight);
+                // Draw background image
+                const bgImage = new Image();
+                bgImage.crossOrigin = "anonymous";
+                bgImage.src = getBackgroundImageUrl(backgroundStyle);
+                await new Promise((resolve) => { 
+                    bgImage.onload = resolve;
+                    bgImage.onerror = () => {
+                        // Fallback to white if image fails
+                        ctx.fillStyle = 'white';
+                        ctx.fillRect(0, 0, catWidth, catHeight);
+                        resolve(null);
+                    };
+                });
+                if (bgImage.complete && bgImage.naturalWidth > 0) {
+                    ctx.drawImage(bgImage, 0, 0, catWidth, catHeight);
+                }
 
                 // Padding
                 const padding = 0.3 * dpi; // 90px padding
@@ -144,9 +169,22 @@ const Result = () => {
                 canvas.width = stripWidth;
                 canvas.height = stripHeight;
 
-                // White background
-                ctx.fillStyle = 'white';
-                ctx.fillRect(0, 0, stripWidth, stripHeight);
+                // Draw background image
+                const bgImageStrip = new Image();
+                bgImageStrip.crossOrigin = "anonymous";
+                bgImageStrip.src = getBackgroundImageUrl(backgroundStyle);
+                await new Promise((resolve) => { 
+                    bgImageStrip.onload = resolve;
+                    bgImageStrip.onerror = () => {
+                        // Fallback to white if image fails
+                        ctx.fillStyle = 'white';
+                        ctx.fillRect(0, 0, stripWidth, stripHeight);
+                        resolve(null);
+                    };
+                });
+                if (bgImageStrip.complete && bgImageStrip.naturalWidth > 0) {
+                    ctx.drawImage(bgImageStrip, 0, 0, stripWidth, stripHeight);
+                }
 
                 // Padding and spacing
                 const padding = 0.15 * dpi; // 45px padding on sides
@@ -200,9 +238,22 @@ const Result = () => {
                 canvas.width = gridSize;
                 canvas.height = gridSize;
 
-                // White background
-                ctx.fillStyle = 'white';
-                ctx.fillRect(0, 0, gridSize, gridSize);
+                // Draw background image
+                const bgImageGrid = new Image();
+                bgImageGrid.crossOrigin = "anonymous";
+                bgImageGrid.src = getBackgroundImageUrl(backgroundStyle);
+                await new Promise((resolve) => { 
+                    bgImageGrid.onload = resolve;
+                    bgImageGrid.onerror = () => {
+                        // Fallback to white if image fails
+                        ctx.fillStyle = 'white';
+                        ctx.fillRect(0, 0, gridSize, gridSize);
+                        resolve(null);
+                    };
+                });
+                if (bgImageGrid.complete && bgImageGrid.naturalWidth > 0) {
+                    ctx.drawImage(bgImageGrid, 0, 0, gridSize, gridSize);
+                }
 
                 // Padding and spacing
                 const padding = 0.3 * dpi; // 90px padding
@@ -251,7 +302,7 @@ const Result = () => {
         };
 
         generatePhotoStrip();
-    }, [selectedImages, frameLayout]);
+    }, [selectedImages, frameLayout, backgroundStyle]);
 
     const handleDownload = () => {
         if (!canvasRef.current) return;

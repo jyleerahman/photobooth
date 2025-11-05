@@ -303,7 +303,7 @@ const Background = () => {
                     {/* Big Preview - Left Side */}
                     <div className="flex items-center justify-center">
                         <div 
-                            className="bg-white border-4 border-black p-4"
+                            className="border-4 border-black"
                             style={{
                                 boxShadow: '8px 8px 0 rgba(0,0,0,0.2)',
                             }}

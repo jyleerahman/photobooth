@@ -341,13 +341,13 @@ const Result = () => {
             {/* Film grain texture */}
             <div className="bodega-grain" />
 
-            <div className="relative z-10 w-full h-full flex flex-col items-center justify-center gap-6" style={{ padding: '2rem' }}>
+            <div className="relative z-10 w-full h-full flex flex-col items-center justify-center gap-4" style={{ padding: '1.5rem' }}>
                 {/* Header - MINIMAL GRAFFITI */}
                 <div className="text-center flex-shrink-0">
                     <div 
                         className="text-black font-bold font-['Throwupz'] leading-none"
                         style={{ 
-                            fontSize: 'clamp(4rem, 8vw, 6rem)',
+                            fontSize: 'clamp(3rem, 6vw, 5rem)',
                             marginBottom: '0.5rem'
                         }}
                     >
@@ -357,21 +357,18 @@ const Result = () => {
                 </div>
 
                 {/* Photo Strip Preview - MINIMAL FRAMING */}
-                <div className="flex justify-center flex-shrink flex-grow min-h-0" style={{ maxHeight: '65vh', width: '100%' }}>
+                <div className="flex justify-center flex-shrink flex-grow min-h-0" style={{ maxHeight: '80vh', width: '100%' }}>
                     <div 
-                        className="bg-white border-4 border-black"
+                        className="border-4 border-black"
                         style={{
                             boxShadow: '6px 6px 0 rgba(0,0,0,0.2)',
-                            maxHeight: '100%',
-                            padding: 'clamp(10px, 1.2vh, 20px)'
+                            maxHeight: '100%'
                         }}
                     >
                         <canvas 
                             ref={canvasRef}
                             style={{
-                                maxWidth: frameLayout === 'strip' ? 'min(25vw, 280px)' : 'min(40vw, 450px)',
-                                maxHeight: '100%',
-                                width: 'auto',
+                                width: frameLayout === 'strip' ? 'min(7vw, 300px)' : 'min(18vw, 450px)',
                                 height: 'auto',
                                 display: 'block'
                             }}

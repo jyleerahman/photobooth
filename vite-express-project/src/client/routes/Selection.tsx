@@ -121,57 +121,26 @@ const Selection = () => {
                 </div>
 
                 {/* Action Buttons - STREET SIGN BUTTONS */}
-                <div className="flex justify-center gap-12 mt-4 pb-4 flex-shrink-0">
-                    <button
-                        onClick={handleRetake}
-                        className="relative transition-all duration-200 hover:scale-105"
-                        style={{
-                            width: 'clamp(120px, 18vw, 180px)',
-                            height: 'clamp(120px, 18vw, 180px)',
-                            backgroundImage: `url(${new URL('../font/stop.png', import.meta.url).href})`,
-                            backgroundSize: 'contain',
-                            backgroundRepeat: 'no-repeat',
-                            backgroundPosition: 'center',
-                            border: 'none',
-                            background: 'transparent',
-                            cursor: 'pointer',
-                            filter: 'drop-shadow(4px 4px 8px rgba(0,0,0,0.3))'
-                        }}
-                    >
-                        <span className="sr-only">RETAKE</span>
-                    </button>
-                    
-                    <button
-                        onClick={handleContinue}
-                        disabled={selectedImages.length !== maxSelection}
-                        className={`relative transition-all duration-200 ${
-                            selectedImages.length === maxSelection 
-                                ? 'hover:scale-105 cursor-pointer' 
-                                : 'cursor-not-allowed opacity-40'
-                        }`}
-                        style={{
-                            width: 'clamp(200px, 28vw, 320px)',
-                            height: 'clamp(60px, 8vw, 100px)',
-                            backgroundImage: `url(${new URL('../font/greenplate.png', import.meta.url).href})`,
-                            backgroundSize: 'contain',
-                            backgroundRepeat: 'no-repeat',
-                            backgroundPosition: 'center',
-                            border: 'none',
-                            background: 'transparent',
-                            filter: selectedImages.length === maxSelection 
-                                ? 'drop-shadow(4px 4px 8px rgba(0,0,0,0.3))' 
-                                : 'grayscale(50%) drop-shadow(2px 2px 4px rgba(0,0,0,0.2))'
-                        }}
-                    >
-                        <div className="absolute inset-0 flex items-center justify-center font-['Coolvetica'] text-[clamp(0.9rem,2vw,1.5rem)] font-bold text-white uppercase tracking-[0.2rem]"
+                <div className="flex justify-center mb-4 pb-4 flex-shrink-0">
+                    {selectedImages.length === maxSelection && (
+                        <button
+                            onClick={handleContinue}
+                            className="relative transition-all duration-200 hover:scale-105 border-0"
                             style={{
-                                fontFamily: 'Coolvetica, Helvetica, Arial, sans-serif',
-                                fontWeight: 700
+                                width: 'clamp(140px, 20vw, 200px)',
+                                height: 'clamp(80px, 11vw, 120px)',
+                                backgroundImage: `url(${new URL('../font/oneway.png', import.meta.url).href})`,
+                                backgroundSize: 'contain',
+                                backgroundRepeat: 'no-repeat',
+                                backgroundPosition: 'center',
+                                backgroundColor: 'transparent',
+                                cursor: 'pointer',
+                                filter: 'drop-shadow(4px 4px 8px rgba(0,0,0,0.3))'
                             }}
                         >
-                            {selectedImages.length === maxSelection ? 'CONTINUE' : `SELECT ${maxSelection - selectedImages.length} MORE`}
-                        </div>
-                    </button>
+                            <span className="sr-only">CONTINUE</span>
+                        </button>
+                    )}
                 </div>
             </div>
         </div>

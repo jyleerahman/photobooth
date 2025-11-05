@@ -65,27 +65,30 @@ const Selection = () => {
             {/* Film grain texture */}
             <div className="bodega-grain" />
 
-            <div className="relative z-10 h-screen flex flex-col px-12 py-8">
+            <div className="relative z-10 h-screen flex flex-col px-8 py-6">
                 {/* Header - GRAFFITI STYLE */}
-                <div className="px-8 py-6 mb-8 flex-shrink-0">
-                    <div className="text-black text-[clamp(6rem,5vw,3.5rem)] font-bold uppercase font-['Throwupz'] mb-2 leading-none"
+                <div className="px-4 py-4 mb-4 flex-shrink-0">
+                    <div className="text-black text-[clamp(2.5rem,4vw,3.5rem)] font-bold uppercase font-['Throwupz'] mb-1 leading-none"
                        >
                         SELECT {maxSelection} PHOTOS
                     </div>
                     
                 
 
-                    <div className="text-white text-[clamp(1rem,2vw,1.25rem)] font-bold uppercase tracking-wide font-['Coolvetica']">
+                    <div className="text-white text-[clamp(0.9rem,1.5vw,1.25rem)] font-bold uppercase tracking-wide font-['Coolvetica']">
                         TAP TO SELECT YOUR FAVORITES 
                     </div>
 
-                    <div className="text-white text-[clamp(0.85rem,1.5vw,1rem)] tracking-[0.2em] -mb-10 font-['Coolvetica']">
+                    <div className="text-white text-[clamp(0.75rem,1.2vw,1rem)] tracking-[0.2em] font-['Coolvetica']">
                         {selectedImages.length}/{maxSelection}
                     </div>
                 </div>
 
-                {/* Image Grid - 3x3 LAYOUT */}
-                <div className="grid grid-cols-3 gap-6 flex-grow flex-shrink min-h-0 overflow-y-auto py-2">
+                {/* Image Grid - 3 COLUMNS x 2 ROWS for 6 photos */}
+                <div className="grid grid-cols-3 gap-4 px-4" style={{ 
+                    gridAutoRows: 'minmax(0, 1fr)',
+                    height: 'calc(100vh - 280px)' 
+                }}>
                     {images.map((image, index) => {
                         const isSelected = selectedImages.includes(index);
                         const selectionOrder = selectedImages.indexOf(index);
@@ -94,12 +97,12 @@ const Selection = () => {
                             <div
                                 key={index}
                                 onClick={() => toggleImageSelection(index)}
-                                className="relative cursor-pointer overflow-hidden transition-all duration-200"
+                                className="relative cursor-pointer overflow-hidden transition-all duration-200 w-full h-full"
                             >
                                 <img
                                     src={image}
                                     alt={`Photo ${index + 1}`}
-                                    className={`w-full h-auto block transition-opacity duration-200 ${isSelected ? 'opacity-100' : 'opacity-60 hover:opacity-100'}`}
+                                    className={`w-full h-full object-cover block transition-opacity duration-200 ${isSelected ? 'opacity-100' : 'opacity-60 hover:opacity-100'}`}
                                 />
                                 
                                 {/* Selection indicator */}
@@ -118,7 +121,7 @@ const Selection = () => {
                 </div>
 
                 {/* Action Buttons - STREET SIGN BUTTONS */}
-                <div className="flex justify-center gap-12 mt-8 pb-8 flex-shrink-0">
+                <div className="flex justify-center gap-12 mt-4 pb-4 flex-shrink-0">
                     <button
                         onClick={handleRetake}
                         className="relative transition-all duration-200 hover:scale-105"

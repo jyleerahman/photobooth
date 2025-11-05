@@ -329,7 +329,7 @@ const Result = () => {
                 </div>
 
                 {/* Action Buttons - STREET SIGN BUTTONS */}
-                <div className="flex flex-wrap justify-center gap-8 flex-shrink-0 items-center">
+                <div className="flex flex-wrap justify-center gap-80 flex-shrink-0 items-center">
                     <button
                         onClick={handleDownload}
                         className="relative transition-all duration-200 hover:scale-105 border-0"
@@ -345,10 +345,9 @@ const Result = () => {
                             filter: 'drop-shadow(4px 4px 8px rgba(0,0,0,0.3))'
                         }}
                     >
-                        <div className="absolute inset-0 flex items-center justify-center text-[clamp(1rem,2.2vw,1.5rem)] font-bold text-white uppercase tracking-[0.25em]"
+                        <div className="absolute inset-0 flex items-center justify-center font-['Coolvetica'] text-[clamp(2rem,2.2vw,1.5rem)] font-bold text-white uppercase tracking-[0.2rem]"
                             style={{
                                 fontFamily: 'Coolvetica, Helvetica, Arial, sans-serif',
-                                textShadow: '2px 2px 4px rgba(0,0,0,0.8)',
                                 fontWeight: 700
                             }}
                         >
@@ -389,14 +388,13 @@ const Result = () => {
                             filter: 'drop-shadow(4px 4px 8px rgba(0,0,0,0.3))'
                         }}
                     >
-                        <div className="absolute inset-0 flex items-center justify-center text-[clamp(0.9rem,2vw,1.3rem)] font-bold text-black uppercase tracking-[0.2em]"
+                        <div className="absolute inset-0 flex items-center justify-center font-['Coolvetica'] text-[clamp(0.9rem,2vw,1.3rem)] font-bold text-black uppercase tracking-[0.2em]"
                             style={{
-                                fontFamily: 'Coolvetica, Helvetica, Arial, sans-serif',
                                 textShadow: '1px 1px 2px rgba(255,255,255,0.5)',
                                 fontWeight: 700
                             }}
                         >
-                            HOME
+                            
                         </div>
                     </button>
                 </div>

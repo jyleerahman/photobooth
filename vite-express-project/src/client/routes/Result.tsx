@@ -54,26 +54,43 @@ const Result = () => {
                 canvas.width = catWidth;
                 canvas.height = catHeight;
 
-                // Draw background image
-                const bgImage = new Image();
-                bgImage.crossOrigin = "anonymous";
-                bgImage.src = getBackgroundImageUrl(backgroundStyle);
-                await new Promise((resolve) => { 
-                    bgImage.onload = resolve;
-                    bgImage.onerror = () => {
-                        // Fallback to white if image fails
-                        ctx.fillStyle = 'white';
-                        ctx.fillRect(0, 0, catWidth, catHeight);
-                        resolve(null);
-                    };
-                });
-                if (bgImage.complete && bgImage.naturalWidth > 0) {
-                    ctx.drawImage(bgImage, 0, 0, catWidth, catHeight);
+                // Draw background
+                if (backgroundStyle === 'white') {
+                    ctx.fillStyle = '#FFFFFF';
+                    ctx.fillRect(0, 0, catWidth, catHeight);
+                } else if (backgroundStyle === 'black') {
+                    ctx.fillStyle = '#000000';
+                    ctx.fillRect(0, 0, catWidth, catHeight);
+                } else if (backgroundStyle === 'neon') {
+                    const gradient = ctx.createLinearGradient(0, 0, catWidth, catHeight);
+                    gradient.addColorStop(0, '#FF00FF');
+                    gradient.addColorStop(0.25, '#00FFFF');
+                    gradient.addColorStop(0.5, '#FF00FF');
+                    gradient.addColorStop(0.75, '#FFFF00');
+                    gradient.addColorStop(1, '#FF00FF');
+                    ctx.fillStyle = gradient;
+                    ctx.fillRect(0, 0, catWidth, catHeight);
+                } else {
+                    const bgImage = new Image();
+                    bgImage.crossOrigin = "anonymous";
+                    bgImage.src = getBackgroundImageUrl(backgroundStyle);
+                    await new Promise((resolve) => { 
+                        bgImage.onload = resolve;
+                        bgImage.onerror = () => {
+                            // Fallback to white if image fails
+                            ctx.fillStyle = 'white';
+                            ctx.fillRect(0, 0, catWidth, catHeight);
+                            resolve(null);
+                        };
+                    });
+                    if (bgImage.complete && bgImage.naturalWidth > 0) {
+                        ctx.drawImage(bgImage, 0, 0, catWidth, catHeight);
+                    }
                 }
 
                 // Padding
-                const padding = 0.3 * dpi; // 90px padding
-                const spacing = 0.15 * dpi; // 45px between photos
+                const padding = 0.5 * dpi; // 150px padding
+                const spacing = 0.2 * dpi; // 60px between photos
 
                 // Big photo dimensions (top 60% of space)
                 const bigPhotoWidth = catWidth - (2 * padding);
@@ -161,38 +178,54 @@ const Result = () => {
                 ctx.fillText(stampText, catWidth - padding - 20, catHeight - padding - 20);
                 ctx.restore();
             } else if (frameLayout === 'strip') {
-                // Classic strip: 2 inches wide x 8 inches tall (at 300 DPI for print quality)
+                // Classic strip: 2 inches wide x 6 inches tall (at 300 DPI for print quality)
                 const dpi = 300;
                 const stripWidth = 2 * dpi;  // 600px
-                const stripHeight = 8 * dpi; // 2400px
+                const stripHeight = 6 * dpi; // 1800px
                 
                 canvas.width = stripWidth;
                 canvas.height = stripHeight;
 
-                // Draw background image
-                const bgImageStrip = new Image();
-                bgImageStrip.crossOrigin = "anonymous";
-                bgImageStrip.src = getBackgroundImageUrl(backgroundStyle);
-                await new Promise((resolve) => { 
-                    bgImageStrip.onload = resolve;
-                    bgImageStrip.onerror = () => {
-                        // Fallback to white if image fails
-                        ctx.fillStyle = 'white';
-                        ctx.fillRect(0, 0, stripWidth, stripHeight);
-                        resolve(null);
-                    };
-                });
-                if (bgImageStrip.complete && bgImageStrip.naturalWidth > 0) {
-                    ctx.drawImage(bgImageStrip, 0, 0, stripWidth, stripHeight);
+                // Draw background
+                if (backgroundStyle === 'white') {
+                    ctx.fillStyle = '#FFFFFF';
+                    ctx.fillRect(0, 0, stripWidth, stripHeight);
+                } else if (backgroundStyle === 'black') {
+                    ctx.fillStyle = '#000000';
+                    ctx.fillRect(0, 0, stripWidth, stripHeight);
+                } else if (backgroundStyle === 'neon') {
+                    const gradient = ctx.createLinearGradient(0, 0, stripWidth, stripHeight);
+                    gradient.addColorStop(0, '#FF00FF');
+                    gradient.addColorStop(0.25, '#00FFFF');
+                    gradient.addColorStop(0.5, '#FF00FF');
+                    gradient.addColorStop(0.75, '#FFFF00');
+                    gradient.addColorStop(1, '#FF00FF');
+                    ctx.fillStyle = gradient;
+                    ctx.fillRect(0, 0, stripWidth, stripHeight);
+                } else {
+                    const bgImageStrip = new Image();
+                    bgImageStrip.crossOrigin = "anonymous";
+                    bgImageStrip.src = getBackgroundImageUrl(backgroundStyle);
+                    await new Promise((resolve) => { 
+                        bgImageStrip.onload = resolve;
+                        bgImageStrip.onerror = () => {
+                            // Fallback to white if image fails
+                            ctx.fillStyle = 'white';
+                            ctx.fillRect(0, 0, stripWidth, stripHeight);
+                            resolve(null);
+                        };
+                    });
+                    if (bgImageStrip.complete && bgImageStrip.naturalWidth > 0) {
+                        ctx.drawImage(bgImageStrip, 0, 0, stripWidth, stripHeight);
+                    }
                 }
 
                 // Padding and spacing
-                const padding = 0.15 * dpi; // 45px padding on sides
-                const topBottomPadding = 0.2 * dpi; // 60px padding top/bottom
+                const photoWidth = 1.7 * dpi; // 510px - fixed photo width
+                const photoHeight = photoWidth * (3/4); // 1.275" - 4:3 aspect ratio (landscape)
+                const padding = (stripWidth - photoWidth) / 2; // Center horizontally
                 const spacing = 0.1 * dpi; // 30px between photos
-
-                const photoWidth = stripWidth - (2 * padding);
-                const photoHeight = (stripHeight - (2 * topBottomPadding) - (3 * spacing)) / 4;
+                const topBottomPadding = (stripHeight - (4 * photoHeight) - (3 * spacing)) / 2; // Center vertically
 
                 // Draw each photo with aspect ratio preserved (cover fit)
                 for (let i = 0; i < 4; i++) {
@@ -233,31 +266,48 @@ const Result = () => {
             } else {
                 // Grid layout: Square format (6 inches x 6 inches at 300 DPI)
                 const dpi = 300;
-                const gridSize = 6 * dpi; // 1800px
+                const gridSize = 8 * dpi; // 1800px
                 
                 canvas.width = gridSize;
                 canvas.height = gridSize;
 
-                // Draw background image
-                const bgImageGrid = new Image();
-                bgImageGrid.crossOrigin = "anonymous";
-                bgImageGrid.src = getBackgroundImageUrl(backgroundStyle);
-                await new Promise((resolve) => { 
-                    bgImageGrid.onload = resolve;
-                    bgImageGrid.onerror = () => {
-                        // Fallback to white if image fails
-                        ctx.fillStyle = 'white';
-                        ctx.fillRect(0, 0, gridSize, gridSize);
-                        resolve(null);
-                    };
-                });
-                if (bgImageGrid.complete && bgImageGrid.naturalWidth > 0) {
-                    ctx.drawImage(bgImageGrid, 0, 0, gridSize, gridSize);
+                // Draw background
+                if (backgroundStyle === 'white') {
+                    ctx.fillStyle = '#FFFFFF';
+                    ctx.fillRect(0, 0, gridSize, gridSize);
+                } else if (backgroundStyle === 'black') {
+                    ctx.fillStyle = '#000000';
+                    ctx.fillRect(0, 0, gridSize, gridSize);
+                } else if (backgroundStyle === 'neon') {
+                    const gradient = ctx.createLinearGradient(0, 0, gridSize, gridSize);
+                    gradient.addColorStop(0, '#FF00FF');
+                    gradient.addColorStop(0.25, '#00FFFF');
+                    gradient.addColorStop(0.5, '#FF00FF');
+                    gradient.addColorStop(0.75, '#FFFF00');
+                    gradient.addColorStop(1, '#FF00FF');
+                    ctx.fillStyle = gradient;
+                    ctx.fillRect(0, 0, gridSize, gridSize);
+                } else {
+                    const bgImageGrid = new Image();
+                    bgImageGrid.crossOrigin = "anonymous";
+                    bgImageGrid.src = getBackgroundImageUrl(backgroundStyle);
+                    await new Promise((resolve) => { 
+                        bgImageGrid.onload = resolve;
+                        bgImageGrid.onerror = () => {
+                            // Fallback to white if image fails
+                            ctx.fillStyle = 'white';
+                            ctx.fillRect(0, 0, gridSize, gridSize);
+                            resolve(null);
+                        };
+                    });
+                    if (bgImageGrid.complete && bgImageGrid.naturalWidth > 0) {
+                        ctx.drawImage(bgImageGrid, 0, 0, gridSize, gridSize);
+                    }
                 }
 
                 // Padding and spacing
-                const padding = 0.3 * dpi; // 90px padding
-                const spacing = 0.15 * dpi; // 45px between photos
+                const padding = 0.5 * dpi; // 150px padding
+                const spacing = 0.2 * dpi; // 60px between photos
 
                 const availableSpace = gridSize - (2 * padding) - spacing;
                 const photoSize = availableSpace / 2;
@@ -368,7 +418,9 @@ const Result = () => {
                         <canvas 
                             ref={canvasRef}
                             style={{
-                                width: frameLayout === 'strip' ? 'min(7vw, 300px)' : 'min(18vw, 450px)',
+                                maxWidth: frameLayout === 'strip' ? '260px' : '450px',
+                                maxHeight: '60vh',
+                                width: 'auto',
                                 height: 'auto',
                                 display: 'block'
                             }}

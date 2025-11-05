@@ -294,10 +294,9 @@ const Result = () => {
                 {/* Header - MINIMAL GRAFFITI */}
                 <div className="text-center flex-shrink-0">
                     <div 
-                        className="text-white font-bold font-['Throwupz'] leading-none"
+                        className="text-black font-bold font-['Throwupz'] leading-none"
                         style={{ 
-                            fontSize: 'clamp(2.5rem, 6vw, 4rem)',
-                            textShadow: '4px 4px 0 rgba(0,0,0,0.3)',
+                            fontSize: 'clamp(4rem, 8vw, 6rem)',
                             marginBottom: '0.5rem'
                         }}
                     >
@@ -329,16 +328,17 @@ const Result = () => {
                     </div>
                 </div>
 
-                {/* Action Buttons - GRAFFITI STYLE */}
-                <div className="flex flex-wrap justify-center gap-12 flex-shrink-0">
+                {/* Action Buttons - MINIMAL BLACK BUTTONS */}
+                <div className="flex flex-wrap justify-center gap-8 flex-shrink-0">
                     <button
                         onClick={handleDownload}
-                        className="text-orange-500 font-bold uppercase transition-all duration-200 hover:scale-110 bg-transparent border-0 outline-none focus:outline-none"
+                        className="text-[clamp(1rem,2.5vw,1.25rem)] font-bold text-white px-12 py-3 border-4 border-black transition-all duration-200 hover:scale-105 uppercase tracking-[0.3em]"
                         style={{
-                            fontFamily: 'Graffiti, sans-serif',
-                            fontSize: '35px',
-                            textShadow: '5px 5px 0 rgba(0,0,0,0.6)',
-                            background: 'none'
+                            fontFamily: 'Coolvetica, Helvetica, Arial, sans-serif',
+                            backgroundColor: '#000',
+                            boxShadow: '6px 6px 0 rgba(0,0,0,0.2)',
+                            letterSpacing: '0.3em',
+                            fontWeight: 700
                         }}
                     >
                         DOWNLOAD
@@ -346,12 +346,13 @@ const Result = () => {
 
                     <button
                         onClick={handleRetake}
-                        className="text-orange-500 font-bold uppercase transition-all duration-200 hover:scale-110 bg-transparent border-0 outline-none focus:outline-none"
+                        className="text-[clamp(1rem,2.5vw,1.25rem)] font-bold text-white px-12 py-3 border-4 border-black transition-all duration-200 hover:scale-105 uppercase tracking-[0.3em]"
                         style={{
-                            fontFamily: 'Graffiti, sans-serif',
-                            fontSize: '35px',
-                            textShadow: '5px 5px 0 rgba(0,0,0,0.6)',
-                            background: 'none'
+                            fontFamily: 'Coolvetica, Helvetica, Arial, sans-serif',
+                            backgroundColor: '#000',
+                            boxShadow: '6px 6px 0 rgba(0,0,0,0.2)',
+                            letterSpacing: '0.3em',
+                            fontWeight: 700
                         }}
                     >
                         RETAKE
@@ -359,12 +360,13 @@ const Result = () => {
 
                     <button
                         onClick={handleStartOver}
-                        className="text-orange-500 font-bold uppercase transition-all duration-200 hover:scale-110 bg-transparent border-0 outline-none focus:outline-none"
+                        className="text-[clamp(1rem,2.5vw,1.25rem)] font-bold text-white px-12 py-3 border-4 border-black transition-all duration-200 hover:scale-105 uppercase tracking-[0.3em]"
                         style={{
-                            fontFamily: 'Graffiti, sans-serif',
-                            fontSize: '35px',
-                            textShadow: '5px 5px 0 rgba(0,0,0,0.6)',
-                            background: 'none'
+                            fontFamily: 'Coolvetica, Helvetica, Arial, sans-serif',
+                            backgroundColor: '#000',
+                            boxShadow: '6px 6px 0 rgba(0,0,0,0.2)',
+                            letterSpacing: '0.3em',
+                            fontWeight: 700
                         }}
                     >
                         HOME

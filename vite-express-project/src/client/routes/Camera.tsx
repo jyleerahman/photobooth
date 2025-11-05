@@ -30,7 +30,7 @@ const Camera = () => {
     const [lastCapturedImage, setLastCapturedImage] = useState<string | null>(null);
     const [showingCapturedImage, setShowingCapturedImage] = useState(false);
     
-    const totalPhotos = 8;
+    const totalPhotos = 6;
 
     // Function to play camera shutter sound using Web Audio API
     const playShutterSound = useCallback(() => {
@@ -163,7 +163,7 @@ const Camera = () => {
                                 }}></div>
                                 <span className="text-red-600 text-sm font-bold uppercase font-['SpaceMono']" style={{ 
                                     textShadow: '0 0 10px rgba(255, 0, 0, 0.9)'
-                                }}>● REC</span>
+                                }}>REC</span>
                             </div>
                         )}
                     </div>

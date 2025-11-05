@@ -160,10 +160,9 @@ const Selection = () => {
                                 : 'grayscale(50%) drop-shadow(2px 2px 4px rgba(0,0,0,0.2))'
                         }}
                     >
-                        <div className="absolute inset-0 flex items-center justify-center text-[clamp(0.9rem,2vw,1.5rem)] font-bold text-white uppercase tracking-[0.2em]"
+                        <div className="absolute inset-0 flex items-center justify-center font-['Coolvetica'] text-[clamp(0.9rem,2vw,1.5rem)] font-bold text-white uppercase tracking-[0.2rem]"
                             style={{
                                 fontFamily: 'Coolvetica, Helvetica, Arial, sans-serif',
-                                textShadow: '2px 2px 4px rgba(0,0,0,0.8)',
                                 fontWeight: 700
                             }}
                         >

@@ -75,28 +75,20 @@ function App() {
         <nav className="mt-8">
           <Link to="/frame">
             <div className="inline-block relative group">
-              {/* GREEN STREET SIGN BUTTON */}
+              {/* ONE WAY SIGN BUTTON */}
               <div 
                 className="relative transition-all duration-200 group-hover:scale-105"
                 style={{
-                  width: 'clamp(250px, 35vw, 400px)',
-                  height: 'clamp(60px, 8vw, 100px)',
-                  backgroundImage: `url(${new URL('./font/greenplate.png', import.meta.url).href})`,
+                  width: 'clamp(280px, 40vw, 450px)',
+                  height: 'clamp(80px, 12vw, 140px)',
+                  backgroundImage: `url(${new URL('./font/oneway.png', import.meta.url).href})`,
                   backgroundSize: 'contain',
                   backgroundRepeat: 'no-repeat',
                   backgroundPosition: 'center',
                   filter: 'drop-shadow(4px 4px 8px rgba(0,0,0,0.3))'
                 }}
               >
-                <div className="absolute inset-0 flex items-center justify-center text-[clamp(1.2rem,3vw,2rem)] font-bold text-white uppercase tracking-[0.3em]"
-                  style={{
-                    fontFamily: 'Coolvetica, Helvetica, Arial, sans-serif',
-                    textShadow: '2px 2px 4px rgba(0,0,0,0.8)',
-                    fontWeight: 700
-                  }}
-                >
-                  START
-                </div>
+                <span className="sr-only">START</span>
               </div>
             </div>
           </Link>

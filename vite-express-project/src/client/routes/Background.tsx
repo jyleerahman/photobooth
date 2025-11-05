@@ -120,8 +120,8 @@ const Background = () => {
                 }
             }
 
-            const padding = 0.5 * dpi;
-            const spacing = 0.2 * dpi;
+            const padding = 0.3 * dpi;
+            const spacing = 0.15 * dpi;
             const bigPhotoWidth = catWidth - (2 * padding);
             const bigPhotoHeight = (catHeight - (2 * padding) - spacing) * 0.6;
             const smallPhotoHeight = (catHeight - (2 * padding) - spacing) * 0.4;
@@ -188,7 +188,7 @@ const Background = () => {
         } else if (frameLayout === 'strip') {
             const dpi = 300 * scale;
             const stripWidth = 2 * dpi;
-            const stripHeight = 6 * dpi;
+            const stripHeight = 8 * dpi;
             
             canvas.width = stripWidth;
             canvas.height = stripHeight;
@@ -223,11 +223,11 @@ const Background = () => {
                 }
             }
 
-            const photoWidth = 1.7 * dpi; // 510px - fixed photo width
-            const photoHeight = photoWidth * (3/4); // 1.275" - 4:3 aspect ratio (landscape)
-            const padding = (stripWidth - photoWidth) / 2; // Center horizontally
-            const spacing = 0.1 * dpi; // 30px between photos
-            const topBottomPadding = (stripHeight - (4 * photoHeight) - (3 * spacing)) / 2; // Center vertically
+            const padding = 0.15 * dpi;
+            const topBottomPadding = 0.2 * dpi;
+            const spacing = 0.1 * dpi;
+            const photoWidth = stripWidth - (2 * padding);
+            const photoHeight = (stripHeight - (2 * topBottomPadding) - (3 * spacing)) / 4;
 
             for (let i = 0; i < 4; i++) {
                 const img = new Image();
@@ -260,7 +260,7 @@ const Background = () => {
         } else {
             // Grid layout
             const dpi = 300 * scale;
-            const gridSize = 8 * dpi;
+            const gridSize = 6 * dpi;
             
             canvas.width = gridSize;
             canvas.height = gridSize;
@@ -295,8 +295,8 @@ const Background = () => {
                 }
             }
 
-            const padding = 0.5 * dpi;
-            const spacing = 0.2 * dpi;
+            const padding = 0.3 * dpi;
+            const spacing = 0.15 * dpi;
             const availableSpace = gridSize - (2 * padding) - spacing;
             const photoSize = availableSpace / 2;
 
@@ -378,7 +378,7 @@ const Background = () => {
                                 ref={canvasRef}
                                 style={{
                                     maxWidth: frameLayout === 'strip' ? '280px' : '500px',
-                                    maxHeight: '70vh',
+                                    maxHeight: '60vh',
                                     width: 'auto',
                                     height: 'auto',
                                     display: 'block'

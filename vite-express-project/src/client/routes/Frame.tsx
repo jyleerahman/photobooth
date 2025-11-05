@@ -19,7 +19,7 @@ function Frame() {
             {/* Film grain */}
             <div className="bodega-grain" />
 
-            <div className="relative z-10 w-full max-w-6xl px-6 py-8" style={{ transform: 'scale(0.9)' }}>
+            <div className="relative z-10 w-full max-w-6xl px-6 py-8" style={{ transform: 'scale(0.9)', transformOrigin: 'center center' }}>
                 {/* Header - MINIMAL */}
                 <div className="text-center mb-12">
                     <div 

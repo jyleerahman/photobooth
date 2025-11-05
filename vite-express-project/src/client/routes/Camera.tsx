@@ -149,7 +149,7 @@ const Camera = () => {
                 boxShadow: '0 0 60px rgba(0,0,0,0.9), inset 0 0 40px rgba(0,0,0,0.5)'
             }}>
                 {/* Camera Label Bar - RAW STYLE */}
-                <div className="absolute top-0 left-0 right-0 bg-black z-20 py-3 px-4 border-b-4 border-[#FF1493]">
+                <div className="absolute top-0 left-0 right-0 bg-black z-20 py-3 px-4 border-b-4 border-black">
                     <div className="flex items-center justify-between">
                         <span className="text-white text-base font-bold tracking-wider uppercase font-['SpaceMono']" style={{ 
                             textShadow: '2px 2px 0 rgba(0, 0, 0, 0.9)'
@@ -214,7 +214,7 @@ const Camera = () => {
                 )}
 
                 {/* Bottom info bar - RAW */}
-                <div className="absolute bottom-0 left-0 right-0 bg-black z-20 py-3 px-4 border-t-4 border-[#FF1493]">
+                <div className="absolute bottom-0 left-0 right-0 bg-black z-20 py-3 px-4 border-t-4 border-black">
                     <div className="flex items-center justify-between">
                         <span className="text-gray-400 text-xs font-bold uppercase font-['SpaceMono']" style={{ 
                             textShadow: '1px 1px 0 rgba(0, 0, 0, 0.9)'

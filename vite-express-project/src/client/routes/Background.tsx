@@ -293,13 +293,13 @@ const Background = () => {
                     <div className="text-black text-[clamp(2.5rem,4vw,3.5rem)] font-bold uppercase font-['Throwupz'] mb-1 leading-none">
                         CHOOSE BACKGROUND
                     </div>
-                    <div className="text-white text-[clamp(0.9rem,1.5vw,1.25rem)] font-bold uppercase tracking-wide font-['Coolvetica']">
+                    <div className="text-black text-[clamp(0.9rem,1.5vw,1.25rem)] font-bold uppercase tracking-wide font-['Coolvetica']">
                         CLICK TO PREVIEW
                     </div>
                 </div>
 
                 {/* Main content area - Preview left, Buttons right */}
-                <div className="flex-1 flex gap-8 items-center justify-center min-h-0 mb-6">
+                <div className="flex-1 flex gap-8 items-center justify-center min-h-0 mt-10 mb-6">
                     {/* Big Preview - Left Side */}
                     <div className="flex items-center justify-center">
                         <div 

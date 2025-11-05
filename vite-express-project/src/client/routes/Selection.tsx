@@ -68,27 +68,24 @@ const Selection = () => {
             <div className="relative z-10 h-screen flex flex-col px-12 py-8">
                 {/* Header - GRAFFITI STYLE */}
                 <div className="px-8 py-6 mb-8 flex-shrink-0">
-                    <div className="text-white text-[clamp(2rem,5vw,3.5rem)] font-bold uppercase font-['Throwupz'] mb-2 leading-none"
-                        style={{
-                            textShadow: '4px 4px 0 rgba(0,0,0,0.3)'
-                        }}>
+                    <div className="text-black text-[clamp(6rem,5vw,3.5rem)] font-bold uppercase font-['Throwupz'] mb-2 leading-none"
+                       >
                         SELECT {maxSelection} PHOTOS
                     </div>
                     
-                    <div className="text-white text-[clamp(0.85rem,1.5vw,1rem)] tracking-[0.2em]"
-                        style={{
-                            fontFamily: 'Coolvetica, Helvetica, Arial, sans-serif',
-                            textShadow: '2px 2px 0 rgba(0,0,0,0.3)'
-                        }}>
+                
+
+                    <div className="text-white text-[clamp(1rem,2vw,1.25rem)] font-bold uppercase tracking-wide font-['Coolvetica']">
+                        TAP TO SELECT YOUR FAVORITES 
+                    </div>
+
+                    <div className="text-white text-[clamp(0.85rem,1.5vw,1rem)] tracking-[0.2em] -mb-10 font-['Coolvetica']">
                         {selectedImages.length}/{maxSelection}
                     </div>
                 </div>
 
-                {/* Image Grid - MINIMAL */}
-                <div className="grid gap-6 flex-grow flex-shrink min-h-0 overflow-y-auto py-2"
-                    style={{
-                        gridTemplateColumns: 'repeat(auto-fit, minmax(min(280px, 100%), 1fr))'
-                    }}>
+                {/* Image Grid - 3x3 LAYOUT */}
+                <div className="grid grid-cols-3 gap-6 flex-grow flex-shrink min-h-0 overflow-y-auto py-2">
                     {images.map((image, index) => {
                         const isSelected = selectedImages.includes(index);
                         const selectionOrder = selectedImages.indexOf(index);
@@ -102,7 +99,7 @@ const Selection = () => {
                                 <img
                                     src={image}
                                     alt={`Photo ${index + 1}`}
-                                    className={`w-full h-auto block transition-opacity duration-200 ${isSelected ? 'opacity-100' : 'opacity-60'}`}
+                                    className={`w-full h-auto block transition-opacity duration-200 ${isSelected ? 'opacity-100' : 'opacity-60 hover:opacity-100'}`}
                                 />
                                 
                                 {/* Selection indicator */}
@@ -120,16 +117,17 @@ const Selection = () => {
                     })}
                 </div>
 
-                {/* Action Buttons - GRAFFITI STYLE */}
-                <div className="flex justify-center gap-16 mt-8 pb-8 flex-shrink-0">
+                {/* Action Buttons - MINIMAL BLACK BUTTONS */}
+                <div className="flex justify-center gap-8 mt-8 pb-8 flex-shrink-0">
                     <button
                         onClick={handleRetake}
-                        className="text-orange-500 font-bold uppercase transition-all duration-200 hover:scale-110 bg-transparent border-0 outline-none focus:outline-none"
+                        className="text-[clamp(1rem,2.5vw,1.25rem)] font-bold text-white px-12 py-3 border-4 border-black transition-all duration-200 hover:scale-105 uppercase tracking-[0.3em]"
                         style={{
-                            fontFamily: 'Graffiti, sans-serif',
-                            fontSize: '35px',
-                            textShadow: '5px 5px 0 rgba(0,0,0,0.6)',
-                            background: 'none'
+                            fontFamily: 'Coolvetica, Helvetica, Arial, sans-serif',
+                            backgroundColor: '#000',
+                            boxShadow: '6px 6px 0 rgba(0,0,0,0.2)',
+                            letterSpacing: '0.3em',
+                            fontWeight: 700
                         }}
                     >
                         RETAKE
@@ -138,18 +136,19 @@ const Selection = () => {
                     <button
                         onClick={handleContinue}
                         disabled={selectedImages.length !== maxSelection}
-                        className={`font-bold uppercase transition-all duration-200 bg-transparent border-0 outline-none focus:outline-none ${
+                        className={`text-[clamp(1rem,2.5vw,1.25rem)] font-bold px-12 py-3 border-4 transition-all duration-200 uppercase tracking-[0.3em] ${
                             selectedImages.length === maxSelection 
-                                ? 'text-orange-500 cursor-pointer hover:scale-110' 
-                                : 'text-gray-400 cursor-not-allowed opacity-50'
+                                ? 'text-white border-black hover:scale-105 cursor-pointer' 
+                                : 'text-gray-400 border-gray-400 cursor-not-allowed opacity-50'
                         }`}
                         style={{
-                            fontFamily: 'Graffiti, sans-serif',
-                            fontSize: '35px',
-                            textShadow: selectedImages.length === maxSelection 
-                                ? '5px 5px 0 rgba(0,0,0,0.6)' 
-                                : '2px 2px 0 rgba(0,0,0,0.2)',
-                            background: 'none'
+                            fontFamily: 'Coolvetica, Helvetica, Arial, sans-serif',
+                            backgroundColor: selectedImages.length === maxSelection ? '#000' : '#666',
+                            boxShadow: selectedImages.length === maxSelection 
+                                ? '6px 6px 0 rgba(0,0,0,0.2)' 
+                                : '3px 3px 0 rgba(0,0,0,0.1)',
+                            letterSpacing: '0.3em',
+                            fontWeight: 700
                         }}
                     >
                         {selectedImages.length === maxSelection ? 'CONTINUE' : `SELECT ${maxSelection - selectedImages.length} MORE`}

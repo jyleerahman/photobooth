@@ -11,7 +11,7 @@ function Frame() {
 
     return (
         <div 
-            className="fixed inset-0 flex items-center justify-center overflow-auto"
+            className="fixed inset-0 flex items-center justify-center overflow-hidden"
             style={{
                 backgroundColor: '#f5f5f5'
             }}
@@ -19,9 +19,9 @@ function Frame() {
             {/* Film grain */}
             <div className="bodega-grain" />
 
-            <div className="relative z-10 w-full max-w-6xl px-6 py-8" style={{ transform: 'scale(0.9)', transformOrigin: 'center center' }}>
+            <div className="relative z-10 w-full max-w-6xl px-6 py-4" style={{ transform: 'scale(0.85)', transformOrigin: 'center center' }}>
                 {/* Header - MINIMAL */}
-                <div className="text-center mb-12">
+                <div className="text-center mb-6">
                     <div 
                         className="text-black text-5xl sm:text-6xl lg:text-8xl font-bold font-['Throwupz'] mb-2 leading-tight tracking-tight"
                         style={{
@@ -42,11 +42,11 @@ function Frame() {
                 </div>
 
                 {/* Frame options */}
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 justify-items-center max-w-6xl mx-auto">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 justify-items-center max-w-6xl mx-auto">
                     {/* Option 1: Strip Layout */}
                     <div
                         onClick={() => selectFrame('strip')}
-                        className="cursor-pointer p-8 transition-all duration-200 hover:scale-105 w-full max-w-xs"
+                        className="cursor-pointer p-6 transition-all duration-200 hover:scale-105 w-full max-w-xs"
                         style={{
                             backgroundColor: '#fff',
                             border: '3px solid #000',
@@ -62,7 +62,7 @@ function Frame() {
                             01
                         </div>
 
-                        <div className="text-black text-xl font-bold mb-6 uppercase tracking-wide"
+                        <div className="text-black text-lg font-bold mb-4 uppercase tracking-wide"
                             style={{
                                 fontFamily: 'Coolvetica, Helvetica, Arial, sans-serif',
                                 fontWeight: 700
@@ -92,7 +92,7 @@ function Frame() {
                     {/* Option 2: Grid Layout */}
                     <div
                         onClick={() => selectFrame('grid')}
-                        className="cursor-pointer p-8 transition-all duration-200 hover:scale-105 w-full max-w-xs"
+                        className="cursor-pointer p-6 transition-all duration-200 hover:scale-105 w-full max-w-xs"
                         style={{
                             backgroundColor: '#fff',
                             border: '3px solid #000',
@@ -108,7 +108,7 @@ function Frame() {
                             02
                         </div>
 
-                        <div className="text-black text-xl font-bold mb-6 uppercase tracking-wide"
+                        <div className="text-black text-lg font-bold mb-4 uppercase tracking-wide"
                             style={{
                                 fontFamily: 'Coolvetica, Helvetica, Arial, sans-serif',
                                 fontWeight: 700
@@ -138,7 +138,7 @@ function Frame() {
                     {/* Option 3: Special Layout */}
                     <div
                         onClick={() => selectFrame('bodega-cat')}
-                        className="cursor-pointer p-8 transition-all duration-200 hover:scale-105 w-full max-w-xs"
+                        className="cursor-pointer p-6 transition-all duration-200 hover:scale-105 w-full max-w-xs"
                         style={{
                             backgroundColor: '#fff',
                             border: '3px solid #000',
@@ -154,7 +154,7 @@ function Frame() {
                             03
                         </div>
 
-                        <div className="text-black text-xl font-bold mb-6 uppercase tracking-wide"
+                        <div className="text-black text-lg font-bold mb-4 uppercase tracking-wide"
                             style={{
                                 fontFamily: 'Coolvetica, Helvetica, Arial, sans-serif',
                                 fontWeight: 700

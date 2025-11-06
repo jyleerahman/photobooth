@@ -422,31 +422,135 @@ const Result = () => {
         link.click();
     };
 
-    const handleShareX = () => {
-        if (!shareUrl) return;
-        const text = encodeURIComponent('Check out my NYC Photobooth photo! 📸');
-        const url = encodeURIComponent(shareUrl);
-        window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank');
+    const handleShareX = async () => {
+        if (!canvasRef.current) return;
+        
+        try {
+            // Convert canvas to blob
+            canvasRef.current.toBlob(async (blob) => {
+                if (!blob) return;
+                
+                // Try copying to clipboard first (best for desktop browsers)
+                if (navigator.clipboard && typeof ClipboardItem !== 'undefined') {
+                    try {
+                        const item = new ClipboardItem({ 'image/png': blob });
+                        await navigator.clipboard.write([item]);
+                        
+                        // Open Twitter with pre-filled text
+                        const text = encodeURIComponent('Check out my NYC Photobooth photo! 📸 (Ctrl+V to paste your photo into this tweet.)');
+                        window.open(`https://twitter.com/intent/tweet?text=${text}`, '_blank');
+                        
+                        // Show brief message
+                        setTimeout(() => {
+                            alert('Image copied to clipboard! Paste it (Ctrl+V / Cmd+V) into your tweet.');
+                        }, 500);
+                        return;
+                    } catch (clipboardError) {
+                        // Clipboard failed, try next method
+                        console.log('Clipboard copy failed:', clipboardError);
+                    }
+                }
+                
+                // Try Web Share API (works on mobile and some desktop browsers)
+                const file = new File([blob], 'photobooth-photo.png', { type: 'image/png' });
+                if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+                    try {
+                        await navigator.share({
+                            title: 'Check out my NYC Photobooth photo! 📸',
+                            text: 'Check out my NYC Photobooth photo! 📸',
+                            files: [file]
+                        });
+                        return;
+                    } catch (err) {
+                        // User cancelled or error, fall through to fallback
+                        console.log('Web Share cancelled or failed:', err);
+                    }
+                }
+                
+                // Fallback: Download the image and open Twitter
+                const link = document.createElement('a');
+                link.download = `photobooth-${Date.now()}.png`;
+                link.href = URL.createObjectURL(blob);
+                link.click();
+                URL.revokeObjectURL(link.href);
+                
+                // Open Twitter with pre-filled text
+                const text = encodeURIComponent('Check out my NYC Photobooth photo! 📸 Just downloaded it!');
+                window.open(`https://twitter.com/intent/tweet?text=${text}`, '_blank');
+            }, 'image/png');
+        } catch (error) {
+            console.error('Error sharing to X:', error);
+            // Ultimate fallback: just share the URL
+            if (shareUrl) {
+                const text = encodeURIComponent('Check out my NYC Photobooth photo! 📸');
+                const url = encodeURIComponent(shareUrl);
+                window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank');
+            }
+        }
     };
 
-    const handleShareInstagram = () => {
-        if (!shareUrl) return;
-        // Instagram doesn't support direct web sharing, so we'll copy the link
-        // and show instructions, or open Instagram app on mobile
-        if (navigator.share) {
-            navigator.share({
-                title: 'My NYC Photobooth Photo',
-                text: 'Check out my NYC Photobooth photo!',
-                url: shareUrl
-            }).catch(console.error);
-        } else {
-            // Fallback: copy to clipboard
-            navigator.clipboard.writeText(shareUrl).then(() => {
-                alert('Link copied! Open Instagram and paste it in your story or post.');
-            }).catch(() => {
-                // Fallback: show the URL
-                prompt('Copy this link to share on Instagram:', shareUrl);
-            });
+    const handleShareInstagram = async () => {
+        if (!canvasRef.current) return;
+        
+        try {
+            // Convert canvas to blob
+            canvasRef.current.toBlob(async (blob) => {
+                if (!blob) return;
+                
+                // Try copying to clipboard first (best for desktop browsers)
+                if (navigator.clipboard && typeof ClipboardItem !== 'undefined') {
+                    try {
+                        const item = new ClipboardItem({ 'image/png': blob });
+                        await navigator.clipboard.write([item]);
+                        
+                        // Show message with instructions
+                        alert('Image copied to clipboard! Open Instagram and paste it (Ctrl+V / Cmd+V) into your post or story.');
+                        return;
+                    } catch (clipboardError) {
+                        // Clipboard failed, try next method
+                        console.log('Clipboard copy failed:', clipboardError);
+                    }
+                }
+                
+                // Try Web Share API (works on mobile and some desktop browsers)
+                const file = new File([blob], 'photobooth-photo.png', { type: 'image/png' });
+                if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+                    try {
+                        await navigator.share({
+                            title: 'My NYC Photobooth Photo',
+                            text: 'Check out my NYC Photobooth photo!',
+                            files: [file]
+                        });
+                        return;
+                    } catch (err) {
+                        // User cancelled or error, fall through to fallback
+                        console.log('Web Share cancelled or failed:', err);
+                    }
+                }
+                
+                // Fallback: Download the image and show instructions
+                const link = document.createElement('a');
+                link.download = `photobooth-${Date.now()}.png`;
+                link.href = URL.createObjectURL(blob);
+                link.click();
+                URL.revokeObjectURL(link.href);
+                
+                alert('Photo downloaded! Open Instagram and upload it from your downloads.');
+            }, 'image/png');
+        } catch (error) {
+            console.error('Error sharing to Instagram:', error);
+            // Ultimate fallback: copy link
+            if (shareUrl) {
+                if (navigator.clipboard) {
+                    navigator.clipboard.writeText(shareUrl).then(() => {
+                        alert('Link copied! Open Instagram and paste it in your story or post.');
+                    }).catch(() => {
+                        prompt('Copy this link to share on Instagram:', shareUrl);
+                    });
+                } else {
+                    prompt('Copy this link to share on Instagram:', shareUrl);
+                }
+            }
         }
     };
 
@@ -518,7 +622,7 @@ const Result = () => {
                     {qrCodeDataUrl && shareUrl && (
                         <div className="flex flex-col items-center gap-4" style={{ maxWidth: '300px' }}>
                             <div className="text-center">
-                                <div className="text-black text-lg font-bold uppercase font-['Coolvetica'] mb-2"
+                                <div className="text-white text-lg font-bold uppercase font-['Coolvetica'] mb-2"
                                     style={{ fontFamily: 'Coolvetica, Helvetica, Arial, sans-serif' }}>
                                     SCAN TO DOWNLOAD
                                 </div>
@@ -526,10 +630,7 @@ const Result = () => {
                                     style={{ boxShadow: '4px 4px 0 rgba(0,0,0,0.2)' }}>
                                     <img src={qrCodeDataUrl} alt="QR Code" className="w-full max-w-[200px] h-auto" />
                                 </div>
-                                <div className="mt-3 text-xs text-black font-['Coolvetica'] break-all"
-                                    style={{ fontFamily: 'Coolvetica, Helvetica, Arial, sans-serif' }}>
-                                    {shareUrl}
-                                </div>
+                                
                             </div>
                             
                             {/* Social Sharing Buttons */}

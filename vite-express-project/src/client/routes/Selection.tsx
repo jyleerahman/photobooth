@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
-type FrameLayout = 'strip' | 'grid';
+type FrameLayout = 'strip' | 'grid' | 'bodega-cat';
 
 interface LocationState {
     images: string[];
@@ -43,8 +43,8 @@ const Selection = () => {
 
     const handleContinue = () => {
         const selected = selectedImages.map(index => images[index]);
-        // Navigate to result page with selected images and frame layout
-        navigate('/result', { state: { selectedImages: selected, frameLayout } });
+        // Navigate to background selection page with selected images and frame layout
+        navigate('/background', { state: { selectedImages: selected, frameLayout } });
     };
 
     const handleRetake = () => {
@@ -53,117 +53,35 @@ const Selection = () => {
 
     return (
         <div 
-            className="fixed inset-0 w-screen h-screen overflow-hidden"
-            style={{
-                backgroundImage: `url(${new URL('../font/nycstreet.jpg', import.meta.url).href})`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                fontFamily: 'SpaceMono, monospace'
-            }}
+            className="fixed inset-0 w-screen h-screen overflow-hidden bg-[#f5f5f5]"
+            
         >
-            {/* Scanline overlay for gritty feel */}
-            <div 
-                style={{
-                    position: 'fixed',
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    background: 'repeating-linear-gradient(0deg, rgba(0,0,0,0.15) 0px, rgba(0,0,0,0.15) 1px, transparent 1px, transparent 2px)',
-                    pointerEvents: 'none',
-                    zIndex: 100
-                }}
-            />
+            {/* Film grain texture */}
+            <div className="bodega-grain" />
 
-            {/* Dark overlay for readability */}
-            <div 
-                style={{
-                    position: 'fixed',
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    backgroundColor: 'rgba(0, 0, 0, 0.75)',
-                    pointerEvents: 'none'
-                }}
-            />
-
-            <div style={{
-                position: 'relative',
-                zIndex: 1,
-                height: '100vh',
-                display: 'flex',
-                flexDirection: 'column',
-                padding: '1vh 2vw'
-            }}>
-                {/* Header - Security Cam Style */}
-                <div style={{
-                    backgroundColor: 'rgba(0, 0, 0, 0.9)',
-                    border: '2px solid #333',
-                    padding: '1.5vh 2vw',
-                    marginBottom: '1vh',
-                    flexShrink: 0
-                }}>
-                    <div style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        marginBottom: '0.5vh'
-                    }}>
-                        <div style={{
-                            color: '#00FF00',
-                            fontSize: 'clamp(1rem, 2.5vw, 1.5rem)',
-                            fontWeight: 'bold',
-                            letterSpacing: '2px',
-                            textShadow: '0 0 10px rgba(0, 255, 0, 0.5)'
-                        }}>
-                            [ FOOTAGE REVIEW ]
-                        </div>
-                        <div style={{
-                            color: '#888',
-                            fontSize: 'clamp(0.6rem, 1.5vw, 0.875rem)',
-                            letterSpacing: '1px'
-                        }}>
-                            {new Date().toLocaleString('en-US', { 
-                                month: '2-digit', 
-                                day: '2-digit', 
-                                year: 'numeric',
-                                hour: '2-digit', 
-                                minute: '2-digit',
-                                hour12: false 
-                            })}
-                        </div>
+            <div className="relative z-10 h-screen flex flex-col px-8 py-6">
+                {/* Header - GRAFFITI STYLE */}
+                <div className="px-4 py-4 mb-4 flex-shrink-0">
+                    <div className="text-black text-[clamp(2.5rem,4vw,3.5rem)] font-bold uppercase font-['Throwupz'] mb-1 leading-none"
+                       >
+                        SELECT {maxSelection} PHOTOS
                     </div>
                     
-                    <div style={{
-                        color: '#FFD700',
-                        fontSize: 'clamp(0.75rem, 2vw, 1rem)',
-                        letterSpacing: '1px',
-                        textTransform: 'uppercase'
-                    }}>
-                        SELECT {maxSelection} FRAMES FOR PRINT
+                
+
+                    <div className="text-black text-[clamp(0.9rem,1.5vw,1.25rem)] font-bold uppercase tracking-wide font-['Coolvetica']">
+                        TAP TO SELECT YOUR FAVORITES 
                     </div>
-                    
-                    <div style={{
-                        color: selectedImages.length === maxSelection ? '#00FF00' : '#FF4444',
-                        fontSize: 'clamp(0.7rem, 1.8vw, 0.875rem)',
-                        marginTop: '0.5vh',
-                        letterSpacing: '1px'
-                    }}>
-                        STATUS: {selectedImages.length}/{maxSelection} SELECTED {selectedImages.length === maxSelection ? '✓' : ''}
+
+                    <div className="text-black text-[clamp(0.75rem,1.2vw,1rem)] tracking-[0.2em] font-['Coolvetica']">
+                        {selectedImages.length}/{maxSelection}
                     </div>
                 </div>
 
-                {/* Image Grid */}
-                <div style={{
-                    display: 'grid',
-                    gridTemplateColumns: 'repeat(auto-fit, minmax(min(250px, 100%), 1fr))',
-                    gap: '1.5vh',
-                    flexGrow: 1,
-                    flexShrink: 1,
-                    minHeight: 0,
-                    overflowY: 'auto',
-                    padding: '1vh 0'
+                {/* Image Grid - 3 COLUMNS x 2 ROWS for 6 photos */}
+                <div className="grid grid-cols-3 gap-4 px-4" style={{ 
+                    gridAutoRows: 'minmax(0, 1fr)',
+                    height: 'calc(100vh - 280px)' 
                 }}>
                     {images.map((image, index) => {
                         const isSelected = selectedImages.includes(index);
@@ -173,211 +91,50 @@ const Selection = () => {
                             <div
                                 key={index}
                                 onClick={() => toggleImageSelection(index)}
-                                style={{
-                                    position: 'relative',
-                                    cursor: 'pointer',
-                                    border: isSelected ? '3px solid #00FF00' : '3px solid #333',
-                                    backgroundColor: '#000',
-                                    overflow: 'hidden',
-                                    transition: 'all 0.2s ease',
-                                    transform: isSelected ? 'scale(1.02)' : 'scale(1)',
-                                    boxShadow: isSelected 
-                                        ? '0 0 25px rgba(0, 255, 0, 0.4), inset 0 0 20px rgba(0, 255, 0, 0.1)' 
-                                        : '0 4px 10px rgba(0,0,0,0.5)'
-                                }}
+                                className="relative cursor-pointer overflow-hidden transition-all duration-200 w-full h-full"
                             >
-                                {/* Camera Label Bar */}
-                                <div style={{
-                                    position: 'absolute',
-                                    top: 0,
-                                    left: 0,
-                                    right: 0,
-                                    backgroundColor: 'rgba(0,0,0,0.9)',
-                                    padding: '0.5vh 1vw',
-                                    display: 'flex',
-                                    justifyContent: 'space-between',
-                                    alignItems: 'center',
-                                    zIndex: 2,
-                                    borderBottom: '1px solid #333'
-                                }}>
-                                    <span style={{
-                                        color: '#888',
-                                        fontSize: 'clamp(0.6rem, 1.2vw, 0.75rem)',
-                                        letterSpacing: '1px'
-                                    }}>
-                                        CAM {String(index + 1).padStart(2, '0')}
-                                    </span>
-                                    {isSelected && (
-                                        <div style={{
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            gap: '0.5vw'
-                                        }}>
-                                            <div style={{
-                                                width: 'clamp(6px, 1vw, 8px)',
-                                                height: 'clamp(6px, 1vw, 8px)',
-                                                backgroundColor: '#00FF00',
-                                                borderRadius: '50%',
-                                                boxShadow: '0 0 8px rgba(0, 255, 0, 0.8)'
-                                            }} />
-                                            <span style={{
-                                                color: '#00FF00',
-                                                fontSize: 'clamp(0.6rem, 1.2vw, 0.75rem)',
-                                                fontWeight: 'bold',
-                                                letterSpacing: '1px'
-                                            }}>
-                                                SELECTED #{selectionOrder + 1}
-                                            </span>
-                                        </div>
-                                    )}
-                                </div>
-
                                 <img
                                     src={image}
                                     alt={`Photo ${index + 1}`}
-                                    style={{
-                                        width: '100%',
-                                        height: 'auto',
-                                        display: 'block',
-                                        opacity: isSelected ? 1 : 0.6,
-                                        transition: 'opacity 0.2s ease',
-                                        filter: 'contrast(1.1) saturate(0.9)',
-                                        paddingTop: '32px'
-                                    }}
+                                    className={`w-full h-full object-cover block transition-opacity duration-200 ${isSelected ? 'opacity-100' : 'opacity-60 hover:opacity-100'}`}
                                 />
                                 
-                                {/* Timestamp overlay */}
-                                <div style={{
-                                    position: 'absolute',
-                                    bottom: '0.5vh',
-                                    left: '0.5vw',
-                                    backgroundColor: 'rgba(0,0,0,0.85)',
-                                    color: '#888',
-                                    padding: '0.3vh 0.8vw',
-                                    fontSize: 'clamp(0.5rem, 1vw, 0.625rem)',
-                                    letterSpacing: '1px',
-                                    fontFamily: 'SpaceMono, monospace',
-                                    border: '1px solid #333'
-                                }}>
-                                    {new Date(Date.now() - (images.length - index) * 6000).toLocaleString('en-US', {
-                                        month: '2-digit',
-                                        day: '2-digit', 
-                                        year: '2-digit',
-                                        hour: '2-digit',
-                                        minute: '2-digit',
-                                        second: '2-digit',
-                                        hour12: false
-                                    })}
-                                </div>
-
-                                {/* Green tint overlay for selected */}
+                                {/* Selection indicator */}
                                 {isSelected && (
-                                    <div style={{
-                                        position: 'absolute',
-                                        top: 0,
-                                        left: 0,
-                                        right: 0,
-                                        bottom: 0,
-                                        backgroundColor: 'rgba(0, 255, 0, 0.08)',
-                                        pointerEvents: 'none',
-                                        border: '1px solid rgba(0, 255, 0, 0.3)'
-                                    }} />
+                                    <div className="absolute top-3 right-3 bg-black text-white px-3 py-2 text-sm font-bold tracking-wider"
+                                        style={{
+                                            fontFamily: 'Coolvetica, Helvetica, Arial, sans-serif',
+                                            boxShadow: '3px 3px 0 rgba(0,0,0,0.2)'
+                                        }}>
+                                        {selectionOrder + 1}
+                                    </div>
                                 )}
-
-                                {/* Hover effect */}
-                                <div style={{
-                                    position: 'absolute',
-                                    top: 0,
-                                    left: 0,
-                                    right: 0,
-                                    bottom: 0,
-                                    opacity: 0,
-                                    transition: 'opacity 0.2s',
-                                    pointerEvents: 'none'
-                                }}
-                                onMouseEnter={(e) => e.currentTarget.style.opacity = '0.3'}
-                                onMouseLeave={(e) => e.currentTarget.style.opacity = '0'}
-                                />
                             </div>
                         );
                     })}
                 </div>
 
-                {/* Action Buttons - Control Panel Style */}
-                <div style={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    gap: '2vw',
-                    marginTop: '1vh',
-                    paddingBottom: '1vh',
-                    flexShrink: 0
-                }}>
-                    <button
-                        onClick={handleRetake}
-                        style={{
-                            padding: '1.2vh 3vw',
-                            fontSize: 'clamp(0.75rem, 2vw, 1rem)',
-                            cursor: 'pointer',
-                            backgroundColor: '#000',
-                            color: '#888',
-                            border: '2px solid #444',
-                            fontWeight: 'bold',
-                            letterSpacing: '2px',
-                            fontFamily: 'SpaceMono, monospace',
-                            textTransform: 'uppercase',
-                            transition: 'all 0.2s',
-                            boxShadow: '0 4px 10px rgba(0,0,0,0.5)'
-                        }}
-                        onMouseEnter={(e) => {
-                            e.currentTarget.style.backgroundColor = '#1a1a1a';
-                            e.currentTarget.style.borderColor = '#666';
-                            e.currentTarget.style.color = '#aaa';
-                        }}
-                        onMouseLeave={(e) => {
-                            e.currentTarget.style.backgroundColor = '#000';
-                            e.currentTarget.style.borderColor = '#444';
-                            e.currentTarget.style.color = '#888';
-                        }}
-                    >
-                        ◄ RETAKE
-                    </button>
-                    
-                    <button
-                        onClick={handleContinue}
-                        disabled={selectedImages.length !== maxSelection}
-                        style={{
-                            padding: '1.2vh 3vw',
-                            fontSize: 'clamp(0.75rem, 2vw, 1rem)',
-                            cursor: selectedImages.length === maxSelection ? 'pointer' : 'not-allowed',
-                            backgroundColor: selectedImages.length === maxSelection ? '#000' : '#0a0a0a',
-                            color: selectedImages.length === maxSelection ? '#00FF00' : '#333',
-                            border: selectedImages.length === maxSelection ? '2px solid #00FF00' : '2px solid #222',
-                            fontWeight: 'bold',
-                            letterSpacing: '2px',
-                            fontFamily: 'SpaceMono, monospace',
-                            textTransform: 'uppercase',
-                            boxShadow: selectedImages.length === maxSelection 
-                                ? '0 0 20px rgba(0, 255, 0, 0.3), 0 4px 10px rgba(0,0,0,0.5)' 
-                                : '0 4px 10px rgba(0,0,0,0.5)',
-                            opacity: selectedImages.length === maxSelection ? 1 : 0.4,
-                            transition: 'all 0.2s',
-                            textShadow: selectedImages.length === maxSelection ? '0 0 10px rgba(0, 255, 0, 0.5)' : 'none'
-                        }}
-                        onMouseEnter={(e) => {
-                            if (selectedImages.length === maxSelection) {
-                                e.currentTarget.style.backgroundColor = '#0a0a0a';
-                                e.currentTarget.style.boxShadow = '0 0 30px rgba(0, 255, 0, 0.5), 0 4px 10px rgba(0,0,0,0.5)';
-                            }
-                        }}
-                        onMouseLeave={(e) => {
-                            if (selectedImages.length === maxSelection) {
-                                e.currentTarget.style.backgroundColor = '#000';
-                                e.currentTarget.style.boxShadow = '0 0 20px rgba(0, 255, 0, 0.3), 0 4px 10px rgba(0,0,0,0.5)';
-                            }
-                        }}
-                    >
-                        {selectedImages.length === maxSelection ? 'CONTINUE ►' : `SELECT ${maxSelection - selectedImages.length} MORE`}
-                    </button>
+                {/* Action Buttons - STREET SIGN BUTTONS */}
+                <div className="flex justify-center mb-4 pb-4 flex-shrink-0">
+                    {selectedImages.length === maxSelection && (
+                        <button
+                            onClick={handleContinue}
+                            className="relative transition-all duration-200 hover:scale-105 border-0"
+                            style={{
+                                width: 'clamp(140px, 20vw, 200px)',
+                                height: 'clamp(80px, 11vw, 120px)',
+                                backgroundImage: `url(${new URL('../font/oneway.png', import.meta.url).href})`,
+                                backgroundSize: 'contain',
+                                backgroundRepeat: 'no-repeat',
+                                backgroundPosition: 'center',
+                                backgroundColor: 'transparent',
+                                cursor: 'pointer',
+                                filter: 'drop-shadow(4px 4px 8px rgba(0,0,0,0.3))'
+                            }}
+                        >
+                            <span className="sr-only">CONTINUE</span>
+                        </button>
+                    )}
                 </div>
             </div>
         </div>

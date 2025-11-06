@@ -9,7 +9,7 @@ const videoConstraints = {
     facingMode: "user"
 };
 
-type FrameLayout = 'strip' | 'grid';
+type FrameLayout = 'strip' | 'grid' | 'bodega-cat';
 
 interface LocationState {
     frameLayout: FrameLayout;
@@ -30,7 +30,7 @@ const Camera = () => {
     const [lastCapturedImage, setLastCapturedImage] = useState<string | null>(null);
     const [showingCapturedImage, setShowingCapturedImage] = useState(false);
     
-    const totalPhotos = 8;
+    const totalPhotos = 4;
 
     // Function to play camera shutter sound using Web Audio API
     const playShutterSound = useCallback(() => {
@@ -100,13 +100,13 @@ const Camera = () => {
     useEffect(() => {
         if (!isCapturing) return;
 
-        // Check if we've taken all 8 photos
+        // Check if we've taken all 4 photos
         if (currentPhotoNumber >= totalPhotos) {
             setIsCapturing(false);
             setCountdown(5);
-            // Navigate to selection page with captured images and frame layout
+            // Navigate directly to background page with all captured images and frame layout
             setTimeout(() => {
-                navigate('/select', { state: { images: capturedImages, frameLayout } });
+                navigate('/background', { state: { selectedImages: capturedImages, frameLayout } });
             }, 500);
             return;
         }
@@ -134,23 +134,36 @@ const Camera = () => {
         <div 
             className="fixed inset-0 w-screen h-screen overflow-hidden flex items-center justify-center"
             style={{ 
-                backgroundImage: `url(${new URL('./font/newyorkbodega.jpg', import.meta.url).href})`,
+                backgroundImage: `url(${new URL('./font/newyorkstreet.jpg', import.meta.url).href})`,
                 backgroundSize: 'cover',
-                backgroundPosition: 'center'
+                backgroundPosition: 'center',
+                backgroundColor: '#0a0a0a'
             }}
         >
+            {/* Gritty Film Effects */}
+            <div className="bodega-scanlines" />
+            <div className="bodega-vhs-effect" />
+            <div className="bodega-grain" />
             {/* Single Active Camera Feed */}
-            <div className="relative w-[80vw] h-[80vh] max-w-[1280px] max-h-[720px]">
-                {/* Camera Label Bar */}
-                <div className="absolute top-0 left-0 right-0 bg-black/90 z-20 py-2 px-4">
+            <div className="relative w-[80vw] h-[80vh] max-w-[1280px] max-h-[720px] border-8 border-black" style={{
+                boxShadow: '0 0 60px rgba(0,0,0,0.9), inset 0 0 40px rgba(0,0,0,0.5)'
+            }}>
+                {/* Camera Label Bar - RAW STYLE */}
+                <div className="absolute top-0 left-0 right-0 bg-black z-20 py-3 px-4 border-b-4 border-black">
                     <div className="flex items-center justify-between">
-                        <span className="text-white text-lg font-bold tracking-wider" style={{ fontFamily: 'SpaceMono, monospace' }}>
-                            CAMERA {String(currentPhotoNumber + 1).padStart(2, '0')}
+                        <span className="text-white text-base font-bold tracking-wider uppercase font-['SpaceMono']" style={{ 
+                            textShadow: '2px 2px 0 rgba(0, 0, 0, 0.9)'
+                        }}>
+                            ▶ CAM {String(currentPhotoNumber + 1).padStart(2, '0')}
                         </span>
                         {isCapturing && (
                             <div className="flex items-center gap-2">
-                                <div className="w-3 h-3 bg-red-600 rounded-full animate-pulse"></div>
-                                <span className="text-red-600 text-sm font-bold" style={{ fontFamily: 'SpaceMono, monospace' }}>REC</span>
+                                <div className="w-3 h-3 bg-red-600 rounded-full animate-pulse" style={{
+                                    boxShadow: '0 0 15px rgba(255, 0, 0, 0.9)'
+                                }}></div>
+                                <span className="text-red-600 text-sm font-bold uppercase font-['SpaceMono']" style={{ 
+                                    textShadow: '0 0 10px rgba(255, 0, 0, 0.9)'
+                                }}>REC</span>
                             </div>
                         )}
                     </div>
@@ -163,17 +176,22 @@ const Camera = () => {
                     screenshotFormat="image/jpeg"
                     videoConstraints={videoConstraints}
                     className="w-full h-full object-cover"
+                    style={{
+                        filter: 'contrast(1.15) saturate(0.9) brightness(0.95)'
+                    }}
                 />
 
-                {/* Countdown overlay */}
+                {/* Countdown overlay - BOLD */}
                 {isCapturing && countdown > 0 && !showingCapturedImage && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-black/30 z-10">
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/50 z-10">
                         <div 
-                            className={`text-[200px] font-bold font-['SpaceMono'] ${
-                                countdown <= 3 ? 'text-red-500' : 'text-white'
+                            className={`text-[250px] font-bold font-['Throwupz'] ${
+                                countdown <= 3 ? 'text-[#FF1493]' : 'text-white'
                             }`}
                             style={{ 
-                                textShadow: '0 0 30px rgba(0,0,0,0.9)'
+                                textShadow: '8px 8px 0 #000, -3px -3px 0 #000, 3px -3px 0 #000, -3px 3px 0 #000, 12px 12px 0 rgba(0,0,0,0.5)',
+                                WebkitTextStroke: '4px black',
+                                paintOrder: 'stroke fill'
                             }}
                         >
                             {countdown}
@@ -195,14 +213,16 @@ const Camera = () => {
                     />
                 )}
 
-                {/* Bottom info bar */}
-                <div className="absolute bottom-0 left-0 right-0 bg-black/90 z-20 py-2 px-4">
+                {/* Bottom info bar - RAW */}
+                <div className="absolute bottom-0 left-0 right-0 bg-black z-20 py-3 px-4 border-t-4 border-black">
                     <div className="flex items-center justify-between">
-                        <span className="text-white text-xs font-['SpaceMono']">
+                        <span className="text-gray-400 text-xs font-bold uppercase font-['SpaceMono']" style={{ 
+                            textShadow: '1px 1px 0 rgba(0, 0, 0, 0.9)'
+                        }}>
                             {new Date().toLocaleString('en-US', { 
                                 month: '2-digit', 
                                 day: '2-digit', 
-                                year: 'numeric',
+                                year: '2-digit',
                                 hour: '2-digit', 
                                 minute: '2-digit', 
                                 second: '2-digit',
@@ -210,32 +230,49 @@ const Camera = () => {
                             })}
                         </span>
                         {isCapturing && (
-                            <span className="text-white text-xs font-['SpaceMono']">
-                                PHOTO {currentPhotoNumber + 1}/{totalPhotos}
+                            <span className="text-white text-xs font-bold uppercase font-['SpaceMono']" style={{ 
+                                textShadow: '2px 2px 0 rgba(0, 0, 0, 0.9)'
+                            }}>
+                                {currentPhotoNumber + 1}/{totalPhotos}
+                            </span>
+                        )}
+                        {!isCapturing && (
+                            <span className="text-gray-500 text-xs uppercase font-['SpaceMono']">
+                                NYC BOOTH
                             </span>
                         )}
                     </div>
                 </div>
 
-                {/* Control button - positioned over feed */}
+                {/* Control button - CHUNKY */}
                 {!isCapturing && (
                     <div 
                         onClick={startAutomatedCapture}
-                        className="absolute inset-0 flex items-center justify-center z-30 bg-black/60 cursor-pointer hover:bg-black/70 transition-colors"
+                        className="absolute inset-0 flex items-center justify-center z-30 bg-black/70 cursor-pointer hover:bg-black/80 transition-colors"
                     >
                         <div className="text-center">
-                            <div className="text-white text-6xl font-bold mb-4 font-['SpaceMono']" >[ REC ]</div>
-                            <div className="text-white/70 text-lg tracking-widest font-['SpaceMono']">PRESS TO START</div>
+                            <div className="text-white text-8xl font-bold mb-6 font-['Throwupz'] uppercase"
+                                style={{
+                                    textShadow: '6px 6px 0 #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 10px 10px 0 rgba(255,20,147,0.6)',
+                                    WebkitTextStroke: '3px black',
+                                    paintOrder: 'stroke fill'
+                                }}
+                            >START</div>
+                            
                         </div>
                     </div>
                 )}
 
-                {/* Stop button - small and unobtrusive */}
+                {/* Stop button - BOLD */}
                 {isCapturing && (
                     <button 
                         onClick={stopAutomatedCapture}
-                        className="absolute top-20 right-4 z-30 py-2 px-4 text-sm cursor-pointer bg-red-600/80 text-white border-none rounded font-bold hover:bg-red-700 transition-colors font-['SpaceMono']"
-                        style={{ fontFamily: 'SpaceMono, monospace' }}
+                        className="absolute top-20 right-4 z-30 py-3 px-6 text-base cursor-pointer bg-black text-white border-4 border-red-600 font-bold hover:bg-red-600 transition-colors font-['SpaceMono'] uppercase tracking-wider"
+                        style={{ 
+                            fontFamily: 'SpaceMono, monospace',
+                            boxShadow: '4px 4px 0 rgba(0,0,0,0.8), 0 0 20px rgba(255,0,0,0.6)',
+                            textShadow: '2px 2px 0 rgba(0,0,0,0.8)'
+                        }}
                     >
                         ■ STOP
                     </button>

@@ -5,12 +5,15 @@
   "type": "module",
   "scripts": {
     "dev": "nodemon -w src/server -x tsx src/server/main.ts",
+    "build": "vite build",
     "start": "NODE_ENV=production tsx src/server/main.ts",
-    "build": "vite build"
+    "postinstall": "bun run build"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.16",
     "express": "^5.1.0",
+    "multer": "^2.0.2",
+    "qrcode": "^1.5.4",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-router": "^7.9.5",
@@ -22,7 +25,9 @@
   },
   "devDependencies": {
     "@types/express": "^5.0.1",
+    "@types/multer": "^2.0.0",
     "@types/node": "^22.15.2",
+    "@types/qrcode": "^1.5.6",
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19.1.2",
     "@vitejs/plugin-react": "^4.4.1",

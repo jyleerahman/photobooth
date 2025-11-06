@@ -1,11 +1,13 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import QRCode from "qrcode";
 
-type FrameLayout = 'strip' | 'grid';
+type FrameLayout = 'strip' | 'grid' | 'bodega-cat';
 
 interface LocationState {
     selectedImages: string[];
     frameLayout: FrameLayout;
+    backgroundStyle?: string;
 }
 
 const Result = () => {
@@ -13,9 +15,24 @@ const Result = () => {
     const location = useLocation();
     const state = location.state as LocationState;
     const canvasRef = useRef<HTMLCanvasElement>(null);
+    const hasUploadedRef = useRef(false);
+    const [shareUrl, setShareUrl] = useState<string | null>(null);
+    const [qrCodeDataUrl, setQrCodeDataUrl] = useState<string | null>(null);
+    const [isUploading, setIsUploading] = useState(false);
     
     const selectedImages = state?.selectedImages || [];
     const frameLayout = state?.frameLayout || 'strip';
+    const backgroundStyle = state?.backgroundStyle || 'graffiti';
+
+    // Helper function to get background image URL
+    const getBackgroundImageUrl = (style: string): string => {
+        const backgrounds: Record<string, string> = {
+            'graffiti': new URL('../font/graffiti-wall.jpg', import.meta.url).href,
+            'subway': new URL('../font/newyork-subway.jpg', import.meta.url).href,
+            'bodega': new URL('../font/newyorkbodega.jpg', import.meta.url).href,
+        };
+        return backgrounds[style] || backgrounds['graffiti'];
+    };
 
     // Redirect if no images are available
     useEffect(() => {
@@ -24,35 +41,247 @@ const Result = () => {
         }
     }, [selectedImages, navigate]);
 
+    // Upload photo to server and generate share URL
+    const uploadPhoto = useCallback(async () => {
+        if (!canvasRef.current || hasUploadedRef.current || isUploading) return;
+        
+        hasUploadedRef.current = true;
+        setIsUploading(true);
+        try {
+            const canvas = canvasRef.current;
+            const imageData = canvas.toDataURL('image/png');
+            
+            const response = await fetch('/api/photos', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    imageData,
+                    format: 'png'
+                })
+            });
+            
+            if (!response.ok) {
+                throw new Error('Failed to upload photo');
+            }
+            
+            const data = await response.json();
+            setShareUrl(data.shareUrl);
+            
+            // Generate QR code
+            const qrCode = await QRCode.toDataURL(data.shareUrl, {
+                width: 300,
+                margin: 2,
+                color: {
+                    dark: '#000000',
+                    light: '#FFFFFF'
+                }
+            });
+            setQrCodeDataUrl(qrCode);
+        } catch (error) {
+            console.error('Error uploading photo:', error);
+            hasUploadedRef.current = false; // Reset on error so it can retry
+        } finally {
+            setIsUploading(false);
+        }
+    }, []);
+
     // Generate the photo strip
     useEffect(() => {
         if (!canvasRef.current || selectedImages.length !== 4) return;
+
+        // Reset upload ref when inputs change
+        hasUploadedRef.current = false;
+        setShareUrl(null);
+        setQrCodeDataUrl(null);
 
         const canvas = canvasRef.current;
         const ctx = canvas.getContext('2d');
         if (!ctx) return;
 
         const generatePhotoStrip = async () => {
-            if (frameLayout === 'strip') {
-                // Classic strip: 2 inches wide x 8 inches tall (at 300 DPI for print quality)
+            if (frameLayout === 'bodega-cat') {
+                // Bodega Cat layout: One big photo on top, 3 small photos on bottom
+                const dpi = 300;
+                const catWidth = 6 * dpi;  // 1800px - square
+                const catHeight = 6 * dpi; // 1800px
+                
+                canvas.width = catWidth;
+                canvas.height = catHeight;
+
+                // Draw background
+                if (backgroundStyle === 'white') {
+                    ctx.fillStyle = '#FFFFFF';
+                    ctx.fillRect(0, 0, catWidth, catHeight);
+                } else if (backgroundStyle === 'black') {
+                    ctx.fillStyle = '#000000';
+                    ctx.fillRect(0, 0, catWidth, catHeight);
+                } else if (backgroundStyle === 'neon') {
+                    const gradient = ctx.createLinearGradient(0, 0, catWidth, catHeight);
+                    gradient.addColorStop(0, '#FF00FF');
+                    gradient.addColorStop(0.25, '#00FFFF');
+                    gradient.addColorStop(0.5, '#FF00FF');
+                    gradient.addColorStop(0.75, '#FFFF00');
+                    gradient.addColorStop(1, '#FF00FF');
+                    ctx.fillStyle = gradient;
+                    ctx.fillRect(0, 0, catWidth, catHeight);
+                } else {
+                    const bgImage = new Image();
+                    bgImage.crossOrigin = "anonymous";
+                    bgImage.src = getBackgroundImageUrl(backgroundStyle);
+                    await new Promise((resolve) => { 
+                        bgImage.onload = resolve;
+                        bgImage.onerror = () => {
+                            // Fallback to white if image fails
+                            ctx.fillStyle = 'white';
+                            ctx.fillRect(0, 0, catWidth, catHeight);
+                            resolve(null);
+                        };
+                    });
+                    if (bgImage.complete && bgImage.naturalWidth > 0) {
+                        ctx.drawImage(bgImage, 0, 0, catWidth, catHeight);
+                    }
+                }
+
+                // Padding
+                const padding = 0.5 * dpi; // 150px padding
+                const spacing = 0.2 * dpi; // 60px between photos
+
+                // Big photo dimensions (top 60% of space)
+                const bigPhotoWidth = catWidth - (2 * padding);
+                const bigPhotoHeight = (catHeight - (2 * padding) - spacing) * 0.6;
+
+                // Small photos dimensions (bottom 40% of space, split into 3)
+                const smallPhotoHeight = (catHeight - (2 * padding) - spacing) * 0.4;
+                const smallPhotoWidth = (catWidth - (2 * padding) - (2 * spacing)) / 3;
+
+                // Draw big photo (first selected image)
+                const bigImg = new Image();
+                bigImg.src = selectedImages[0];
+                await new Promise((resolve) => {
+                    bigImg.onload = resolve;
+                });
+
+                const bigImgAspect = bigImg.width / bigImg.height;
+                const bigBoxAspect = bigPhotoWidth / bigPhotoHeight;
+                
+                let bigSourceX, bigSourceY, bigSourceWidth, bigSourceHeight;
+                
+                if (bigImgAspect > bigBoxAspect) {
+                    bigSourceHeight = bigImg.height;
+                    bigSourceWidth = bigImg.height * bigBoxAspect;
+                    bigSourceX = (bigImg.width - bigSourceWidth) / 2;
+                    bigSourceY = 0;
+                } else {
+                    bigSourceWidth = bigImg.width;
+                    bigSourceHeight = bigImg.width / bigBoxAspect;
+                    bigSourceX = 0;
+                    bigSourceY = (bigImg.height - bigSourceHeight) / 2;
+                }
+                
+                ctx.drawImage(
+                    bigImg,
+                    bigSourceX, bigSourceY, bigSourceWidth, bigSourceHeight,
+                    padding, padding, bigPhotoWidth, bigPhotoHeight
+                );
+
+                // Draw 3 small photos (remaining selected images)
+                for (let i = 0; i < 3; i++) {
+                    const smallImg = new Image();
+                    smallImg.src = selectedImages[i + 1];
+                    await new Promise((resolve) => {
+                        smallImg.onload = resolve;
+                    });
+
+                    const x = padding + (i * (smallPhotoWidth + spacing));
+                    const y = padding + bigPhotoHeight + spacing;
+
+                    const smallImgAspect = smallImg.width / smallImg.height;
+                    const smallBoxAspect = smallPhotoWidth / smallPhotoHeight;
+                    
+                    let smallSourceX, smallSourceY, smallSourceWidth, smallSourceHeight;
+                    
+                    if (smallImgAspect > smallBoxAspect) {
+                        smallSourceHeight = smallImg.height;
+                        smallSourceWidth = smallImg.height * smallBoxAspect;
+                        smallSourceX = (smallImg.width - smallSourceWidth) / 2;
+                        smallSourceY = 0;
+                    } else {
+                        smallSourceWidth = smallImg.width;
+                        smallSourceHeight = smallImg.width / smallBoxAspect;
+                        smallSourceX = 0;
+                        smallSourceY = (smallImg.height - smallSourceHeight) / 2;
+                    }
+                    
+                    ctx.drawImage(
+                        smallImg,
+                        smallSourceX, smallSourceY, smallSourceWidth, smallSourceHeight,
+                        x, y, smallPhotoWidth, smallPhotoHeight
+                    );
+                }
+
+                // Add "BODEGA CAT APPROVED" stamp in corner
+                ctx.save();
+                ctx.font = `bold ${0.15 * dpi}px Arial`;
+                ctx.fillStyle = '#FFD700';
+                ctx.strokeStyle = '#000';
+                ctx.lineWidth = 3;
+                ctx.textAlign = 'right';
+                ctx.rotate(-0.1);
+                const stampText = '🐈 BODEGA CAT';
+                ctx.strokeText(stampText, catWidth - padding - 20, catHeight - padding - 20);
+                ctx.fillText(stampText, catWidth - padding - 20, catHeight - padding - 20);
+                ctx.restore();
+            } else if (frameLayout === 'strip') {
+                // Classic strip: 2 inches wide x 6 inches tall (at 300 DPI for print quality)
                 const dpi = 300;
                 const stripWidth = 2 * dpi;  // 600px
-                const stripHeight = 8 * dpi; // 2400px
+                const stripHeight = 6 * dpi; // 1800px
                 
                 canvas.width = stripWidth;
                 canvas.height = stripHeight;
 
-                // White background
-                ctx.fillStyle = 'white';
-                ctx.fillRect(0, 0, stripWidth, stripHeight);
+                // Draw background
+                if (backgroundStyle === 'white') {
+                    ctx.fillStyle = '#FFFFFF';
+                    ctx.fillRect(0, 0, stripWidth, stripHeight);
+                } else if (backgroundStyle === 'black') {
+                    ctx.fillStyle = '#000000';
+                    ctx.fillRect(0, 0, stripWidth, stripHeight);
+                } else if (backgroundStyle === 'neon') {
+                    const gradient = ctx.createLinearGradient(0, 0, stripWidth, stripHeight);
+                    gradient.addColorStop(0, '#FF00FF');
+                    gradient.addColorStop(0.25, '#00FFFF');
+                    gradient.addColorStop(0.5, '#FF00FF');
+                    gradient.addColorStop(0.75, '#FFFF00');
+                    gradient.addColorStop(1, '#FF00FF');
+                    ctx.fillStyle = gradient;
+                    ctx.fillRect(0, 0, stripWidth, stripHeight);
+                } else {
+                    const bgImageStrip = new Image();
+                    bgImageStrip.crossOrigin = "anonymous";
+                    bgImageStrip.src = getBackgroundImageUrl(backgroundStyle);
+                    await new Promise((resolve) => { 
+                        bgImageStrip.onload = resolve;
+                        bgImageStrip.onerror = () => {
+                            // Fallback to white if image fails
+                            ctx.fillStyle = 'white';
+                            ctx.fillRect(0, 0, stripWidth, stripHeight);
+                            resolve(null);
+                        };
+                    });
+                    if (bgImageStrip.complete && bgImageStrip.naturalWidth > 0) {
+                        ctx.drawImage(bgImageStrip, 0, 0, stripWidth, stripHeight);
+                    }
+                }
 
                 // Padding and spacing
-                const padding = 0.15 * dpi; // 45px padding on sides
-                const topBottomPadding = 0.2 * dpi; // 60px padding top/bottom
+                const photoWidth = 1.7 * dpi; // 510px - fixed photo width
+                const photoHeight = photoWidth * (3/4); // 1.275" - 4:3 aspect ratio (landscape)
+                const padding = (stripWidth - photoWidth) / 2; // Center horizontally
                 const spacing = 0.1 * dpi; // 30px between photos
-
-                const photoWidth = stripWidth - (2 * padding);
-                const photoHeight = (stripHeight - (2 * topBottomPadding) - (3 * spacing)) / 4;
+                const topBottomPadding = (stripHeight - (4 * photoHeight) - (3 * spacing)) / 2; // Center vertically
 
                 // Draw each photo with aspect ratio preserved (cover fit)
                 for (let i = 0; i < 4; i++) {
@@ -93,18 +322,48 @@ const Result = () => {
             } else {
                 // Grid layout: Square format (6 inches x 6 inches at 300 DPI)
                 const dpi = 300;
-                const gridSize = 6 * dpi; // 1800px
+                const gridSize = 8 * dpi; // 1800px
                 
                 canvas.width = gridSize;
                 canvas.height = gridSize;
 
-                // White background
-                ctx.fillStyle = 'white';
-                ctx.fillRect(0, 0, gridSize, gridSize);
+                // Draw background
+                if (backgroundStyle === 'white') {
+                    ctx.fillStyle = '#FFFFFF';
+                    ctx.fillRect(0, 0, gridSize, gridSize);
+                } else if (backgroundStyle === 'black') {
+                    ctx.fillStyle = '#000000';
+                    ctx.fillRect(0, 0, gridSize, gridSize);
+                } else if (backgroundStyle === 'neon') {
+                    const gradient = ctx.createLinearGradient(0, 0, gridSize, gridSize);
+                    gradient.addColorStop(0, '#FF00FF');
+                    gradient.addColorStop(0.25, '#00FFFF');
+                    gradient.addColorStop(0.5, '#FF00FF');
+                    gradient.addColorStop(0.75, '#FFFF00');
+                    gradient.addColorStop(1, '#FF00FF');
+                    ctx.fillStyle = gradient;
+                    ctx.fillRect(0, 0, gridSize, gridSize);
+                } else {
+                    const bgImageGrid = new Image();
+                    bgImageGrid.crossOrigin = "anonymous";
+                    bgImageGrid.src = getBackgroundImageUrl(backgroundStyle);
+                    await new Promise((resolve) => { 
+                        bgImageGrid.onload = resolve;
+                        bgImageGrid.onerror = () => {
+                            // Fallback to white if image fails
+                            ctx.fillStyle = 'white';
+                            ctx.fillRect(0, 0, gridSize, gridSize);
+                            resolve(null);
+                        };
+                    });
+                    if (bgImageGrid.complete && bgImageGrid.naturalWidth > 0) {
+                        ctx.drawImage(bgImageGrid, 0, 0, gridSize, gridSize);
+                    }
+                }
 
                 // Padding and spacing
-                const padding = 0.3 * dpi; // 90px padding
-                const spacing = 0.15 * dpi; // 45px between photos
+                const padding = 0.5 * dpi; // 150px padding
+                const spacing = 0.2 * dpi; // 60px between photos
 
                 const availableSpace = gridSize - (2 * padding) - spacing;
                 const photoSize = availableSpace / 2;
@@ -148,8 +407,11 @@ const Result = () => {
             }
         };
 
-        generatePhotoStrip();
-    }, [selectedImages, frameLayout]);
+        generatePhotoStrip().then(() => {
+            // Upload photo after canvas is generated
+            uploadPhoto();
+        });
+    }, [selectedImages, frameLayout, backgroundStyle, uploadPhoto]);
 
     const handleDownload = () => {
         if (!canvasRef.current) return;
@@ -160,6 +422,34 @@ const Result = () => {
         link.click();
     };
 
+    const handleShareX = () => {
+        if (!shareUrl) return;
+        const text = encodeURIComponent('Check out my NYC Photobooth photo! 📸');
+        const url = encodeURIComponent(shareUrl);
+        window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank');
+    };
+
+    const handleShareInstagram = () => {
+        if (!shareUrl) return;
+        // Instagram doesn't support direct web sharing, so we'll copy the link
+        // and show instructions, or open Instagram app on mobile
+        if (navigator.share) {
+            navigator.share({
+                title: 'My NYC Photobooth Photo',
+                text: 'Check out my NYC Photobooth photo!',
+                url: shareUrl
+            }).catch(console.error);
+        } else {
+            // Fallback: copy to clipboard
+            navigator.clipboard.writeText(shareUrl).then(() => {
+                alert('Link copied! Open Instagram and paste it in your story or post.');
+            }).catch(() => {
+                // Fallback: show the URL
+                prompt('Copy this link to share on Instagram:', shareUrl);
+            });
+        }
+    };
+
     const handleStartOver = () => {
         navigate('/');
     };
@@ -168,145 +458,185 @@ const Result = () => {
         navigate('/frame');
     };
 
+    const getLayoutName = () => {
+        if (frameLayout === 'bodega-cat') return '※ SPECIAL EDITION ※';
+        if (frameLayout === 'grid') return '※ GRID FORMAT ※';
+        return '※ CLASSIC STRIP ※';
+    };
+
     return (
         <div 
             className="fixed inset-0 flex items-center justify-center overflow-hidden"
             style={{
-                backgroundImage: `url(${new URL('../font/nycstreet.jpg', import.meta.url).href})`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                fontFamily: 'SpaceMono, monospace'
+                backgroundColor: '#f5f5f5',
+                backgroundImage: `url(${new URL('../font/newyorkstreet.jpg', import.meta.url).href})`,
+                backgroundSize: '50% auto',
+                backgroundPosition: 'center center',
+                backgroundRepeat: 'no-repeat'
             }}
         >
-            {/* Dark overlay */}
-            <div className="fixed inset-0 pointer-events-none" 
-                style={{
-                    background: 'radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.9))'
-                }}
-            />
+            {/* Film grain texture */}
+            <div className="bodega-grain" />
 
-            <div className="relative z-10 w-full h-full flex flex-col items-center justify-center gap-[1vh]" style={{ padding: '2vh 2vw' }}>
-                {/* Header */}
+            <div className="relative z-10 w-full h-full flex flex-col items-center justify-center gap-4" style={{ padding: '1.5rem' }}>
+                {/* Header - MINIMAL GRAFFITI */}
                 <div className="text-center flex-shrink-0">
                     <div 
-                        className="text-neon-pink font-bold font-['WhoopieSunday'] -rotate-1 leading-none"
-                        style={{ fontSize: 'clamp(1.5rem, 4vw, 2.5rem)', marginBottom: '0.5vh' }}
+                        className="text-black font-bold font-['Throwupz'] leading-none"
+                        style={{ 
+                            fontSize: 'clamp(3rem, 6vw, 5rem)',
+                            marginBottom: '0.5rem'
+                        }}
                     >
-                        YA PHOTO STRIP!
+                        YOUR PHOTOS
                     </div>
-                    <div 
-                        className="text-neon-cyan font-['Timegoing'] tracking-wide rotate-1"
-                        style={{ fontSize: 'clamp(0.75rem, 2vw, 1rem)' }}
-                    >
-                        {frameLayout === 'strip' ? 'classic strip format ✨' : 'square grid format ✨'}
-                    </div>
+                    
                 </div>
 
-                {/* Photo Strip Preview - Constrained height */}
-                <div className="flex justify-center flex-shrink flex-grow min-h-0" style={{ maxHeight: '70vh', width: '100%' }}>
+                {/* Photo Strip Preview - MINIMAL FRAMING */}
+                <div className="flex justify-center flex-shrink flex-grow min-h-0 gap-6" style={{ maxHeight: '80vh', width: '100%' }}>
                     <div 
-                        className="bg-white shadow-2xl"
+                        className="border-4 border-black"
                         style={{
-                            boxShadow: '0 0 40px rgba(255, 20, 147, 0.4), 0 10px 30px rgba(0, 0, 0, 0.7)',
-                            transform: 'rotate(-1deg)',
-                            maxHeight: '100%',
-                            padding: 'clamp(8px, 1vh, 16px)'
+                            boxShadow: '6px 6px 0 rgba(0,0,0,0.2)',
+                            maxHeight: '100%'
                         }}
                     >
                         <canvas 
                             ref={canvasRef}
                             style={{
-                                maxWidth: frameLayout === 'strip' ? 'min(25vw, 280px)' : 'min(40vw, 450px)',
-                                maxHeight: '100%',
+                                maxWidth: frameLayout === 'strip' ? '260px' : '450px',
+                                maxHeight: '60vh',
                                 width: 'auto',
                                 height: 'auto',
                                 display: 'block'
                             }}
                         />
                     </div>
+                    
+                    {/* QR Code and Share Section */}
+                    {qrCodeDataUrl && shareUrl && (
+                        <div className="flex flex-col items-center gap-4" style={{ maxWidth: '300px' }}>
+                            <div className="text-center">
+                                <div className="text-black text-lg font-bold uppercase font-['Coolvetica'] mb-2"
+                                    style={{ fontFamily: 'Coolvetica, Helvetica, Arial, sans-serif' }}>
+                                    SCAN TO DOWNLOAD
+                                </div>
+                                <div className="bg-white p-4 rounded-lg border-4 border-black"
+                                    style={{ boxShadow: '4px 4px 0 rgba(0,0,0,0.2)' }}>
+                                    <img src={qrCodeDataUrl} alt="QR Code" className="w-full max-w-[200px] h-auto" />
+                                </div>
+                                <div className="mt-3 text-xs text-black font-['Coolvetica'] break-all"
+                                    style={{ fontFamily: 'Coolvetica, Helvetica, Arial, sans-serif' }}>
+                                    {shareUrl}
+                                </div>
+                            </div>
+                            
+                            {/* Social Sharing Buttons */}
+                            <div className="flex gap-3 mt-2">
+                                <button
+                                    onClick={handleShareX}
+                                    className="px-4 py-2 bg-black text-white font-bold uppercase text-sm tracking-wider hover:bg-gray-800 transition-colors"
+                                    style={{
+                                        fontFamily: 'Coolvetica, Helvetica, Arial, sans-serif',
+                                        boxShadow: '3px 3px 0 rgba(0,0,0,0.2)'
+                                    }}
+                                >
+                                    Share on X
+                                </button>
+                                <button
+                                    onClick={handleShareInstagram}
+                                    className="px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold uppercase text-sm tracking-wider hover:from-purple-700 hover:to-pink-700 transition-colors"
+                                    style={{
+                                        fontFamily: 'Coolvetica, Helvetica, Arial, sans-serif',
+                                        boxShadow: '3px 3px 0 rgba(0,0,0,0.2)'
+                                    }}
+                                >
+                                    Share on IG
+                                </button>
+                            </div>
+                        </div>
+                    )}
+                    
+                    {isUploading && (
+                        <div className="flex items-center justify-center">
+                            <div className="text-black font-bold uppercase font-['Coolvetica']"
+                                style={{ fontFamily: 'Coolvetica, Helvetica, Arial, sans-serif' }}>
+                                Uploading...
+                            </div>
+                        </div>
+                    )}
                 </div>
 
-                {/* Action Buttons - Compact */}
-                <div className="flex flex-wrap justify-center gap-[2vw] flex-shrink-0">
+                {/* Action Buttons - STREET SIGN BUTTONS */}
+                <div className="flex flex-wrap justify-center gap-80 flex-shrink-0 items-center">
                     <button
                         onClick={handleDownload}
-                        className="font-bold font-['SpaceMono'] uppercase tracking-wider cursor-pointer transition-all duration-300"
+                        className="relative transition-all duration-200 hover:scale-105 border-0"
                         style={{
-                            padding: '1vh 2vw',
-                            fontSize: 'clamp(0.7rem, 1.8vw, 0.9rem)',
-                            backgroundColor: '#000',
-                            color: '#00FF00',
-                            border: '2px solid #00FF00',
-                            boxShadow: '0 0 20px rgba(0, 255, 0, 0.4), 0 4px 10px rgba(0, 0, 0, 0.5)',
-                            textShadow: '0 0 10px rgba(0, 255, 0, 0.5)'
-                        }}
-                        onMouseEnter={(e) => {
-                            e.currentTarget.style.boxShadow = '0 0 30px rgba(0, 255, 0, 0.6), 0 4px 10px rgba(0, 0, 0, 0.5)';
-                            e.currentTarget.style.transform = 'scale(1.05)';
-                        }}
-                        onMouseLeave={(e) => {
-                            e.currentTarget.style.boxShadow = '0 0 20px rgba(0, 255, 0, 0.4), 0 4px 10px rgba(0, 0, 0, 0.5)';
-                            e.currentTarget.style.transform = 'scale(1)';
+                            width: 'clamp(200px, 25vw, 300px)',
+                            height: 'clamp(60px, 8vw, 90px)',
+                            backgroundImage: `url(${new URL('../font/greenplate.png', import.meta.url).href})`,
+                            backgroundSize: 'contain',
+                            backgroundRepeat: 'no-repeat',
+                            backgroundPosition: 'center',
+                            backgroundColor: 'transparent',
+                            cursor: 'pointer',
+                            filter: 'drop-shadow(4px 4px 8px rgba(0,0,0,0.3))'
                         }}
                     >
-                        ⬇ DOWNLOAD
+                        <div className="absolute inset-0 flex items-center justify-center font-['Coolvetica'] text-[clamp(2rem,2.2vw,1.5rem)] font-bold text-white uppercase tracking-[0.2rem]"
+                            style={{
+                                fontFamily: 'Coolvetica, Helvetica, Arial, sans-serif',
+                                fontWeight: 700
+                            }}
+                        >
+                            DOWNLOAD
+                        </div>
                     </button>
 
                     <button
                         onClick={handleRetake}
-                        className="font-bold font-['SpaceMono'] uppercase tracking-wider cursor-pointer transition-all duration-300"
+                        className="relative transition-all duration-200 hover:scale-105 border-0"
                         style={{
-                            padding: '1vh 2vw',
-                            fontSize: 'clamp(0.7rem, 1.8vw, 0.9rem)',
-                            backgroundColor: '#000',
-                            color: '#FFD700',
-                            border: '2px solid #FFD700',
-                            boxShadow: '0 0 20px rgba(255, 215, 0, 0.4), 0 4px 10px rgba(0, 0, 0, 0.5)',
-                            textShadow: '0 0 10px rgba(255, 215, 0, 0.5)'
-                        }}
-                        onMouseEnter={(e) => {
-                            e.currentTarget.style.boxShadow = '0 0 30px rgba(255, 215, 0, 0.6), 0 4px 10px rgba(0, 0, 0, 0.5)';
-                            e.currentTarget.style.transform = 'scale(1.05)';
-                        }}
-                        onMouseLeave={(e) => {
-                            e.currentTarget.style.boxShadow = '0 0 20px rgba(255, 215, 0, 0.4), 0 4px 10px rgba(0, 0, 0, 0.5)';
-                            e.currentTarget.style.transform = 'scale(1)';
+                            width: 'clamp(110px, 16vw, 160px)',
+                            height: 'clamp(110px, 16vw, 160px)',
+                            backgroundImage: `url(${new URL('../font/stop.png', import.meta.url).href})`,
+                            backgroundSize: 'contain',
+                            backgroundRepeat: 'no-repeat',
+                            backgroundPosition: 'center',
+                            backgroundColor: 'transparent',
+                            cursor: 'pointer',
+                            filter: 'drop-shadow(4px 4px 8px rgba(0,0,0,0.3))'
                         }}
                     >
-                        📸 NEW PHOTOS
+                        <span className="sr-only">RETAKE</span>
                     </button>
 
                     <button
                         onClick={handleStartOver}
-                        className="font-bold font-['SpaceMono'] uppercase tracking-wider cursor-pointer transition-all duration-300"
+                        className="relative transition-all duration-200 hover:scale-105 border-0"
                         style={{
-                            padding: '1vh 2vw',
-                            fontSize: 'clamp(0.7rem, 1.8vw, 0.9rem)',
-                            backgroundColor: '#000',
-                            color: '#888',
-                            border: '2px solid #444',
-                            boxShadow: '0 4px 10px rgba(0, 0, 0, 0.5)'
-                        }}
-                        onMouseEnter={(e) => {
-                            e.currentTarget.style.backgroundColor = '#1a1a1a';
-                            e.currentTarget.style.borderColor = '#666';
-                            e.currentTarget.style.color = '#aaa';
-                        }}
-                        onMouseLeave={(e) => {
-                            e.currentTarget.style.backgroundColor = '#000';
-                            e.currentTarget.style.borderColor = '#444';
-                            e.currentTarget.style.color = '#888';
+                            width: 'clamp(140px, 20vw, 200px)',
+                            height: 'clamp(80px, 11vw, 120px)',
+                            backgroundImage: `url(${new URL('../font/yellowarrow.png', import.meta.url).href})`,
+                            backgroundSize: 'contain',
+                            backgroundRepeat: 'no-repeat',
+                            backgroundPosition: 'center',
+                            backgroundColor: 'transparent',
+                            cursor: 'pointer',
+                            filter: 'drop-shadow(4px 4px 8px rgba(0,0,0,0.3))'
                         }}
                     >
-                        ◄ HOME
+                        <div className="absolute inset-0 flex items-center justify-center font-['Coolvetica'] text-[clamp(0.9rem,2vw,1.3rem)] font-bold text-black uppercase tracking-[0.2em]"
+                            style={{
+                                textShadow: '1px 1px 2px rgba(255,255,255,0.5)',
+                                fontWeight: 700
+                            }}
+                        >
+                            
+                        </div>
                     </button>
-                </div>
-
-                {/* Fun message - Compact */}
-                <div className="text-center flex-shrink-0">
-                    <div className="text-neon-gold tracking-wider font-['Timegoing'] opacity-80" style={{ fontSize: 'clamp(0.6rem, 1.5vw, 0.75rem)' }}>
-                        ✨ THANKS FOR VISITING THE NYC PHOTO BOOTH! ✨
-                    </div>
                 </div>
             </div>
         </div>

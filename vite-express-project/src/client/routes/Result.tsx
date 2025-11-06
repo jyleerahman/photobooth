@@ -1,5 +1,6 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import QRCode from "qrcode";
 
 type FrameLayout = 'strip' | 'grid' | 'bodega-cat';
 
@@ -14,6 +15,10 @@ const Result = () => {
     const location = useLocation();
     const state = location.state as LocationState;
     const canvasRef = useRef<HTMLCanvasElement>(null);
+    const hasUploadedRef = useRef(false);
+    const [shareUrl, setShareUrl] = useState<string | null>(null);
+    const [qrCodeDataUrl, setQrCodeDataUrl] = useState<string | null>(null);
+    const [isUploading, setIsUploading] = useState(false);
     
     const selectedImages = state?.selectedImages || [];
     const frameLayout = state?.frameLayout || 'strip';
@@ -36,9 +41,60 @@ const Result = () => {
         }
     }, [selectedImages, navigate]);
 
+    // Upload photo to server and generate share URL
+    const uploadPhoto = useCallback(async () => {
+        if (!canvasRef.current || hasUploadedRef.current || isUploading) return;
+        
+        hasUploadedRef.current = true;
+        setIsUploading(true);
+        try {
+            const canvas = canvasRef.current;
+            const imageData = canvas.toDataURL('image/png');
+            
+            const response = await fetch('/api/photos', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    imageData,
+                    format: 'png'
+                })
+            });
+            
+            if (!response.ok) {
+                throw new Error('Failed to upload photo');
+            }
+            
+            const data = await response.json();
+            setShareUrl(data.shareUrl);
+            
+            // Generate QR code
+            const qrCode = await QRCode.toDataURL(data.shareUrl, {
+                width: 300,
+                margin: 2,
+                color: {
+                    dark: '#000000',
+                    light: '#FFFFFF'
+                }
+            });
+            setQrCodeDataUrl(qrCode);
+        } catch (error) {
+            console.error('Error uploading photo:', error);
+            hasUploadedRef.current = false; // Reset on error so it can retry
+        } finally {
+            setIsUploading(false);
+        }
+    }, []);
+
     // Generate the photo strip
     useEffect(() => {
         if (!canvasRef.current || selectedImages.length !== 4) return;
+
+        // Reset upload ref when inputs change
+        hasUploadedRef.current = false;
+        setShareUrl(null);
+        setQrCodeDataUrl(null);
 
         const canvas = canvasRef.current;
         const ctx = canvas.getContext('2d');
@@ -351,8 +407,11 @@ const Result = () => {
             }
         };
 
-        generatePhotoStrip();
-    }, [selectedImages, frameLayout, backgroundStyle]);
+        generatePhotoStrip().then(() => {
+            // Upload photo after canvas is generated
+            uploadPhoto();
+        });
+    }, [selectedImages, frameLayout, backgroundStyle, uploadPhoto]);
 
     const handleDownload = () => {
         if (!canvasRef.current) return;
@@ -361,6 +420,34 @@ const Result = () => {
         link.download = `photobooth-${frameLayout}-${Date.now()}.png`;
         link.href = canvasRef.current.toDataURL('image/png');
         link.click();
+    };
+
+    const handleShareX = () => {
+        if (!shareUrl) return;
+        const text = encodeURIComponent('Check out my NYC Photobooth photo! 📸');
+        const url = encodeURIComponent(shareUrl);
+        window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank');
+    };
+
+    const handleShareInstagram = () => {
+        if (!shareUrl) return;
+        // Instagram doesn't support direct web sharing, so we'll copy the link
+        // and show instructions, or open Instagram app on mobile
+        if (navigator.share) {
+            navigator.share({
+                title: 'My NYC Photobooth Photo',
+                text: 'Check out my NYC Photobooth photo!',
+                url: shareUrl
+            }).catch(console.error);
+        } else {
+            // Fallback: copy to clipboard
+            navigator.clipboard.writeText(shareUrl).then(() => {
+                alert('Link copied! Open Instagram and paste it in your story or post.');
+            }).catch(() => {
+                // Fallback: show the URL
+                prompt('Copy this link to share on Instagram:', shareUrl);
+            });
+        }
     };
 
     const handleStartOver = () => {
@@ -407,7 +494,7 @@ const Result = () => {
                 </div>
 
                 {/* Photo Strip Preview - MINIMAL FRAMING */}
-                <div className="flex justify-center flex-shrink flex-grow min-h-0" style={{ maxHeight: '80vh', width: '100%' }}>
+                <div className="flex justify-center flex-shrink flex-grow min-h-0 gap-6" style={{ maxHeight: '80vh', width: '100%' }}>
                     <div 
                         className="border-4 border-black"
                         style={{
@@ -426,6 +513,59 @@ const Result = () => {
                             }}
                         />
                     </div>
+                    
+                    {/* QR Code and Share Section */}
+                    {qrCodeDataUrl && shareUrl && (
+                        <div className="flex flex-col items-center gap-4" style={{ maxWidth: '300px' }}>
+                            <div className="text-center">
+                                <div className="text-black text-lg font-bold uppercase font-['Coolvetica'] mb-2"
+                                    style={{ fontFamily: 'Coolvetica, Helvetica, Arial, sans-serif' }}>
+                                    SCAN TO DOWNLOAD
+                                </div>
+                                <div className="bg-white p-4 rounded-lg border-4 border-black"
+                                    style={{ boxShadow: '4px 4px 0 rgba(0,0,0,0.2)' }}>
+                                    <img src={qrCodeDataUrl} alt="QR Code" className="w-full max-w-[200px] h-auto" />
+                                </div>
+                                <div className="mt-3 text-xs text-black font-['Coolvetica'] break-all"
+                                    style={{ fontFamily: 'Coolvetica, Helvetica, Arial, sans-serif' }}>
+                                    {shareUrl}
+                                </div>
+                            </div>
+                            
+                            {/* Social Sharing Buttons */}
+                            <div className="flex gap-3 mt-2">
+                                <button
+                                    onClick={handleShareX}
+                                    className="px-4 py-2 bg-black text-white font-bold uppercase text-sm tracking-wider hover:bg-gray-800 transition-colors"
+                                    style={{
+                                        fontFamily: 'Coolvetica, Helvetica, Arial, sans-serif',
+                                        boxShadow: '3px 3px 0 rgba(0,0,0,0.2)'
+                                    }}
+                                >
+                                    Share on X
+                                </button>
+                                <button
+                                    onClick={handleShareInstagram}
+                                    className="px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold uppercase text-sm tracking-wider hover:from-purple-700 hover:to-pink-700 transition-colors"
+                                    style={{
+                                        fontFamily: 'Coolvetica, Helvetica, Arial, sans-serif',
+                                        boxShadow: '3px 3px 0 rgba(0,0,0,0.2)'
+                                    }}
+                                >
+                                    Share on IG
+                                </button>
+                            </div>
+                        </div>
+                    )}
+                    
+                    {isUploading && (
+                        <div className="flex items-center justify-center">
+                            <div className="text-black font-bold uppercase font-['Coolvetica']"
+                                style={{ fontFamily: 'Coolvetica, Helvetica, Arial, sans-serif' }}>
+                                Uploading...
+                            </div>
+                        </div>
+                    )}
                 </div>
 
                 {/* Action Buttons - STREET SIGN BUTTONS */}

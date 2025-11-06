@@ -377,8 +377,8 @@ const Background = () => {
                             <canvas 
                                 ref={canvasRef}
                                 style={{
-                                    maxWidth: frameLayout === 'strip' ? '280px' : '500px',
-                                    maxHeight: '60vh',
+                                    maxWidth: frameLayout === 'strip' ? '450px' : '700px',
+                                    maxHeight: '75vh',
                                     width: 'auto',
                                     height: 'auto',
                                     display: 'block'

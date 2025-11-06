@@ -30,7 +30,7 @@ const Camera = () => {
     const [lastCapturedImage, setLastCapturedImage] = useState<string | null>(null);
     const [showingCapturedImage, setShowingCapturedImage] = useState(false);
     
-    const totalPhotos = 6;
+    const totalPhotos = 4;
 
     // Function to play camera shutter sound using Web Audio API
     const playShutterSound = useCallback(() => {
@@ -100,13 +100,13 @@ const Camera = () => {
     useEffect(() => {
         if (!isCapturing) return;
 
-        // Check if we've taken all 8 photos
+        // Check if we've taken all 4 photos
         if (currentPhotoNumber >= totalPhotos) {
             setIsCapturing(false);
             setCountdown(5);
-            // Navigate to selection page with captured images and frame layout
+            // Navigate directly to background page with all captured images and frame layout
             setTimeout(() => {
-                navigate('/select', { state: { images: capturedImages, frameLayout } });
+                navigate('/background', { state: { selectedImages: capturedImages, frameLayout } });
             }, 500);
             return;
         }

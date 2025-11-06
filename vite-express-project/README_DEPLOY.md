@@ -54,3 +54,4 @@ No environment variables required for basic setup. The app will:
 3. Check that the QR code shows the correct domain
 4. Scan the QR code on your phone to test the download flow
 
+

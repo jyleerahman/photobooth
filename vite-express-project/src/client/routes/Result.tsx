@@ -503,8 +503,13 @@ const Result = () => {
                         const item = new ClipboardItem({ 'image/png': blob });
                         await navigator.clipboard.write([item]);
                         
+                        // Open Instagram in a new tab
+                        window.open('https://www.instagram.com', '_blank');
+                        
                         // Show message with instructions
-                        alert('Image copied to clipboard! Open Instagram and paste it (Ctrl+V / Cmd+V) into your post or story.');
+                        setTimeout(() => {
+                            alert('Image copied to clipboard! Instagram opened in a new tab.\n\n1. Click the "+" button to create a new post\n2. Press Ctrl+V (or Cmd+V on Mac) to paste your photo\n3. Add your caption and share!');
+                        }, 500);
                         return;
                     } catch (clipboardError) {
                         // Clipboard failed, try next method
@@ -528,14 +533,19 @@ const Result = () => {
                     }
                 }
                 
-                // Fallback: Download the image and show instructions
+                // Fallback: Download the image and open Instagram
                 const link = document.createElement('a');
                 link.download = `photobooth-${Date.now()}.png`;
                 link.href = URL.createObjectURL(blob);
                 link.click();
                 URL.revokeObjectURL(link.href);
                 
-                alert('Photo downloaded! Open Instagram and upload it from your downloads.');
+                // Open Instagram in a new tab
+                window.open('https://www.instagram.com', '_blank');
+                
+                setTimeout(() => {
+                    alert('Photo downloaded! Instagram opened in a new tab.\n\n1. Click the "+" button to create a new post\n2. Click "Select from Computer" and choose the downloaded photo\n3. Add your caption and share!');
+                }, 500);
             }, 'image/png');
         } catch (error) {
             console.error('Error sharing to Instagram:', error);
@@ -634,26 +644,56 @@ const Result = () => {
                             </div>
                             
                             {/* Social Sharing Buttons */}
-                            <div className="flex gap-3 mt-2">
+                            <div className="flex flex-col gap-3 mt-4 w-full">
                                 <button
                                     onClick={handleShareX}
-                                    className="px-4 py-2 bg-black text-white font-bold uppercase text-sm tracking-wider hover:bg-gray-800 transition-colors"
+                                    className="relative transition-all duration-200 hover:scale-105 border-0"
                                     style={{
-                                        fontFamily: 'Coolvetica, Helvetica, Arial, sans-serif',
-                                        boxShadow: '3px 3px 0 rgba(0,0,0,0.2)'
+                                        width: '100%',
+                                        minWidth: '200px',
+                                        height: 'clamp(50px, 8vw, 70px)',
+                                        backgroundImage: `url(${new URL('../font/greenplate.png', import.meta.url).href})`,
+                                        backgroundSize: 'contain',
+                                        backgroundRepeat: 'no-repeat',
+                                        backgroundPosition: 'center',
+                                        backgroundColor: 'transparent',
+                                        cursor: 'pointer',
+                                        filter: 'drop-shadow(4px 4px 8px rgba(0,0,0,0.3))'
                                     }}
                                 >
-                                    Share on X
+                                    <div className="absolute inset-0 flex items-center justify-center font-['Coolvetica'] text-[clamp(1rem, 2vw, 1.2rem)] font-bold text-white uppercase tracking-[0.15rem]"
+                                        style={{
+                                            fontFamily: 'Coolvetica, Helvetica, Arial, sans-serif',
+                                            fontWeight: 700
+                                        }}
+                                    >
+                                        SHARE ON X
+                                    </div>
                                 </button>
                                 <button
                                     onClick={handleShareInstagram}
-                                    className="px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold uppercase text-sm tracking-wider hover:from-purple-700 hover:to-pink-700 transition-colors"
+                                    className="relative transition-all duration-200 hover:scale-105 border-0"
                                     style={{
-                                        fontFamily: 'Coolvetica, Helvetica, Arial, sans-serif',
-                                        boxShadow: '3px 3px 0 rgba(0,0,0,0.2)'
+                                        width: '100%',
+                                        minWidth: '200px',
+                                        height: 'clamp(50px, 8vw, 70px)',
+                                        backgroundImage: `url(${new URL('../font/greenplate.png', import.meta.url).href})`,
+                                        backgroundSize: 'contain',
+                                        backgroundRepeat: 'no-repeat',
+                                        backgroundPosition: 'center',
+                                        backgroundColor: 'transparent',
+                                        cursor: 'pointer',
+                                        filter: 'drop-shadow(4px 4px 8px rgba(0,0,0,0.3))'
                                     }}
                                 >
-                                    Share on IG
+                                    <div className="absolute inset-0 flex items-center justify-center font-['Coolvetica'] text-[clamp(1rem, 2vw, 1.2rem)] font-bold text-white uppercase tracking-[0.15rem]"
+                                        style={{
+                                            fontFamily: 'Coolvetica, Helvetica, Arial, sans-serif',
+                                            fontWeight: 700
+                                        }}
+                                    >
+                                        SHARE ON IG
+                                    </div>
                                 </button>
                             </div>
                         </div>
@@ -738,6 +778,22 @@ const Result = () => {
                             
                         </div>
                     </button>
+                </div>
+
+                {/* Twitter Credit */}
+                <div className="text-center mt-6 flex-shrink-0">
+                    <a 
+                        href="https://twitter.com/JyleeRahman" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="text-black font-bold font-['Coolvetica'] text-sm hover:underline"
+                        style={{ 
+                            fontFamily: 'Coolvetica, Helvetica, Arial, sans-serif',
+                            textShadow: '1px 1px 2px rgba(255,255,255,0.8)'
+                        }}
+                    >
+                        @JyleeRahman
+                    </a>
                 </div>
             </div>
         </div>

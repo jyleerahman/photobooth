@@ -16,7 +16,12 @@ app.use(express.json({ limit: '50mb' })); // For base64 image uploads
 app.use(express.static(path.join(__dirname, '../../public')));
 
 // Create photos directory if it doesn't exist
-const photosDir = path.join(__dirname, '../../public/photos');
+// Check for Render disk mount first, then fall back to standard path
+const renderDiskPath = '/opt/render/project/src/vite-express-project/public/photos';
+const standardPath = path.join(__dirname, '../../public/photos');
+
+const photosDir = existsSync(renderDiskPath) ? renderDiskPath : standardPath;
+
 if (!existsSync(photosDir)) {
   mkdir(photosDir, { recursive: true }).catch(console.error);
 }

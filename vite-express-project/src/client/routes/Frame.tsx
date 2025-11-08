@@ -10,51 +10,44 @@ function Frame() {
     };
 
     return (
-        <div 
-            className="fixed inset-0 flex items-center justify-center overflow-hidden"
-            style={{
-                backgroundColor: '#f5f5f5'
-            }}
-        >
-            {/* Film grain */}
+        <div className="relative h-screen w-full overflow-hidden bg-[var(--poster-bg)] text-[var(--poster-ink)]">
             <div className="bodega-grain" />
 
-            <div className="relative z-10 w-full max-w-6xl px-6 py-4" style={{ transform: 'scale(0.85)', transformOrigin: 'center center' }}>
-                {/* Header - MINIMAL */}
-                <div className="text-center mb-6">
-                    <div 
-                        className="text-black text-5xl sm:text-6xl lg:text-7xl font-bold font-['WhoopieSunday'] mb-2 leading-tight tracking-tight"
+            <div className="relative z-10 mx-auto flex h-full w-full max-w-6xl flex-col gap-8 px-6 py-8">
+                <header className="flex flex-wrap items-center justify-between gap-3 text-[0.6rem] uppercase tracking-[0.3em] text-[var(--poster-muted)] font-['SpaceMono']">
+                    <span>SESSION 02 · FORMAT LAB</span>
+                    <span>SELECT FOUR FRAMES</span>
+                    <span>NYC PHOTO DIVISION</span>
+                </header>
+
+                <div className="text-center">
+                    <div
+                        className="text-white text-[clamp(2.4rem,5vw,4.5rem)] font-bold uppercase font-['WhoopieSunday'] leading-[0.9]"
                         style={{
-                            textShadow: '2px 2px 0 rgba(0,0,0,0.08)'
+                            textShadow:
+                                '6px 6px 0 rgba(0,0,0,0.85), -3px -3px 0 rgba(0,0,0,0.8), 3px -3px 0 rgba(0,0,0,0.8), -3px 3px 0 rgba(0,0,0,0.8)',
+                            WebkitTextStroke: '3px #0f0f0f',
+                            color: 'var(--poster-neon)'
                         }}
                     >
-                        CHOOSE LAYOUT
+                        CHOOSE
+                        <br />
+                        YOUR LAYOUT
                     </div>
-                    <div className="text-gray-600 text-sm sm:text-base tracking-[0.2em] uppercase mt-4"
-                        style={{
-                            fontFamily: 'Coolvetica, Helvetica, Arial, sans-serif',
-                            fontWeight: 400,
-                            letterSpacing: '0.2em'
-                        }}
-                    >
-                        SELECT YOUR FORMAT
-                    </div>
+                    <p className="mt-4 text-xs uppercase tracking-[0.5em] text-[var(--poster-muted)] font-['SpaceMono']">
+                        TAP A CARD TO LOCK IT IN
+                    </p>
                 </div>
 
                 {/* Frame options */}
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 justify-items-center max-w-6xl mx-auto">
+                <div className="grid flex-1 grid-cols-1 gap-6 overflow-hidden md:grid-cols-3">
                     {/* Option 1: Strip Layout */}
                     <div
                         onClick={() => selectFrame('strip')}
-                        className="cursor-pointer p-6 transition-all duration-200 hover:scale-105 w-full max-w-xs"
-                        style={{
-                            backgroundColor: '#fff',
-                            border: '3px solid #000',
-                            boxShadow: '8px 8px 0 rgba(0,0,0,0.15)'
-                        }}
+                        className="cursor-pointer border-4 border-[var(--poster-ink)] bg-white p-6 shadow-[10px_10px_0_rgba(0,0,0,0.75)] transition-transform duration-200 hover:-translate-x-1 hover:-translate-y-1"
                     >
                         {/* Minimal number */}
-                        <div className="text-black text-5xl font-bold mb-3"
+                        <div className="text-[var(--poster-ink)] text-5xl font-bold mb-3"
                             style={{
                                 fontFamily: 'Coolvetica, Helvetica, Arial, sans-serif',
                                 fontWeight: 900
@@ -62,7 +55,7 @@ function Frame() {
                             01
                         </div>
 
-                        <div className="text-black text-lg font-bold mb-4 uppercase tracking-wide"
+                        <div className="text-[var(--poster-ink)] text-lg font-bold mb-4 uppercase tracking-[0.3em]"
                             style={{
                                 fontFamily: 'Coolvetica, Helvetica, Arial, sans-serif',
                                 fontWeight: 700
@@ -73,11 +66,11 @@ function Frame() {
 
                         {/* Visual representation */}
                         <div className="flex justify-center">
-                            <div className="w-32 bg-white p-3 flex flex-col gap-2 border-2 border-black">
+                            <div className="w-28 bg-white p-3 flex flex-col gap-2 border-2 border-[var(--poster-ink)]">
                                 {[1, 2, 3, 4].map((i) => (
                                     <div
                                         key={i}
-                                        className="h-16 bg-gray-200 border border-gray-400 flex items-center justify-center text-gray-600 text-xs font-bold"
+                                        className="h-16 bg-[var(--poster-bg)] border border-[var(--poster-ink)]/30 flex items-center justify-center text-[var(--poster-muted)] text-xs font-bold"
                                         style={{
                                             fontFamily: 'Coolvetica, Helvetica, Arial, sans-serif'
                                         }}
@@ -92,15 +85,10 @@ function Frame() {
                     {/* Option 2: Grid Layout */}
                     <div
                         onClick={() => selectFrame('grid')}
-                        className="cursor-pointer p-6 transition-all duration-200 hover:scale-105 w-full max-w-xs"
-                        style={{
-                            backgroundColor: '#fff',
-                            border: '3px solid #000',
-                            boxShadow: '8px 8px 0 rgba(0,0,0,0.15)'
-                        }}
+                        className="cursor-pointer border-4 border-[var(--poster-ink)] bg-white p-6 shadow-[10px_10px_0_rgba(0,0,0,0.75)] transition-transform duration-200 hover:-translate-x-1 hover:-translate-y-1"
                     >
                         {/* Minimal number */}
-                        <div className="text-black text-5xl font-bold mb-3"
+                        <div className="text-[var(--poster-ink)] text-5xl font-bold mb-3"
                             style={{
                                 fontFamily: 'Coolvetica, Helvetica, Arial, sans-serif',
                                 fontWeight: 900
@@ -108,7 +96,7 @@ function Frame() {
                             02
                         </div>
 
-                        <div className="text-black text-lg font-bold mb-4 uppercase tracking-wide"
+                        <div className="text-[var(--poster-ink)] text-lg font-bold mb-4 uppercase tracking-[0.3em]"
                             style={{
                                 fontFamily: 'Coolvetica, Helvetica, Arial, sans-serif',
                                 fontWeight: 700
@@ -119,11 +107,11 @@ function Frame() {
 
                         {/* Visual representation */}
                         <div className="flex justify-center">
-                            <div className="w-48 h-48 bg-white p-4 grid grid-cols-2 gap-2 border-2 border-black">
+                            <div className="w-40 h-40 bg-white p-4 grid grid-cols-2 gap-2 border-2 border-[var(--poster-ink)]">
                                 {[1, 2, 3, 4].map((i) => (
                                     <div
                                         key={i}
-                                        className="bg-gray-200 border border-gray-400 flex items-center justify-center text-gray-600 text-xs font-bold"
+                                        className="bg-[var(--poster-bg)] border border-[var(--poster-ink)]/30 flex items-center justify-center text-[var(--poster-muted)] text-xs font-bold"
                                         style={{
                                             fontFamily: 'Coolvetica, Helvetica, Arial, sans-serif'
                                         }}
@@ -138,15 +126,10 @@ function Frame() {
                     {/* Option 3: Special Layout */}
                     <div
                         onClick={() => selectFrame('bodega-cat')}
-                        className="cursor-pointer p-6 transition-all duration-200 hover:scale-105 w-full max-w-xs"
-                        style={{
-                            backgroundColor: '#fff',
-                            border: '3px solid #000',
-                            boxShadow: '8px 8px 0 rgba(0,0,0,0.15)'
-                        }}
+                        className="cursor-pointer border-4 border-[var(--poster-ink)] bg-white p-6 shadow-[10px_10px_0_rgba(0,0,0,0.75)] transition-transform duration-200 hover:-translate-x-1 hover:-translate-y-1"
                     >
                         {/* Minimal number */}
-                        <div className="text-black text-5xl font-bold mb-3"
+                        <div className="text-[var(--poster-ink)] text-5xl font-bold mb-3"
                             style={{
                                 fontFamily: 'Coolvetica, Helvetica, Arial, sans-serif',
                                 fontWeight: 900
@@ -154,7 +137,7 @@ function Frame() {
                             03
                         </div>
 
-                        <div className="text-black text-lg font-bold mb-4 uppercase tracking-wide"
+                        <div className="text-[var(--poster-ink)] text-lg font-bold mb-4 uppercase tracking-[0.3em]"
                             style={{
                                 fontFamily: 'Coolvetica, Helvetica, Arial, sans-serif',
                                 fontWeight: 700
@@ -165,9 +148,9 @@ function Frame() {
 
                         {/* Visual representation */}
                         <div className="flex justify-center">
-                            <div className="w-48 h-48 bg-white p-4 flex flex-col gap-2 border-2 border-black">
+                            <div className="w-40 h-40 bg-white p-4 flex flex-col gap-2 border-2 border-[var(--poster-ink)]">
                                 {/* Big photo on top */}
-                                <div className="h-32 bg-gray-200 border border-gray-400 flex items-center justify-center text-gray-600 text-xs font-bold"
+                                <div className="h-32 bg-[var(--poster-bg)] border border-[var(--poster-ink)]/30 flex items-center justify-center text-[var(--poster-muted)] text-xs font-bold"
                                     style={{
                                         fontFamily: 'Coolvetica, Helvetica, Arial, sans-serif'
                                     }}
@@ -179,7 +162,7 @@ function Frame() {
                                     {[2, 3, 4].map((i) => (
                                         <div
                                             key={i}
-                                            className="bg-gray-200 border border-gray-400 flex items-center justify-center text-gray-600 text-xs font-bold"
+                                            className="bg-[var(--poster-bg)] border border-[var(--poster-ink)]/30 flex items-center justify-center text-[var(--poster-muted)] text-xs font-bold"
                                             style={{
                                                 fontFamily: 'Coolvetica, Helvetica, Arial, sans-serif'
                                             }}
@@ -194,13 +177,7 @@ function Frame() {
                 </div>
 
                 {/* Instructions */}
-                <div className="text-gray-500 text-center mt-6 text-sm tracking-[0.2em] uppercase"
-                    style={{
-                        fontFamily: 'Coolvetica, Helvetica, Arial, sans-serif',
-                        fontWeight: 400,
-                        letterSpacing: '0.2em'
-                    }}
-                >
+                <div className="mt-2 text-center text-[0.6rem] uppercase tracking-[0.5em] text-[var(--poster-muted)] font-['SpaceMono']">
                     ↑ TAP TO SELECT ↑
                 </div>
             </div>

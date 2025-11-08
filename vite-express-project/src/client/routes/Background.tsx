@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, CSSProperties } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
 type FrameLayout = 'strip' | 'grid' | 'bodega-cat';
@@ -347,44 +347,39 @@ const Background = () => {
     };
 
     return (
-        <div 
-            className="fixed inset-0 w-screen h-screen overflow-hidden bg-[#f5f5f5]"
-            
-        >
+        <div className="relative h-screen w-full overflow-hidden bg-[var(--poster-bg)] text-[var(--poster-ink)]">
             <div className="bodega-grain" />
 
-            <div className="relative z-10 h-screen flex flex-col px-8 py-6">
-                {/* Header */}
-                <div className="px-4 py-4 mb-4 flex-shrink-0 text-center">
-                    <div className="text-white text-[clamp(2.5rem,4vw,3.5rem)] font-bold uppercase font-['WhoopieSunday'] mb-1 leading-none"
+            <div className="relative z-10 mx-auto flex h-full w-full max-w-6xl flex-col gap-8 px-6 py-8">
+                <header className="flex flex-wrap items-center justify-between gap-3 text-[0.6rem] uppercase tracking-[0.3em] text-[var(--poster-muted)] font-['SpaceMono']">
+                    <span>SESSION 05 · BACKDROP LAB</span>
+                    <span>PREVIEW UPDATES INSTANTLY</span>
+                    <span>{selectedBackground.toUpperCase()} MODE</span>
+                </header>
+
+                <div className="text-center">
+                    <div className="mx-auto text-white text-[clamp(2.1rem,4.5vw,4rem)] font-bold uppercase font-['WhoopieSunday'] leading-[0.9]"
                         style={{
-                            textShadow: '6px 6px 0 #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 10px 10px 0 rgba(255,20,147,0.6)',
-                            WebkitTextStroke: '3px black',
-                            paintOrder: 'stroke fill'
+                            textShadow: '6px 6px 0 rgba(0,0,0,0.85), -3px -3px 0 rgba(0,0,0,0.8), 3px -3px 0 rgba(0,0,0,0.8), -3px 3px 0 rgba(0,0,0,0.8)',
+                            WebkitTextStroke: '3px #0f0f0f',
+                            color: 'var(--poster-neon)'
                         }}
                     >
                         CHOOSE BACKGROUND
                     </div>
-                    <div className="text-black text-[clamp(0.9rem,1.5vw,1.25rem)] font-bold uppercase tracking-wide font-['Coolvetica']">
-                        CLICK TO PREVIEW
-                    </div>
+                    <p className="mt-2 text-[0.7rem] uppercase tracking-[0.45em] text-[var(--poster-muted)] font-['SpaceMono']">
+                        TAP A TILE TO TRY IT ON YOUR LAYOUT
+                    </p>
                 </div>
 
-                {/* Main content area - Preview left, Buttons right in 3x2 grid */}
-                <div className="flex-1 flex gap-8 items-center justify-center min-h-0 mt-10 mb-6">
-                    {/* Big Preview - Left Side */}
-                    <div className="flex items-center justify-center">
-                        <div 
-                            className="border-4 border-black"
-                            style={{
-                                boxShadow: '8px 8px 0 rgba(0,0,0,0.2)',
-                            }}
-                        >
+                <div className="flex flex-1 flex-col gap-8 overflow-hidden lg:flex-row">
+                    <div className="flex flex-1 items-center justify-center overflow-hidden">
+                        <div className="border-4 border-[var(--poster-ink)] bg-white p-5 shadow-[12px_12px_0_rgba(0,0,0,0.75)]">
                             <canvas 
                                 ref={canvasRef}
                                 style={{
-                                    maxWidth: frameLayout === 'strip' ? '450px' : '700px',
-                                    maxHeight: '75vh',
+                                    maxWidth: frameLayout === 'strip' ? '300px' : '480px',
+                                    maxHeight: '62vh',
                                     width: 'auto',
                                     height: 'auto',
                                     display: 'block'
@@ -393,70 +388,46 @@ const Background = () => {
                         </div>
                     </div>
 
-                    {/* Small Square Buttons - Right Side (3x2 Grid) */}
-                    <div className="grid grid-cols-3 gap-4">
-                        {backgrounds.map((bg, index) => (
-                            <div
-                                key={bg.id}
-                                onClick={() => handleSelectBackground(bg.id)}
-                                className="cursor-pointer transition-all duration-200 hover:scale-105"
-                                style={{
-                                    backgroundColor: '#fff',
-                                    border: selectedBackground === bg.id ? '4px solid #000' : '3px solid #000',
-                                    boxShadow: selectedBackground === bg.id 
-                                        ? '8px 8px 0 rgba(0,0,0,0.3)' 
-                                        : '4px 4px 0 rgba(0,0,0,0.15)',
-                                    width: 'clamp(100px, 12vw, 130px)',
-                                    height: 'clamp(100px, 12vw, 130px)',
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    padding: '0.8rem'
-                                }}
-                            >
-                                {/* Number */}
-                                <div className="text-black text-3xl font-bold mb-1"
-                                    style={{
-                                        fontFamily: 'Coolvetica, Helvetica, Arial, sans-serif',
-                                        fontWeight: 900
-                                    }}>
-                                    {String(index + 1).padStart(2, '0')}
-                                </div>
+                    <div className="grid flex-1 grid-cols-2 gap-4 overflow-hidden sm:grid-cols-3">
+                        {backgrounds.map((bg, index) => {
+                            const isSelected = selectedBackground === bg.id;
+                            const previewStyle: CSSProperties = bg.imageUrl
+                                ? {
+                                    backgroundImage: `url(${bg.imageUrl})`,
+                                    backgroundSize: 'cover',
+                                    backgroundPosition: 'center'
+                                }
+                                : bg.id === 'white'
+                                    ? { backgroundColor: '#ffffff' }
+                                    : bg.id === 'black'
+                                        ? { backgroundColor: '#101010', color: '#f9f9f9' }
+                                        : { background: 'linear-gradient(135deg,#FF00FF 0%,#00FFFF 50%,#FFFF00 100%)', color: '#0f0f0f' };
 
-                                {/* Name */}
-                                <div className="text-black text-xs font-bold uppercase tracking-wide text-center"
-                                    style={{
-                                        fontFamily: 'Coolvetica, Helvetica, Arial, sans-serif',
-                                        fontWeight: 700,
-                                        lineHeight: 1.2
-                                    }}
+                            return (
+                                <button
+                                    key={bg.id}
+                                    onClick={() => handleSelectBackground(bg.id)}
+                                    className={`group flex h-36 flex-col items-center justify-between border-4 border-[var(--poster-ink)] px-4 py-3 text-center shadow-[8px_8px_0_rgba(0,0,0,0.65)] transition-transform duration-200 ${isSelected ? '-translate-x-1 -translate-y-1 bg-white' : 'bg-[var(--poster-bg)] hover:-translate-x-1 hover:-translate-y-1'}`}
+                                    style={previewStyle}
                                 >
-                                    {bg.name}
-                                </div>
-                            </div>
-                        ))}
+                                    <span className="text-[0.7rem] font-['SpaceMono'] uppercase tracking-[0.45em] opacity-70">
+                                        {String(index + 1).padStart(2, '0')}
+                                    </span>
+                                    <span className="font-['Coolvetica'] text-sm font-bold uppercase tracking-[0.3em]">
+                                        {bg.name}
+                                    </span>
+                                </button>
+                            );
+                        })}
                     </div>
                 </div>
 
-                {/* Continue button */}
-                <div className="flex justify-center pb-4 flex-shrink-0">
+                <div className="flex justify-center pb-4">
                     <button
                         onClick={handleContinue}
-                        className="relative transition-all duration-200 hover:scale-105 border-0"
-                        style={{
-                            width: 'clamp(140px, 20vw, 200px)',
-                            height: 'clamp(80px, 11vw, 120px)',
-                            backgroundImage: `url(${new URL('../font/oneway.png', import.meta.url).href})`,
-                            backgroundSize: 'contain',
-                            backgroundRepeat: 'no-repeat',
-                            backgroundPosition: 'center',
-                            backgroundColor: 'transparent',
-                            cursor: 'pointer',
-                            filter: 'drop-shadow(4px 4px 8px rgba(0,0,0,0.3))'
-                        }}
+                        className="border-4 border-[var(--poster-ink)] bg-[var(--poster-neon)] px-12 py-5 text-base font-['WhoopieSunday'] uppercase tracking-[0.25em] text-[var(--poster-ink)] shadow-[12px_12px_0_rgba(0,0,0,0.8)] transition-transform duration-200 hover:-translate-x-1 hover:-translate-y-1"
                     >
-                        <span className="sr-only">CONTINUE</span>
+                        CONTINUE
                     </button>
                 </div>
             </div>

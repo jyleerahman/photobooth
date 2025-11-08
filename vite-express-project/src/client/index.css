@@ -6,6 +6,11 @@
 }
 
 :root {
+  --poster-bg: #f9f9f6;
+  --poster-ink: #101010;
+  --poster-muted: #7c7c7c;
+  --poster-neon: #7cff00;
+
   font-family: 'Coolvetica', Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
@@ -15,6 +20,8 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
+  color: var(--poster-ink);
+  background-color: var(--poster-bg);
 }
 
 a {
@@ -24,11 +31,10 @@ a {
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
   min-width: 320px;
   min-height: 100vh;
-  background: #f5f5f5;
+  background: var(--poster-bg);
+  color: var(--poster-ink);
 }
 
 h1 {
@@ -37,19 +43,24 @@ h1 {
 }
 
 button {
-  border-radius: 8px;
-  border: 1px solid transparent;
+  border-radius: 6px;
+  border: 2px solid var(--poster-ink);
   padding: 0.6em 1.2em;
   font-size: 1em;
-  font-weight: 500;
+  font-weight: 600;
   font-family: inherit;
-  background-color: #1a1a1a;
+  background-color: var(--poster-neon);
+  color: var(--poster-ink);
   cursor: pointer;
-  transition: border-color 0.25s;
+  transition: transform 0.2s ease;
 }
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
+}
+
+button:hover {
+  transform: translate(-2px, -2px);
 }
 
 /* Minimal Film Grain */
@@ -61,16 +72,16 @@ button:focus-visible {
   height: 100%;
   pointer-events: none;
   z-index: 9997;
-  opacity: 0.03;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='2' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-  mix-blend-mode: overlay;
+  opacity: 0.08;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.5' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  mix-blend-mode: multiply;
 }
 
 .bodega-timestamp {
   position: fixed;
   top: 15px;
   left: 15px;
-  color: #666;
+  color: var(--poster-muted);
   font-family: 'Coolvetica', Helvetica, Arial, sans-serif;
   font-size: 10px;
   font-weight: 400;

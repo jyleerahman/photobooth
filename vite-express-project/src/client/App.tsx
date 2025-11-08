@@ -1,11 +1,8 @@
 import "./App.css";
 import { useState, useEffect } from "react";
-import { Link, Outlet } from "react-router-dom";
-
-import reactLogo from "./assets/react.svg";
+import { Link } from "react-router-dom";
 
 function App() {
-  const [count, setCount] = useState(0);
   const [time, setTime] = useState(new Date());
 
   useEffect(() => {
@@ -14,87 +11,72 @@ function App() {
   }, []);
 
   return (
-      <div 
-        className="fixed inset-0 flex flex-col items-center justify-center overflow-hidden"
-        style={{
-          backgroundColor: '#f5f5f5',
-          backgroundImage: `url(${new URL('./font/newyorkstreet.jpg', import.meta.url).href})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center center',
-          backgroundRepeat: 'no-repeat'
-        }}
-      >
-        {/* Film grain texture */}
-        <div className="bodega-grain" />
-        
-        {/* Timestamp - minimal */}
-        <div className="bodega-timestamp">
-          {time.toLocaleString('en-US', { 
-            month: '2-digit', 
-            day: '2-digit', 
-            year: '2-digit',
-            hour: '2-digit', 
-            minute: '2-digit', 
-            second: '2-digit',
-            hour12: false 
-          })}
-        </div>
+    <div className="relative h-screen w-full overflow-hidden bg-[var(--poster-bg)] text-[var(--poster-ink)]">
+      <div className="bodega-grain" />
 
-      {/* Main Content */}
-      <div className="relative z-10 text-center max-w-4xl mx-auto px-8">
-        {/* BLACK & WHITE ZINE TITLES */}
-        <div className="mb-12">
-          <div className="text-[clamp(3rem,12vw,9rem)] font-bold font-['Throwupz'] text-white leading-[0.85] tracking-tight"
-            style={{
-              textShadow: '4px 4px 0 rgba(0,0,0,0.3)',
-            }}
+      <div className="relative z-10 mx-auto flex h-full w-full max-w-5xl flex-col px-6 py-6">
+        <header className="flex flex-wrap items-center justify-between gap-4 text-[0.65rem] uppercase tracking-[0.35em] font-['SpaceMono'] text-[var(--poster-muted)]">
+          <span>NYC PHOTOBOOTH EDITION</span>
+          <span>{time.toLocaleDateString('en-US')}</span>
+          <span>{time.toLocaleTimeString('en-US', { hour12: false })} EST</span>
+        </header>
+
+        <main className="flex flex-1 flex-col items-center justify-center gap-10 px-2 text-center">
+          <p className="mb-6 text-xs uppercase tracking-[0.6em] text-[var(--poster-muted)] font-['SpaceMono']">
+            HEADCASE ISSUE · 2025
+          </p>
+          <div
+            className="mx-auto flex flex-col items-center gap-4 text-center"
           >
-            NEW YORK
+            <span
+              className="block text-[clamp(3.5rem,10vw,7rem)] leading-[0.85] uppercase font-['WhoopieSunday']"
+              style={{
+                color: 'var(--poster-neon)',
+                WebkitTextStroke: '4px #0f0f0f',
+                textShadow:
+                  '6px 6px 0 rgba(0,0,0,0.9), -3px -3px 0 rgba(0,0,0,0.8), 3px -3px 0 rgba(0,0,0,0.8), -3px 3px 0 rgba(0,0,0,0.8)'
+              }}
+            >
+              TOTAL
+            </span>
+            <span
+              className="block text-[clamp(3.5rem,10vw,7rem)] leading-[0.85] uppercase font-['WhoopieSunday']"
+              style={{
+                color: 'var(--poster-neon)',
+                WebkitTextStroke: '4px #0f0f0f',
+                textShadow:
+                  '6px 6px 0 rgba(0,0,0,0.9), -3px -3px 0 rgba(0,0,0,0.8), 3px -3px 0 rgba(0,0,0,0.8), -3px 3px 0 rgba(0,0,0,0.8)'
+              }}
+            >
+              PHOTOBOOTH
+            </span>
           </div>
-          <div className="text-[clamp(5rem,20vw,14rem)] font-bold font-['Throwupz'] text-white leading-[0.7] -rotate-1 tracking-tighter"
-            style={{
-              textShadow: '6px 6px 0 rgba(0,0,0,0.3)',
-              marginTop: '-1rem'
-            }}
-          >
-            PHOTOBOOTH
+          <div className="max-w-xl text-center text-sm leading-relaxed tracking-wider uppercase text-[var(--poster-ink)] font-['Coolvetica']">
+            SOMETIMES YOU JUST NEED A LOUD PRINT TO PROVE YOU WERE THERE. SNAP FOUR SHOTS, MIX THE FRAME, THEN SHARE THE NEON MEMORIES.
           </div>
-        </div>
 
-        {/* Clean description */}
-        <div className="text-white text-[clamp(0.75rem,1.8vw,1rem)] mb-8 max-w-md mx-auto leading-relaxed tracking-wide"
-          style={{
-            fontFamily: 'Coolvetica, Helvetica, Arial, sans-serif',
-            fontWeight: 400,
-            textShadow: '2px 2px 0 rgba(0,0,0,0.3)'
-          }}
-        >
-          STREET-STYLE PHOTOGRAPHY BOOTH
-        </div>
-
-        <nav className="mt-8">
-          <Link to="/frame">
-            <div className="inline-block relative group">
-              {/* ONE WAY SIGN BUTTON */}
-              <div 
-                className="relative transition-all duration-200 group-hover:scale-105"
-                style={{
-                  width: 'clamp(280px, 40vw, 450px)',
-                  height: 'clamp(80px, 12vw, 140px)',
-                  backgroundImage: `url(${new URL('./font/oneway.png', import.meta.url).href})`,
-                  backgroundSize: 'contain',
-                  backgroundRepeat: 'no-repeat',
-                  backgroundPosition: 'center',
-                  filter: 'drop-shadow(4px 4px 8px rgba(0,0,0,0.3))'
-                }}
-              >
-                <span className="sr-only">START</span>
-              </div>
+          <div className="flex flex-col items-center gap-6 text-xs uppercase tracking-[0.3em] text-[var(--poster-muted)] font-['SpaceMono']">
+            <div className="flex items-center gap-4">
+              <span>SESSION NO. 131</span>
+              <span>LIVE PRINT LAB</span>
+              <span>NYC / BK</span>
             </div>
-          </Link>
-        </nav>
 
-       
+            <Link to="/frame" className="group">
+              <div className="relative border-4 border-[var(--poster-ink)] bg-[var(--poster-neon)] px-10 py-5 shadow-[10px_10px_0_rgba(0,0,0,0.85)] transition-transform duration-200 group-hover:-translate-x-1 group-hover:-translate-y-1">
+                <span className="block text-base font-['WhoopieSunday'] uppercase tracking-[0.2em] text-[var(--poster-ink)]">
+                  LET'S SHOOT
+                </span>
+              </div>
+            </Link>
+          </div>
+        </main>
+
+        <footer className="mt-auto flex flex-wrap justify-between gap-3 text-[0.65rem] uppercase tracking-[0.25em] text-[var(--poster-muted)] font-['SpaceMono']">
+          <span>© 2025 STREET PRINTS</span>
+          <span>DESIGNED IN HOUSE</span>
+          <span>FOLLOW @NYCPHOTOBOOTH</span>
+        </footer>
       </div>
     </div>
   );

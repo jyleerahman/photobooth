@@ -579,194 +579,112 @@ const Result = () => {
     };
 
     return (
-        <div 
-            className="fixed inset-0 flex items-center justify-center overflow-hidden bg-[#f5f5f5]"
-        >
-            {/* Film grain texture */}
+        <div className="relative h-screen w-full overflow-hidden bg-[var(--poster-bg)] text-[var(--poster-ink)]">
             <div className="bodega-grain" />
 
-            <div className="relative z-10 w-full h-full flex flex-col items-center justify-center gap-4" style={{ padding: '1.5rem' }}>
-                {/* Header - MINIMAL GRAFFITI */}
-                <div className="text-center flex-shrink-0">
-                    <div 
-                        className="text-black font-bold font-['WhoopieSunday'] leading-tight"
-                        style={{ 
-                            fontSize: 'clamp(3rem, 6vw, 4.5rem)',
-                            marginBottom: '0.5rem',
-                            textShadow: '2px 2px 0 rgba(0,0,0,0.08)'
+            <div className="relative z-10 mx-auto flex h-full w-full max-w-6xl flex-col gap-8 px-6 py-8">
+                <header className="flex flex-wrap items-center justify-between gap-3 text-[0.6rem] uppercase tracking-[0.3em] text-[var(--poster-muted)] font-['SpaceMono']">
+                    <span>SESSION 06 · FINAL PRINT</span>
+                    <span>{getLayoutName()}</span>
+                    <span>NYC PHOTO LAB</span>
+                </header>
+
+                <div className="text-center">
+                    <div className="mx-auto text-white text-[clamp(2.5rem,5.5vw,4.2rem)] font-bold uppercase font-['WhoopieSunday'] leading-[0.9]"
+                        style={{
+                            textShadow: '6px 6px 0 rgba(0,0,0,0.85), -3px -3px 0 rgba(0,0,0,0.8), 3px -3px 0 rgba(0,0,0,0.8), -3px 3px 0 rgba(0,0,0,0.8)',
+                            WebkitTextStroke: '3px #0f0f0f',
+                            color: 'var(--poster-neon)'
                         }}
                     >
-                        YOUR PHOTOS
+                        YOUR PHOTO STRIP
                     </div>
-                    
+                    <p className="mt-2 text-[0.7rem] uppercase tracking-[0.45em] text-[var(--poster-muted)] font-['SpaceMono']">
+                        DOWNLOAD · SHARE · PRINT
+                    </p>
                 </div>
 
-                {/* Photo Strip Preview - MINIMAL FRAMING */}
-                <div className="flex justify-center flex-shrink flex-grow min-h-0 gap-6" style={{ maxHeight: '80vh', width: '100%' }}>
-                    <div 
-                        className="border-4 border-black"
-                        style={{
-                            boxShadow: '6px 6px 0 rgba(0,0,0,0.2)',
-                            maxHeight: '100%'
-                        }}
-                    >
-                        <canvas 
-                            ref={canvasRef}
-                            style={{
-                                maxWidth: frameLayout === 'strip' ? '260px' : '450px',
-                                maxHeight: '60vh',
-                                width: 'auto',
-                                height: 'auto',
-                                display: 'block'
-                            }}
-                        />
+                <div className="flex flex-1 flex-col items-center justify-center gap-6 lg:flex-row">
+                    <div className="flex w-full flex-1 items-center justify-center">
+                        <div className="border-4 border-[var(--poster-ink)] bg-white p-4 shadow-[12px_12px_0_rgba(0,0,0,0.75)]" style={{ maxHeight: '60vh' }}>
+                            <canvas 
+                                ref={canvasRef}
+                                style={{
+                                    maxWidth: frameLayout === 'strip' ? '200px' : '360px',
+                                    maxHeight: '55vh',
+                                    width: 'auto',
+                                    height: '100%',
+                                    display: 'block'
+                                }}
+                            />
+                        </div>
                     </div>
-                    
-                    {/* QR Code and Share Section */}
-                    {qrCodeDataUrl && shareUrl && (
-                        <div className="flex flex-col items-center gap-4" style={{ maxWidth: '300px' }}>
-                            <div className="text-center">
-                                <div className="text-black text-lg font-bold uppercase font-['Coolvetica'] mb-2"
-                                    style={{ fontFamily: 'Coolvetica, Helvetica, Arial, sans-serif' }}>
+
+                    <div className="flex w-full flex-1 flex-col items-center gap-4">
+                        {qrCodeDataUrl && shareUrl ? (
+                            <div className="flex w-full max-w-sm flex-col items-center gap-3 border-4 border-[var(--poster-ink)] bg-white p-4 shadow-[10px_10px_0_rgba(0,0,0,0.7)]" style={{ maxHeight: '60vh' }}>
+                                <span className="text-black text-sm font-bold uppercase tracking-[0.4em] font-['SpaceMono']">
                                     SCAN TO DOWNLOAD
+                                </span>
+                                <div className="bg-white p-3 border-4 border-[var(--poster-ink)]">
+                                    <img src={qrCodeDataUrl} alt="QR Code" className="h-32 w-32 object-contain" />
                                 </div>
-                                <div className="bg-white p-4 rounded-lg border-4 border-black"
-                                    style={{ boxShadow: '4px 4px 0 rgba(0,0,0,0.2)' }}>
-                                    <img src={qrCodeDataUrl} alt="QR Code" className="w-full max-w-[200px] h-auto" />
+                                <div className="text-center text-[0.65rem] uppercase tracking-[0.4em] text-[var(--poster-muted)] font-['SpaceMono']">
+                                    OR SHARE IT STRAIGHT AWAY
                                 </div>
-                                
-                            </div>
-                            
-                            {/* Social Sharing Buttons */}
-                            <div className="flex flex-col gap-3 mt-4 w-full">
-                                <button
-                                    onClick={handleShareX}
-                                    className="relative transition-all duration-200 hover:scale-105 border-0"
-                                    style={{
-                                        width: '100%',
-                                        minWidth: '200px',
-                                        height: 'clamp(50px, 8vw, 70px)',
-                                        backgroundImage: `url(${new URL('../font/greenplate.png', import.meta.url).href})`,
-                                        backgroundSize: 'contain',
-                                        backgroundRepeat: 'no-repeat',
-                                        backgroundPosition: 'center',
-                                        backgroundColor: 'transparent',
-                                        cursor: 'pointer',
-                                        filter: 'drop-shadow(4px 4px 8px rgba(0,0,0,0.3))'
-                                    }}
-                                >
-                                    <div className="absolute inset-0 flex items-center justify-center font-['Coolvetica'] text-[clamp(1rem, 2vw, 1.2rem)] font-bold text-white uppercase tracking-[0.15rem]"
-                                        style={{
-                                            fontFamily: 'Coolvetica, Helvetica, Arial, sans-serif',
-                                            fontWeight: 700
-                                        }}
+                                <div className="flex w-full flex-col gap-2">
+                                    <button
+                                        onClick={handleShareX}
+                                        className="border-4 border-[var(--poster-ink)] bg-[var(--poster-neon)] px-6 py-3 text-sm font-['WhoopieSunday'] uppercase tracking-[0.25em] text-[var(--poster-ink)] shadow-[8px_8px_0_rgba(0,0,0,0.7)] transition-transform duration-200 hover:-translate-x-1 hover:-translate-y-1"
                                     >
                                         SHARE ON X
-                                    </div>
-                                </button>
-                                <button
-                                    onClick={handleShareInstagram}
-                                    className="relative transition-all duration-200 hover:scale-105 border-0"
-                                    style={{
-                                        width: '100%',
-                                        minWidth: '200px',
-                                        height: 'clamp(50px, 8vw, 70px)',
-                                        backgroundImage: `url(${new URL('../font/greenplate.png', import.meta.url).href})`,
-                                        backgroundSize: 'contain',
-                                        backgroundRepeat: 'no-repeat',
-                                        backgroundPosition: 'center',
-                                        backgroundColor: 'transparent',
-                                        cursor: 'pointer',
-                                        filter: 'drop-shadow(4px 4px 8px rgba(0,0,0,0.3))'
-                                    }}
-                                >
-                                    <div className="absolute inset-0 flex items-center justify-center font-['Coolvetica'] text-[clamp(1rem, 2vw, 1.2rem)] font-bold text-white uppercase tracking-[0.15rem]"
-                                        style={{
-                                            fontFamily: 'Coolvetica, Helvetica, Arial, sans-serif',
-                                            fontWeight: 700
-                                        }}
+                                    </button>
+                                    <button
+                                        onClick={handleShareInstagram}
+                                        className="border-4 border-[var(--poster-ink)] bg-[var(--poster-neon)] px-6 py-3 text-sm font-['WhoopieSunday'] uppercase tracking-[0.25em] text-[var(--poster-ink)] shadow-[8px_8px_0_rgba(0,0,0,0.7)] transition-transform duration-200 hover:-translate-x-1 hover:-translate-y-1"
                                     >
                                         SHARE ON IG
-                                    </div>
-                                </button>
+                                    </button>
+                                </div>
+                                <div className="w-full break-words text-center text-[0.65rem] font-['SpaceMono'] uppercase tracking-[0.3em] text-[var(--poster-muted)]">
+                                    {shareUrl}
+                                </div>
                             </div>
-                        </div>
-                    )}
-                    
-                    {isUploading && (
-                        <div className="flex items-center justify-center">
-                            <div className="text-black font-bold uppercase font-['Coolvetica']"
-                                style={{ fontFamily: 'Coolvetica, Helvetica, Arial, sans-serif' }}>
-                                Uploading...
+                        ) : (
+                            <div className="flex w-full max-w-sm items-center justify-center border-4 border-[var(--poster-ink)] bg-white p-4 text-center font-['Coolvetica'] text-sm uppercase tracking-[0.3em] text-[var(--poster-muted)] shadow-[10px_10px_0_rgba(0,0,0,0.6)]" style={{ maxHeight: '60vh' }}>
+                                {isUploading ? 'UPLOADING YOUR PRINT…' : 'PREPARING YOUR SHARE LINK…'}
                             </div>
-                        </div>
-                    )}
+                        )}
+                    </div>
                 </div>
 
-                {/* Action Buttons - STREET SIGN BUTTONS */}
-                <div className="flex flex-wrap justify-center gap-80 flex-shrink-0 items-center">
-                    <button
-                        onClick={handleDownload}
-                        className="relative transition-all duration-200 hover:scale-105 border-0"
-                        style={{
-                            width: 'clamp(200px, 25vw, 300px)',
-                            height: 'clamp(60px, 8vw, 90px)',
-                            backgroundImage: `url(${new URL('../font/greenplate.png', import.meta.url).href})`,
-                            backgroundSize: 'contain',
-                            backgroundRepeat: 'no-repeat',
-                            backgroundPosition: 'center',
-                            backgroundColor: 'transparent',
-                            cursor: 'pointer',
-                            filter: 'drop-shadow(4px 4px 8px rgba(0,0,0,0.3))'
-                        }}
-                    >
-                        <div className="absolute inset-0 flex items-center justify-center font-['Coolvetica'] text-[clamp(2rem,2.2vw,1.5rem)] font-bold text-white uppercase tracking-[0.2rem]"
-                            style={{
-                                fontFamily: 'Coolvetica, Helvetica, Arial, sans-serif',
-                                fontWeight: 700
-                            }}
+                <div className="flex flex-col items-center gap-4 pb-4">
+                    <div className="flex flex-wrap justify-center gap-4">
+                        <button
+                            onClick={handleDownload}
+                            className="border-4 border-[var(--poster-ink)] bg-[var(--poster-neon)] px-10 py-4 text-base font-['WhoopieSunday'] uppercase tracking-[0.25em] text-[var(--poster-ink)] shadow-[12px_12px_0_rgba(0,0,0,0.8)] transition-transform duration-200 hover:-translate-x-1 hover:-translate-y-1"
                         >
                             DOWNLOAD
-                        </div>
-                    </button>
-
-                    <button
-                        onClick={handleStartOver}
-                        className="relative transition-all duration-200 hover:scale-105 border-0"
-                        style={{
-                            width: 'clamp(140px, 20vw, 200px)',
-                            height: 'clamp(80px, 11vw, 120px)',
-                            backgroundImage: `url(${new URL('../font/yellowarrow.png', import.meta.url).href})`,
-                            backgroundSize: 'contain',
-                            backgroundRepeat: 'no-repeat',
-                            backgroundPosition: 'center',
-                            backgroundColor: 'transparent',
-                            cursor: 'pointer',
-                            filter: 'drop-shadow(4px 4px 8px rgba(0,0,0,0.3))'
-                        }}
-                    >
-                        <div className="absolute inset-0 flex items-center justify-center font-['Coolvetica'] text-[clamp(0.9rem,2vw,1.3rem)] font-bold text-black uppercase tracking-[0.2em]"
-                            style={{
-                                textShadow: '1px 1px 2px rgba(255,255,255,0.5)',
-                                fontWeight: 700
-                            }}
+                        </button>
+                        <button
+                            onClick={handleRetake}
+                            className="border-4 border-[var(--poster-ink)] bg-[var(--poster-bg)] px-8 py-3 text-base font-['WhoopieSunday'] uppercase tracking-[0.25em] text-[var(--poster-ink)] shadow-[10px_10px_0_rgba(0,0,0,0.5)] transition-transform duration-200 hover:-translate-x-1 hover:-translate-y-1"
                         >
-                            
-                        </div>
-                    </button>
-                </div>
+                            RETAKE
+                        </button>
+                        <button
+                            onClick={handleStartOver}
+                            className="border-4 border-[var(--poster-ink)] bg-white px-8 py-3 text-base font-['WhoopieSunday'] uppercase tracking-[0.25em] text-[var(--poster-ink)] shadow-[10px_10px_0_rgba(0,0,0,0.5)] transition-transform duration-200 hover:-translate-x-1 hover:-translate-y-1"
+                        >
+                            START OVER
+                        </button>
+                    </div>
 
-                {/* Twitter Credit */}
-                <div className="text-center mt-6 flex-shrink-0">
                     <a 
                         href="https://twitter.com/JyleeRahman" 
                         target="_blank" 
                         rel="noopener noreferrer"
-                        className="text-black font-bold font-['Coolvetica'] text-sm hover:underline"
-                        style={{ 
-                            fontFamily: 'Coolvetica, Helvetica, Arial, sans-serif',
-                            textShadow: '1px 1px 2px rgba(255,255,255,0.8)'
-                        }}
+                        className="text-sm uppercase tracking-[0.3em] text-[var(--poster-muted)] font-['SpaceMono'] hover:text-[var(--poster-ink)]"
                     >
                         @JyleeRahman
                     </a>

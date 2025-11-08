@@ -356,7 +356,13 @@ const Background = () => {
             <div className="relative z-10 h-screen flex flex-col px-8 py-6">
                 {/* Header */}
                 <div className="px-4 py-4 mb-4 flex-shrink-0 text-center">
-                    <div className="text-black text-[clamp(2.5rem,4vw,3.5rem)] font-bold uppercase font-['WhoopieSunday'] mb-1 leading-none">
+                    <div className="text-white text-[clamp(2.5rem,4vw,3.5rem)] font-bold uppercase font-['WhoopieSunday'] mb-1 leading-none"
+                        style={{
+                            textShadow: '6px 6px 0 #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 10px 10px 0 rgba(255,20,147,0.6)',
+                            WebkitTextStroke: '3px black',
+                            paintOrder: 'stroke fill'
+                        }}
+                    >
                         CHOOSE BACKGROUND
                     </div>
                     <div className="text-black text-[clamp(0.9rem,1.5vw,1.25rem)] font-bold uppercase tracking-wide font-['Coolvetica']">

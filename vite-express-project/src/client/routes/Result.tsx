@@ -580,14 +580,7 @@ const Result = () => {
 
     return (
         <div 
-            className="fixed inset-0 flex items-center justify-center overflow-hidden"
-            style={{
-                backgroundColor: '#f5f5f5',
-                backgroundImage: `url(${new URL('../font/newyorkstreet.jpg', import.meta.url).href})`,
-                backgroundSize: '50% auto',
-                backgroundPosition: 'center center',
-                backgroundRepeat: 'no-repeat'
-            }}
+            className="fixed inset-0 flex items-center justify-center overflow-hidden bg-[#f5f5f5]"
         >
             {/* Film grain texture */}
             <div className="bodega-grain" />
@@ -596,10 +589,11 @@ const Result = () => {
                 {/* Header - MINIMAL GRAFFITI */}
                 <div className="text-center flex-shrink-0">
                     <div 
-                        className="text-black font-bold font-['Throwupz'] leading-none"
+                        className="text-black font-bold font-['WhoopieSunday'] leading-tight"
                         style={{ 
-                            fontSize: 'clamp(3rem, 6vw, 5rem)',
-                            marginBottom: '0.5rem'
+                            fontSize: 'clamp(3rem, 6vw, 4.5rem)',
+                            marginBottom: '0.5rem',
+                            textShadow: '2px 2px 0 rgba(0,0,0,0.08)'
                         }}
                     >
                         YOUR PHOTOS

@@ -19,7 +19,7 @@ function App() {
         style={{
           backgroundColor: '#f5f5f5',
           backgroundImage: `url(${new URL('./font/newyorkstreet.jpg', import.meta.url).href})`,
-          backgroundSize: '50% auto',
+          backgroundSize: 'cover',
           backgroundPosition: 'center center',
           backgroundRepeat: 'no-repeat'
         }}

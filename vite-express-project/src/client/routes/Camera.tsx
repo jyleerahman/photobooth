@@ -185,7 +185,7 @@ const Camera = () => {
                 {isCapturing && countdown > 0 && !showingCapturedImage && (
                     <div className="absolute inset-0 flex items-center justify-center bg-black/50 z-10">
                         <div 
-                            className={`text-[250px] font-bold font-['Throwupz'] ${
+                            className={`text-[250px] font-bold font-['WhoopieSunday'] ${
                                 countdown <= 3 ? 'text-[#FF1493]' : 'text-white'
                             }`}
                             style={{ 
@@ -251,7 +251,7 @@ const Camera = () => {
                         className="absolute inset-0 flex items-center justify-center z-30 bg-black/70 cursor-pointer hover:bg-black/80 transition-colors"
                     >
                         <div className="text-center">
-                            <div className="text-white text-8xl font-bold mb-6 font-['Throwupz'] uppercase"
+                            <div className="text-white text-8xl font-bold mb-6 font-['WhoopieSunday'] uppercase"
                                 style={{
                                     textShadow: '6px 6px 0 #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 10px 10px 0 rgba(255,20,147,0.6)',
                                     WebkitTextStroke: '3px black',

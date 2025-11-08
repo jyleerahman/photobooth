@@ -23,9 +23,9 @@ function Frame() {
                 {/* Header - MINIMAL */}
                 <div className="text-center mb-6">
                     <div 
-                        className="text-black text-5xl sm:text-6xl lg:text-8xl font-bold font-['Throwupz'] mb-2 leading-tight tracking-tight"
+                        className="text-black text-5xl sm:text-6xl lg:text-7xl font-bold font-['WhoopieSunday'] mb-2 leading-tight tracking-tight"
                         style={{
-                            textShadow: '4px 4px 0 rgba(0,0,0,0.1)'
+                            textShadow: '2px 2px 0 rgba(0,0,0,0.08)'
                         }}
                     >
                         CHOOSE LAYOUT

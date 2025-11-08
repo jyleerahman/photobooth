@@ -626,7 +626,7 @@ const Result = () => {
                     {qrCodeDataUrl && shareUrl && (
                         <div className="flex flex-col items-center gap-4" style={{ maxWidth: '300px' }}>
                             <div className="text-center">
-                                <div className="text-white text-lg font-bold uppercase font-['Coolvetica'] mb-2"
+                                <div className="text-black text-lg font-bold uppercase font-['Coolvetica'] mb-2"
                                     style={{ fontFamily: 'Coolvetica, Helvetica, Arial, sans-serif' }}>
                                     SCAN TO DOWNLOAD
                                 </div>
@@ -728,24 +728,6 @@ const Result = () => {
                         >
                             DOWNLOAD
                         </div>
-                    </button>
-
-                    <button
-                        onClick={handleRetake}
-                        className="relative transition-all duration-200 hover:scale-105 border-0"
-                        style={{
-                            width: 'clamp(110px, 16vw, 160px)',
-                            height: 'clamp(110px, 16vw, 160px)',
-                            backgroundImage: `url(${new URL('../font/stop.png', import.meta.url).href})`,
-                            backgroundSize: 'contain',
-                            backgroundRepeat: 'no-repeat',
-                            backgroundPosition: 'center',
-                            backgroundColor: 'transparent',
-                            cursor: 'pointer',
-                            filter: 'drop-shadow(4px 4px 8px rgba(0,0,0,0.3))'
-                        }}
-                    >
-                        <span className="sr-only">RETAKE</span>
                     </button>
 
                     <button

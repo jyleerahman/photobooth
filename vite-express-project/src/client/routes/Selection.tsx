@@ -62,7 +62,7 @@ const Selection = () => {
             <div className="relative z-10 h-screen flex flex-col px-8 py-6">
                 {/* Header - GRAFFITI STYLE */}
                 <div className="px-4 py-4 mb-4 flex-shrink-0">
-                    <div className="text-black text-[clamp(2.5rem,4vw,3.5rem)] font-bold uppercase font-['Throwupz'] mb-1 leading-none"
+                    <div className="text-black text-[clamp(2.5rem,4vw,3.5rem)] font-bold uppercase font-['WhoopieSunday'] mb-1 leading-tight"
                        >
                         SELECT {maxSelection} PHOTOS
                     </div>

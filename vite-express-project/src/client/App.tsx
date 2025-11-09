@@ -52,14 +52,14 @@ function App() {
             </span>
           </div>
           <div className="max-w-xl text-center text-sm leading-relaxed tracking-wider uppercase text-[var(--poster-ink)] font-['Coolvetica']">
-            SOMETIMES YOU JUST NEED A LOUD PRINT TO PROVE YOU WERE THERE. SNAP FOUR SHOTS, MIX THE FRAME, THEN SHARE THE NEON MEMORIES.
+            WHY DO YOU PAY FOR PHOTO BOOTH WHEN YOU CAN JUST SET UP YOUR OWN AND PRINT THE IMAGES YOURSELF?
           </div>
 
           <div className="flex flex-col items-center gap-6 text-xs uppercase tracking-[0.3em] text-[var(--poster-muted)] font-['SpaceMono']">
             <div className="flex items-center gap-4">
               <span>SESSION NO. 131</span>
               <span>LIVE PRINT LAB</span>
-              <span>NYC / BK</span>
+              <span>NYC</span>
             </div>
 
             <Link to="/frame" className="group">

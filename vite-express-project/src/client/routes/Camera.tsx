@@ -172,7 +172,7 @@ const Camera = () => {
 
                 {/* Countdown overlay - BOLD */}
                 {isCapturing && countdown > 0 && !showingCapturedImage && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-white/55 backdrop-blur-[2px] z-10">
+                    <div className="absolute inset-0 flex items-center justify-center bg-white/45 z-10">
                         <div 
                             className={`text-[220px] font-bold font-['WhoopieSunday'] ${
                                 countdown <= 3 ? 'text-[var(--poster-neon)]' : 'text-[var(--poster-neon)]'
@@ -237,7 +237,7 @@ const Camera = () => {
                 {!isCapturing && (
                     <div 
                         onClick={startAutomatedCapture}
-                        className="absolute inset-0 flex items-center justify-center z-30 bg-[var(--poster-bg)]/90 backdrop-blur-sm cursor-pointer"
+                        className="absolute inset-0 flex items-center justify-center z-30 bg-[var(--poster-bg)]/85 cursor-pointer"
                     >
                         <div className="text-center">
                             <div className="text-[clamp(4rem,9vw,7rem)] font-bold mb-6 font-['WhoopieSunday'] uppercase"

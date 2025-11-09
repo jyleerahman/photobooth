@@ -34,13 +34,11 @@ function Frame() {
                         <br />
                         YOUR LAYOUT
                     </div>
-                    <p className="mt-4 text-xs uppercase tracking-[0.5em] text-[var(--poster-muted)] font-['SpaceMono']">
-                        TAP A CARD TO LOCK IT IN
-                    </p>
+                   
                 </div>
 
                 {/* Frame options */}
-                <div className="grid flex-1 grid-cols-1 gap-6 overflow-hidden md:grid-cols-3">
+                <div className="grid flex-1 grid-cols-1 gap-6 md:grid-cols-3">
                     {/* Option 1: Strip Layout */}
                     <div
                         onClick={() => selectFrame('strip')}
@@ -70,7 +68,7 @@ function Frame() {
                                 {[1, 2, 3, 4].map((i) => (
                                     <div
                                         key={i}
-                                        className="h-16 bg-[var(--poster-bg)] border border-[var(--poster-ink)]/30 flex items-center justify-center text-[var(--poster-muted)] text-xs font-bold"
+                                        className="h-12 bg-[var(--poster-bg)] border border-[var(--poster-ink)]/30 flex items-center justify-center text-[var(--poster-muted)] text-xs font-bold"
                                         style={{
                                             fontFamily: 'Coolvetica, Helvetica, Arial, sans-serif'
                                         }}

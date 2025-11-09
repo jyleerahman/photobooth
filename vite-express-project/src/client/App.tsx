@@ -75,7 +75,7 @@ function App() {
         <footer className="mt-auto flex flex-wrap justify-between gap-3 text-[0.65rem] uppercase tracking-[0.25em] text-[var(--poster-muted)] font-['SpaceMono']">
           <span>© 2025 STREET PRINTS</span>
           <span>DESIGNED IN HOUSE</span>
-          <span>FOLLOW @NYCPHOTOBOOTH</span>
+          <span>FOLLOW @JyleeRahman</span>
         </footer>
       </div>
     </div>

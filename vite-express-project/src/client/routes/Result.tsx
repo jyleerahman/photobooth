@@ -276,12 +276,16 @@ const Result = () => {
                     }
                 }
 
-                // Padding and spacing
-                const photoWidth = 1.7 * dpi; // 510px - fixed photo width
-                const photoHeight = photoWidth * (3/4); // 1.275" - 4:3 aspect ratio (landscape)
-                const padding = (stripWidth - photoWidth) / 2; // Center horizontally
-                const spacing = 0.1 * dpi; // 30px between photos
-                const topBottomPadding = (stripHeight - (4 * photoHeight) - (3 * spacing)) / 2; // Center vertically
+                // Padding and spacing - calculate to fit 4 portrait photos
+                const padding = 0.15 * dpi; // 45px horizontal padding
+                const spacing = 0.08 * dpi; // 24px between photos
+                const topBottomPadding = 0.15 * dpi; // 45px top/bottom padding
+                
+                // Calculate photo dimensions to fit perfectly in strip
+                const availableWidth = stripWidth - (2 * padding);
+                const photoWidth = availableWidth; // Full width available
+                const availableHeight = stripHeight - (2 * topBottomPadding) - (3 * spacing);
+                const photoHeight = availableHeight / 4; // Divide available space by 4 photos
 
                 // Draw each photo with aspect ratio preserved (cover fit)
                 for (let i = 0; i < 4; i++) {
@@ -582,99 +586,99 @@ const Result = () => {
         <div className="relative h-screen w-full overflow-hidden bg-[var(--poster-bg)] text-[var(--poster-ink)]">
             <div className="bodega-grain" />
 
-            <div className="relative z-10 mx-auto flex h-full w-full max-w-6xl flex-col gap-8 px-6 py-8">
-                <header className="flex flex-wrap items-center justify-between gap-3 text-[0.6rem] uppercase tracking-[0.3em] text-[var(--poster-muted)] font-['SpaceMono']">
+            <div className="relative z-10 mx-auto flex h-full w-full max-w-6xl flex-col gap-3 px-4 py-3">
+                <header className="flex flex-wrap items-center justify-between gap-2 text-[0.5rem] uppercase tracking-[0.3em] text-[var(--poster-muted)] font-['SpaceMono']">
                     <span>SESSION 06 · FINAL PRINT</span>
                     <span>{getLayoutName()}</span>
                     <span>NYC PHOTO LAB</span>
                 </header>
 
                 <div className="text-center">
-                    <div className="mx-auto text-white text-[clamp(2.5rem,5.5vw,4.2rem)] font-bold uppercase font-['WhoopieSunday'] leading-[0.9]"
+                    <div className="mx-auto text-white text-[clamp(1.8rem,4vw,3rem)] font-bold uppercase font-['WhoopieSunday'] leading-[0.9]"
                         style={{
-                            textShadow: '6px 6px 0 rgba(0,0,0,0.85), -3px -3px 0 rgba(0,0,0,0.8), 3px -3px 0 rgba(0,0,0,0.8), -3px 3px 0 rgba(0,0,0,0.8)',
-                            WebkitTextStroke: '3px #0f0f0f',
+                            textShadow: '4px 4px 0 rgba(0,0,0,0.85), -2px -2px 0 rgba(0,0,0,0.8), 2px -2px 0 rgba(0,0,0,0.8), -2px 2px 0 rgba(0,0,0,0.8)',
+                            WebkitTextStroke: '2px #0f0f0f',
                             color: 'var(--poster-neon)'
                         }}
                     >
                         YOUR PHOTO STRIP
                     </div>
-                    <p className="mt-2 text-[0.7rem] uppercase tracking-[0.45em] text-[var(--poster-muted)] font-['SpaceMono']">
+                    <p className="mt-1 text-[0.6rem] uppercase tracking-[0.4em] text-[var(--poster-muted)] font-['SpaceMono']">
                         DOWNLOAD · SHARE · PRINT
                     </p>
                 </div>
 
-                <div className="flex flex-1 flex-col items-center justify-center gap-6 lg:flex-row">
+                <div className="flex flex-1 flex-col items-center justify-center gap-4 lg:flex-row">
                     <div className="flex w-full flex-1 items-center justify-center">
-                        <div className="border-4 border-[var(--poster-ink)] bg-white p-4 shadow-[12px_12px_0_rgba(0,0,0,0.75)]" style={{ maxHeight: '60vh' }}>
+                        <div className="border-3 border-[var(--poster-ink)] bg-white p-3 shadow-[8px_8px_0_rgba(0,0,0,0.75)]">
                             <canvas 
                                 ref={canvasRef}
                                 style={{
-                                    maxWidth: frameLayout === 'strip' ? '200px' : '360px',
-                                    maxHeight: '55vh',
+                                    maxWidth: frameLayout === 'strip' ? '160px' : '300px',
+                                    maxHeight: frameLayout === 'strip' ? '65vh' : '50vh',
                                     width: 'auto',
-                                    height: '100%',
+                                    height: 'auto',
                                     display: 'block'
                                 }}
                             />
                         </div>
                     </div>
 
-                    <div className="flex w-full flex-1 flex-col items-center gap-4">
+                    <div className="flex w-full flex-1 flex-col items-center gap-3">
                         {qrCodeDataUrl && shareUrl ? (
-                            <div className="flex w-full max-w-sm flex-col items-center gap-3 border-4 border-[var(--poster-ink)] bg-white p-4 shadow-[10px_10px_0_rgba(0,0,0,0.7)]" style={{ maxHeight: '60vh' }}>
-                                <span className="text-black text-sm font-bold uppercase tracking-[0.4em] font-['SpaceMono']">
+                            <div className="flex w-full max-w-sm flex-col items-center gap-2 border-3 border-[var(--poster-ink)] bg-white p-3 shadow-[8px_8px_0_rgba(0,0,0,0.7)]">
+                                <span className="text-black text-xs font-bold uppercase tracking-[0.35em] font-['SpaceMono']">
                                     SCAN TO DOWNLOAD
                                 </span>
-                                <div className="bg-white p-3 border-4 border-[var(--poster-ink)]">
-                                    <img src={qrCodeDataUrl} alt="QR Code" className="h-32 w-32 object-contain" />
+                                <div className="bg-white p-2 border-3 border-[var(--poster-ink)]">
+                                    <img src={qrCodeDataUrl} alt="QR Code" className="h-24 w-24 object-contain" />
                                 </div>
-                                <div className="text-center text-[0.65rem] uppercase tracking-[0.4em] text-[var(--poster-muted)] font-['SpaceMono']">
+                                <div className="text-center text-[0.55rem] uppercase tracking-[0.35em] text-[var(--poster-muted)] font-['SpaceMono']">
                                     OR SHARE IT STRAIGHT AWAY
                                 </div>
-                                <div className="flex w-full flex-col gap-2">
+                                <div className="flex w-full flex-col gap-1.5">
                                     <button
                                         onClick={handleShareX}
-                                        className="border-4 border-[var(--poster-ink)] bg-[var(--poster-neon)] px-6 py-3 text-sm font-['WhoopieSunday'] uppercase tracking-[0.25em] text-[var(--poster-ink)] shadow-[8px_8px_0_rgba(0,0,0,0.7)] transition-transform duration-200 hover:-translate-x-1 hover:-translate-y-1"
+                                        className="border-3 border-[var(--poster-ink)] bg-[var(--poster-neon)] px-4 py-2 text-xs font-['WhoopieSunday'] uppercase tracking-[0.2em] text-[var(--poster-ink)] shadow-[6px_6px_0_rgba(0,0,0,0.7)] transition-transform duration-200 hover:-translate-x-1 hover:-translate-y-1"
                                     >
                                         SHARE ON X
                                     </button>
                                     <button
                                         onClick={handleShareInstagram}
-                                        className="border-4 border-[var(--poster-ink)] bg-[var(--poster-neon)] px-6 py-3 text-sm font-['WhoopieSunday'] uppercase tracking-[0.25em] text-[var(--poster-ink)] shadow-[8px_8px_0_rgba(0,0,0,0.7)] transition-transform duration-200 hover:-translate-x-1 hover:-translate-y-1"
+                                        className="border-3 border-[var(--poster-ink)] bg-[var(--poster-neon)] px-4 py-2 text-xs font-['WhoopieSunday'] uppercase tracking-[0.2em] text-[var(--poster-ink)] shadow-[6px_6px_0_rgba(0,0,0,0.7)] transition-transform duration-200 hover:-translate-x-1 hover:-translate-y-1"
                                     >
                                         SHARE ON IG
                                     </button>
                                 </div>
-                                <div className="w-full break-words text-center text-[0.65rem] font-['SpaceMono'] uppercase tracking-[0.3em] text-[var(--poster-muted)]">
+                                <div className="w-full break-words text-center text-[0.55rem] font-['SpaceMono'] uppercase tracking-[0.25em] text-[var(--poster-muted)]">
                                     {shareUrl}
                                 </div>
                             </div>
                         ) : (
-                            <div className="flex w-full max-w-sm items-center justify-center border-4 border-[var(--poster-ink)] bg-white p-4 text-center font-['Coolvetica'] text-sm uppercase tracking-[0.3em] text-[var(--poster-muted)] shadow-[10px_10px_0_rgba(0,0,0,0.6)]" style={{ maxHeight: '60vh' }}>
+                            <div className="flex w-full max-w-sm items-center justify-center border-3 border-[var(--poster-ink)] bg-white p-4 text-center font-['Coolvetica'] text-xs uppercase tracking-[0.25em] text-[var(--poster-muted)] shadow-[8px_8px_0_rgba(0,0,0,0.6)]">
                                 {isUploading ? 'UPLOADING YOUR PRINT…' : 'PREPARING YOUR SHARE LINK…'}
                             </div>
                         )}
                     </div>
                 </div>
 
-                <div className="flex flex-col items-center gap-4 pb-4">
-                    <div className="flex flex-wrap justify-center gap-4">
+                <div className="flex flex-col items-center gap-2 pb-2">
+                    <div className="flex flex-wrap justify-center gap-3">
                         <button
                             onClick={handleDownload}
-                            className="border-4 border-[var(--poster-ink)] bg-[var(--poster-neon)] px-10 py-4 text-base font-['WhoopieSunday'] uppercase tracking-[0.25em] text-[var(--poster-ink)] shadow-[12px_12px_0_rgba(0,0,0,0.8)] transition-transform duration-200 hover:-translate-x-1 hover:-translate-y-1"
+                            className="border-3 border-[var(--poster-ink)] bg-[var(--poster-neon)] px-8 py-2.5 text-sm font-['WhoopieSunday'] uppercase tracking-[0.2em] text-[var(--poster-ink)] shadow-[8px_8px_0_rgba(0,0,0,0.8)] transition-transform duration-200 hover:-translate-x-1 hover:-translate-y-1"
                         >
                             DOWNLOAD
                         </button>
                         <button
                             onClick={handleRetake}
-                            className="border-4 border-[var(--poster-ink)] bg-[var(--poster-bg)] px-8 py-3 text-base font-['WhoopieSunday'] uppercase tracking-[0.25em] text-[var(--poster-ink)] shadow-[10px_10px_0_rgba(0,0,0,0.5)] transition-transform duration-200 hover:-translate-x-1 hover:-translate-y-1"
+                            className="border-3 border-[var(--poster-ink)] bg-[var(--poster-bg)] px-6 py-2.5 text-sm font-['WhoopieSunday'] uppercase tracking-[0.2em] text-[var(--poster-ink)] shadow-[8px_8px_0_rgba(0,0,0,0.5)] transition-transform duration-200 hover:-translate-x-1 hover:-translate-y-1"
                         >
                             RETAKE
                         </button>
                         <button
                             onClick={handleStartOver}
-                            className="border-4 border-[var(--poster-ink)] bg-white px-8 py-3 text-base font-['WhoopieSunday'] uppercase tracking-[0.25em] text-[var(--poster-ink)] shadow-[10px_10px_0_rgba(0,0,0,0.5)] transition-transform duration-200 hover:-translate-x-1 hover:-translate-y-1"
+                            className="border-3 border-[var(--poster-ink)] bg-white px-6 py-2.5 text-sm font-['WhoopieSunday'] uppercase tracking-[0.2em] text-[var(--poster-ink)] shadow-[8px_8px_0_rgba(0,0,0,0.5)] transition-transform duration-200 hover:-translate-x-1 hover:-translate-y-1"
                         >
                             START OVER
                         </button>
@@ -684,7 +688,7 @@ const Result = () => {
                         href="https://twitter.com/JyleeRahman" 
                         target="_blank" 
                         rel="noopener noreferrer"
-                        className="text-sm uppercase tracking-[0.3em] text-[var(--poster-muted)] font-['SpaceMono'] hover:text-[var(--poster-ink)]"
+                        className="text-xs uppercase tracking-[0.25em] text-[var(--poster-muted)] font-['SpaceMono'] hover:text-[var(--poster-ink)]"
                     >
                         @JyleeRahman
                     </a>

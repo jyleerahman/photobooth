@@ -368,18 +368,18 @@ const Background = () => {
                         CHOOSE BACKGROUND
                     </div>
                     <p className="mt-2 text-[0.7rem] uppercase tracking-[0.45em] text-[var(--poster-muted)] font-['SpaceMono']">
-                        TAP A TILE TO TRY IT ON YOUR LAYOUT
+                        TRY IT ON YOUR LAYOUT
                     </p>
                 </div>
 
-                <div className="flex flex-1 flex-col gap-8 overflow-hidden lg:flex-row">
-                    <div className="flex flex-1 items-center justify-center overflow-hidden">
+                <div className="flex flex-1 flex-col gap-8 lg:flex-row min-h-0">
+                    <div className="flex flex-1 items-center justify-center">
                         <div className="border-4 border-[var(--poster-ink)] bg-white p-5 shadow-[12px_12px_0_rgba(0,0,0,0.75)]">
                             <canvas 
                                 ref={canvasRef}
                                 style={{
-                                    maxWidth: frameLayout === 'strip' ? '300px' : '480px',
-                                    maxHeight: '62vh',
+                                    maxWidth: frameLayout === 'strip' ? '180px' : '400px',
+                                    maxHeight: '65vh',
                                     width: 'auto',
                                     height: 'auto',
                                     display: 'block'

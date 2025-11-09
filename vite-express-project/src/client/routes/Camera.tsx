@@ -172,9 +172,9 @@ const Camera = () => {
 
                 {/* Countdown overlay - BOLD */}
                 {isCapturing && countdown > 0 && !showingCapturedImage && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-white/45 z-10">
+                    <div className="absolute inset-0 bg-white/20 z-10">
                         <div 
-                            className={`text-[220px] font-bold font-['WhoopieSunday'] ${
+                            className={`absolute top-16 left-4 text-[220px] font-bold font-['WhoopieSunday'] ${
                                 countdown <= 3 ? 'text-[var(--poster-neon)]' : 'text-[var(--poster-neon)]'
                             }`}
                             style={{ 

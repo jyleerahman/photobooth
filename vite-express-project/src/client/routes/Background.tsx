@@ -188,7 +188,7 @@ const Background = () => {
         } else if (frameLayout === 'strip') {
             const dpi = 300 * scale;
             const stripWidth = 2 * dpi;
-            const stripHeight = 8 * dpi;
+            const stripHeight = 6 * dpi;
             
             canvas.width = stripWidth;
             canvas.height = stripHeight;
@@ -223,11 +223,16 @@ const Background = () => {
                 }
             }
 
-            const padding = 0.15 * dpi;
-            const topBottomPadding = 0.2 * dpi;
-            const spacing = 0.1 * dpi;
-            const photoWidth = stripWidth - (2 * padding);
-            const photoHeight = (stripHeight - (2 * topBottomPadding) - (3 * spacing)) / 4;
+            // Padding and spacing - calculate to fit 4 portrait photos
+            const padding = 0.15 * dpi; // 45px horizontal padding
+            const spacing = 0.08 * dpi; // 24px between photos
+            const topBottomPadding = 0.15 * dpi; // 45px top/bottom padding
+            
+            // Calculate photo dimensions to fit perfectly in strip
+            const availableWidth = stripWidth - (2 * padding);
+            const photoWidth = availableWidth; // Full width available
+            const availableHeight = stripHeight - (2 * topBottomPadding) - (3 * spacing);
+            const photoHeight = availableHeight / 4; // Divide available space by 4 photos
 
             for (let i = 0; i < 4; i++) {
                 const img = new Image();
@@ -374,12 +379,12 @@ const Background = () => {
 
                 <div className="flex flex-1 flex-col gap-8 lg:flex-row min-h-0">
                     <div className="flex flex-1 items-center justify-center">
-                        <div className="border-4 border-[var(--poster-ink)] bg-white p-5 shadow-[12px_12px_0_rgba(0,0,0,0.75)]">
+                        <div className="border-4 border-[var(--poster-ink)] bg-white p-3 shadow-[12px_12px_0_rgba(0,0,0,0.75)]">
                             <canvas 
                                 ref={canvasRef}
                                 style={{
-                                    maxWidth: frameLayout === 'strip' ? '180px' : '400px',
-                                    maxHeight: '65vh',
+                                    maxWidth: frameLayout === 'strip' ? '140px' : '340px',
+                                    maxHeight: '52vh',
                                     width: 'auto',
                                     height: 'auto',
                                     display: 'block'

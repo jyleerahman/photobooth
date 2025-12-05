@@ -400,7 +400,9 @@ const Background = () => {
                                 ? {
                                     backgroundImage: `url(${bg.imageUrl})`,
                                     backgroundSize: 'cover',
-                                    backgroundPosition: 'center'
+                                    backgroundPosition: 'center',
+                                    color: '#ffffff',
+                                    textShadow: '2px 2px 4px rgba(0,0,0,0.9), -1px -1px 2px rgba(0,0,0,0.7)'
                                 }
                                 : bg.id === 'white'
                                     ? { backgroundColor: '#ffffff' }

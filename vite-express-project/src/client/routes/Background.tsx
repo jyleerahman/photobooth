@@ -224,9 +224,9 @@ const Background = () => {
             }
 
             // Padding and spacing - calculate to fit 4 portrait photos
-            const padding = 0.15 * dpi; // 45px horizontal padding
-            const spacing = 0.08 * dpi; // 24px between photos
-            const topBottomPadding = 0.15 * dpi; // 45px top/bottom padding
+            const padding = 0.25 * dpi; // 75px horizontal padding
+            const spacing = 0.1 * dpi; // 30px between photos
+            const topBottomPadding = 0.25 * dpi; // 75px top/bottom padding
             
             // Calculate photo dimensions to fit perfectly in strip
             const availableWidth = stripWidth - (2 * padding);
@@ -379,7 +379,7 @@ const Background = () => {
 
                 <div className="flex flex-1 flex-col gap-8 lg:flex-row min-h-0">
                     <div className="flex flex-1 items-center justify-center">
-                        <div className="border-4 border-[var(--poster-ink)] bg-white p-3 shadow-[12px_12px_0_rgba(0,0,0,0.75)]">
+                        <div className="border-4 border-[var(--poster-ink)] shadow-[12px_12px_0_rgba(0,0,0,0.75)]">
                             <canvas 
                                 ref={canvasRef}
                                 style={{
